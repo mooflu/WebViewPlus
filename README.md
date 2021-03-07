@@ -1,8 +1,9 @@
 # WebViewPlus
 
 Browser file viewer
-
 (meant to be used with MS WebView2)
+
+Demo: https://mooflu.github.io/WebViewPlus/
 
 ## Supported file formats:
 
