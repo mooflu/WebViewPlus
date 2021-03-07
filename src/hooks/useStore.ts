@@ -10,6 +10,7 @@ import { SVGPlugin } from '@plugins/SVGPlugin';
 import { IFramePlugin } from '@plugins/IFramePlugin';
 import { MarkdownPlugin } from '@plugins/MarkdownPlugin';
 import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
+// import { JupyterNBPlugin } from '@plugins/JupyterNBPlugin';
 
 const DISABLED_EXTENSIONS_KEY = 'disabledExtensions';
 
@@ -29,6 +30,7 @@ export const store = createVanilla(
                 new MarkdownPlugin(),
                 new ModelViewerPlugin(),
                 new SyntaxPlugin(),
+                // new JupyterNBPlugin(), // notebookjs + deps is large; notebooksjs not working with vite
             ],
             showConfig: false,
             disabledExtensions: {} as {
