@@ -1,0 +1,50 @@
+body,
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+// react-syntax-highlighter
+span[data='textLine'] {
+    display: block;
+}
+
+span[data='textLine']:hover {
+    background-color: #eee;
+}
+
+// react-data-grid custom style
+.rdg {
+    font-family: monospace;
+    font-size: 1rem !important;
+    height: 100% !important;
+}
+
+.rdg-header-row:not(:hover) {
+    background-color: #eef !important;
+}
+.rdg-header-row:hover {
+    background-color: darken(#eef, 10%) !important;
+}
+
+.rdg-row-odd:not(:hover) {
+    background-color: #ffe !important;
+}
+.rdg-row-odd:hover {
+    background-color: darken(#ffe, 10%) !important;
+}
+
+.rdg-row-even:not(:hover) {
+    background-color: #efe !important;
+}
+.rdg-row-even:hover {
+    background-color: darken(#efe, 10%) !important;
+}
