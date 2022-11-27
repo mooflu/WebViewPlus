@@ -2,46 +2,50 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import math from 'remark-math';
-import Tex from '@matejmazur/react-katex';
+import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+    vscDarkPlus,
+    vs,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { IPlugin } from './PluginInterface';
 import useStore from '@hooks/useStore';
 
-// https://github.com/remarkjs/remark/blob/main/doc/plugins.md
-const renderers = {
-    inlineMath: ({ value }: { value: string | number }) => {
-        return <Tex block>{value}</Tex>;
-    },
-    math: ({ value }: { value: string | number }) => {
-        return <Tex block>{value}</Tex>;
-    },
-    code: ({ language, value }: { language: string; value: string }) => {
-        return (
-            <SyntaxHighlighter
-                language={language}
-                style={codeStyle}
-                wrapLines
-                lineProps={{
-                    data: 'textLine', // className doesn't work :(
-                }}
-                showLineNumbers
-            >
-                {value}
-            </SyntaxHighlighter>
-        );
-    },
-};
-
 const MarkdownViewer: React.FC = () => {
     const fileContent = useStore((state) => state.fileContent) as string;
 
+    let style = vs;
+    if (
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+        style = vscDarkPlus;
+    }
+
     return (
         <ReactMarkdown
-            plugins={[math, gfm]}
-            renderers={renderers}
+            remarkPlugins={[math, gfm]}
+            rehypePlugins={[rehypeKatex]}
+            components={{
+                code({ node, inline, className, children, ...props }) {
+                    const match = /language-(\w+)/.exec(className || '');
+                    return (
+                        <SyntaxHighlighter
+                            {...props}
+                            language={match ? match[1] : ''}
+                            style={style}
+                            wrapLines
+                            lineProps={{
+                                data: 'textLine', // className doesn't work :(
+                            }}
+                            showLineNumbers
+                            children={String(children).replace(/\n$/, '')}
+                        />
+                    );
+                },
+            }}
             children={fileContent}
         />
     );
