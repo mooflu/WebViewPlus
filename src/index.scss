@@ -5,6 +5,11 @@ html {
     margin: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    @media (prefers-color-scheme:dark){
+        color: #eee;
+        background-color: #222;
+    }
 }
 
 #root {
@@ -17,8 +22,15 @@ span[data='textLine'] {
     display: block;
 }
 
-span[data='textLine']:hover {
-    background-color: #eee;
+@media (prefers-color-scheme:dark){
+    span[data='textLine']:hover {
+        background-color: #444;
+    }
+}
+@media (prefers-color-scheme:light){
+    span[data='textLine']:hover {
+        background-color: #eee;
+    }
 }
 
 // react-data-grid custom style
@@ -28,23 +40,48 @@ span[data='textLine']:hover {
     height: 100% !important;
 }
 
-.rdg-header-row:not(:hover) {
-    background-color: #eef !important;
-}
-.rdg-header-row:hover {
-    background-color: darken(#eef, 10%) !important;
+@media (prefers-color-scheme:dark){
+    .rdg-header-row:not(:hover) {
+        background-color: #338 !important;
+    }
+    .rdg-header-row:hover {
+        background-color: lighten(#338, 10%) !important;
+    }
+
+    .rdg-row-odd:not(:hover) {
+        background-color: #883 !important;
+    }
+    .rdg-row-odd:hover {
+        background-color: lighten(#883, 10%) !important;
+    }
+
+    .rdg-row-even:not(:hover) {
+        background-color: #383 !important;
+    }
+    .rdg-row-even:hover {
+        background-color: lighten(#383, 10%) !important;
+    }
 }
 
-.rdg-row-odd:not(:hover) {
-    background-color: #ffe !important;
-}
-.rdg-row-odd:hover {
-    background-color: darken(#ffe, 10%) !important;
-}
+@media (prefers-color-scheme:light){
+    .rdg-header-row:not(:hover) {
+        background-color: #eef !important;
+    }
+    .rdg-header-row:hover {
+        background-color: darken(#eef, 10%) !important;
+    }
 
-.rdg-row-even:not(:hover) {
-    background-color: #efe !important;
-}
-.rdg-row-even:hover {
-    background-color: darken(#efe, 10%) !important;
+    .rdg-row-odd:not(:hover) {
+        background-color: #ffe !important;
+    }
+    .rdg-row-odd:hover {
+        background-color: darken(#ffe, 10%) !important;
+    }
+
+    .rdg-row-even:not(:hover) {
+        background-color: #efe !important;
+    }
+    .rdg-row-even:hover {
+        background-color: darken(#efe, 10%) !important;
+    }
 }

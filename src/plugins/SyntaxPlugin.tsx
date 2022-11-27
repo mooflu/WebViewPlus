@@ -1,6 +1,9 @@
 import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {
+    vscDarkPlus,
+    vs,
+} from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import { IPlugin } from './PluginInterface';
 import useStore from '@hooks/useStore';
@@ -35,6 +38,7 @@ const Ext2Lang: { [index: string]: string } = {
     scss: 'scss',
     sh: 'bash',
     sql: 'sql',
+    svg: 'svg',
     tex: 'latex',
     ts: 'typescript',
     tsx: 'tsx',
@@ -44,15 +48,24 @@ const Ext2Lang: { [index: string]: string } = {
 };
 
 const SyntaxViewer: React.FC = () => {
-    const fileContent = useStore((state) => state.fileContent);
+    const fileContent = useStore((state) => state.fileContent) as string;
     const fileExt = useStore((state) => state.fileExt);
 
     const lang = Ext2Lang[fileExt];
 
+    let style = vs;
+    if (
+        window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+    ) {
+        style = vscDarkPlus;
+    }
+    // console.log(SyntaxHighlighter.supportedLanguages);
+
     return (
         <SyntaxHighlighter
             language={lang}
-            style={codeStyle}
+            style={style}
             wrapLines
             lineProps={{
                 data: 'textLine', // className doesn't work :(
@@ -62,7 +75,6 @@ const SyntaxViewer: React.FC = () => {
                 margin: 0,
                 padding: 0,
                 border: 'none',
-                height: '100%',
                 overflow: 'initial',
             }}
         >
