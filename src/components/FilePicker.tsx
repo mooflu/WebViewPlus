@@ -1,43 +1,41 @@
 import React from 'react';
 
-import { Button } from '@material-ui/core';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { Box, Button, Input, SxProps } from '@mui/material';
 
 import useStore from '@hooks/useStore';
 import { log } from '@utils/log';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        button: {
-            padding: '4rem',
-            height: '20rem',
-            borderRadius: '1rem',
-            border: '1px dashed #888',
-            textTransform: 'none',
-        },
-        label: {
-            fontSize: '2rem',
-        },
-        filePicker: {
+const classes = {
+    root: {
+        display: 'flex',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    } as SxProps,
+    button: {
+        padding: '4rem',
+        height: '20rem',
+        borderRadius: '1rem',
+        border: '1px dashed #888',
+        textTransform: 'none',
+        fontSize: '2rem',
+    } as SxProps,
+    filePicker: {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '100%',
+        height: '100%',
+        opacity: 0,
+        '& .MuiInput-input': {
             position: 'absolute',
-            left: 0,
-            top: 0,
-            width: '100%',
             height: '100%',
-            opacity: 0,
-        },
-    })
-);
+            cursor: 'pointer',
+        }
+    } as SxProps,
+};
 
 const FilePicker: React.FC = () => {
-    const classes = useStyles();
-
     const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
         if (e?.target?.result) {
             log(`handledDataLoaded: size: ${e.total}`);
@@ -84,14 +82,14 @@ const FilePicker: React.FC = () => {
     };
 
     return (
-        <div className={classes.root}>
+        <Box sx={classes.root}>
             <label htmlFor='raised-button-file'>
                 <Button
-                    classes={{ root: classes.button, label: classes.label }}
+                    sx={classes.button}
                     variant='outlined'
                 >
-                    <input
-                        className={classes.filePicker}
+                    <Input
+                        sx={classes.filePicker}
                         id='raised-button-file'
                         type='file'
                         onChange={handleOpen}
@@ -99,7 +97,7 @@ const FilePicker: React.FC = () => {
                     Select or drag and drop file here.
                 </Button>
             </label>{' '}
-        </div>
+        </Box>
     );
 };
 

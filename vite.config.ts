@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import reactRefresh from '@vitejs/plugin-react';
+import reactRefresh from '@vitejs/plugin-react-swc';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,5 +15,11 @@ export default defineConfig({
     },
     build: {
         outDir: 'build',
+    },
+    server: {
+        port: 3000,
+        fs: {
+            strict: false,
+        },
     },
 });

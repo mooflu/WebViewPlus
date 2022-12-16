@@ -1,23 +1,21 @@
 import React from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+import { Box, SxProps } from '@mui/material';
 
 import { IPlugin } from './PluginInterface';
 import useStore from '@hooks/useStore';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            height: '100%',
-        },
-    })
-);
+const classes = {
+    root: {
+        width: '100%',
+        height: '100%',
+    } as SxProps,
+};
 
 const IFrameViewer: React.FC = () => {
-    const classes = useStyles();
     const fileUrl = useStore((state) => state.fileUrl);
     return (
-        <div className={classes.root}>
+        <Box sx={classes.root}>
             <iframe
                 title='iframe preview'
                 width='100%'
@@ -25,7 +23,7 @@ const IFrameViewer: React.FC = () => {
                 frameBorder='0'
                 src={fileUrl}
             ></iframe>
-        </div>
+        </Box>
     );
 };
 

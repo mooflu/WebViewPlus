@@ -1,25 +1,24 @@
 import React from 'react';
+
 import svgPanZoom from 'svg-pan-zoom';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+
+import { Box, SxProps } from '@mui/material';
 
 import { IPlugin } from './PluginInterface';
 import useStore from '@hooks/useStore';
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
+const classes = {
+    root: {
+        width: '100%',
+        height: '100%',
+        '& SVG': {
             width: '100%',
             height: '100%',
-            '& SVG': {
-                width: '100%',
-                height: '100%',
-            },
         },
-    })
-);
+    },
+};
 
 const SVGViewer: React.FC = () => {
-    const classes = useStyles();
     const container = React.useRef<HTMLDivElement>(null);
     const fileContent = useStore((state) => state.fileContent) as string;
 
@@ -33,11 +32,11 @@ const SVGViewer: React.FC = () => {
     }, [container]);
 
     return (
-        <div
-            className={classes.root}
+        <Box
+            sx={classes.root}
             ref={container}
             dangerouslySetInnerHTML={{ __html: fileContent }}
-        ></div>
+        ></Box>
     );
 };
 

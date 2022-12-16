@@ -1,46 +1,49 @@
 import React from 'react';
 
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import {
+    Box,
+    Dialog,
+    Slide,
+    AppBar,
+    Toolbar,
+    IconButton,
+    ListSubheader,
+    ListItemText,
+    ListItemButton,
+    List,
+    Divider,
+    Typography,
+    SxProps,
+} from '@mui/material';
 
-import Dialog from '@material-ui/core/Dialog';
-import Slide from '@material-ui/core/Slide';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import { TransitionProps } from '@material-ui/core/transitions';
+import {
+    Close as CloseIcon,
+    Block as BlockIcon,
+} from '@mui/icons-material';
 
-import CloseIcon from '@material-ui/icons/Close';
-import BlockIcon from '@material-ui/icons/Block';
+import { TransitionProps } from '@mui/material/transitions';
 
 import useStore from '@hooks/useStore';
 import { IPlugin } from '@plugins/PluginInterface';
 
 const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & { children?: React.ReactElement },
-    ref: React.Ref<unknown>
+    props: TransitionProps & { children: React.ReactElement<any, any>; },
+    ref: React.Ref<unknown>,
 ) {
     return <Slide direction='up' ref={ref} {...props} />;
 });
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        grow: {
-            flexGrow: 1,
-        },
-        pluginHeader: {
-            fontSize: '1.5rem',
-        },
-        disabled: {
-            color: '#aaa',
-        },
-    })
-);
+const classes = {
+    grow: {
+        flexGrow: 1,
+    } as SxProps,
+    pluginHeader: {
+        fontSize: '1.5rem',
+    } as SxProps,
+    disabled: {
+        color: '#aaa',
+    } as SxProps,
+};
 
 type ExtensionItemProps = {
     plugin: IPlugin;
@@ -48,7 +51,6 @@ type ExtensionItemProps = {
 };
 
 const ExtensionItem: React.FC<ExtensionItemProps> = (props) => {
-    const classes = useStyles();
     const disabledExtensions = useStore((state) => state.disabledExtensions);
     const toggleExtension = useStore((state) => state.actions.toggleExtension);
     const isDisabled =
@@ -60,20 +62,18 @@ const ExtensionItem: React.FC<ExtensionItemProps> = (props) => {
     };
 
     return (
-        <ListItem
-            className={isDisabled ? classes.disabled : ''}
+        <ListItemButton
+            sx={isDisabled ? classes.disabled : {}}
             dense
-            button
             onClick={toggleExtensionClicked}
         >
             <ListItemText inset primary={props.extension} />
             {isDisabled && <BlockIcon />}
-        </ListItem>
+        </ListItemButton>
     );
 };
 
 const SettingsDialog: React.FC = () => {
-    const classes = useStyles();
     const showConfig = useStore((state) => state.showConfig);
     const plugins = useStore((state) => state.plugins);
 
@@ -89,7 +89,7 @@ const SettingsDialog: React.FC = () => {
 
         return (
             <div key={p.name}>
-                <ListSubheader className={classes.pluginHeader}>
+                <ListSubheader sx={classes.pluginHeader}>
                     {p.name}
                 </ListSubheader>
                 {extensionItems}
@@ -107,7 +107,7 @@ const SettingsDialog: React.FC = () => {
             <AppBar position='sticky'>
                 <Toolbar>
                     <Typography variant='h6'>Settings</Typography>
-                    <div className={classes.grow} />
+                    <Box sx={classes.grow} />
                     <IconButton
                         edge='end'
                         color='inherit'
