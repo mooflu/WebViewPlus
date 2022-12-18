@@ -1,21 +1,23 @@
 import React from 'react';
 
-import { CssBaseline, Box, CircularProgress, IconButton, SxProps, useMediaQuery } from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline, Box, CircularProgress, IconButton, SxProps, ThemeProvider } from '@mui/material';
 import {
     Settings as SettingsIcon,
     Undo as UndoIcon,
 } from '@mui/icons-material';
-import { indigo, grey } from '@mui/material/colors';
 
 import SettingsDialog from '@components/SettingsDialog';
 import FilePicker from '@components/FilePicker';
 import FileViewer from '@components/FileViewer';
-
 import useStore from '@hooks/useStore';
-import { initWebview2 } from '@utils/webview2Helpers';
+import {
+    getEnabledExtensions,
+    handleSharedBufferReceived,
+    handleWebMessage,
+    IWebView2,
+} from '@utils/webview2Helpers';
 
-initWebview2();
+import useTheme from './theme';
 
 const classes = {
     root: {
@@ -44,58 +46,33 @@ const classes = {
     } as SxProps,
 };
 
-
 const App: React.FC = () => {
-    const isDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const theme = useTheme();
     const fileContent = useStore((state) => state.fileContent);
     const fileName = useStore((state) => state.fileName);
     const showConfig = useStore((state) => state.showConfig);
     const initState = useStore((state) => state.actions.init);
     // MS webview2
-    const isEmbedded = !!(window as any).chrome?.webview;
-
-    const theme = createTheme({
-        palette: {
-            mode: isDarkMode ? 'dark' : 'light',
-            ...(isDarkMode
-            ? {
-                // palette values for dark mode
-                primary: indigo,
-                divider: indigo[700],
-                background: {
-                    default: grey[900],
-                    paper: grey[900],
-                },
-            } : {
-                // palette values for light mode
-            }),
-        },
-    });
+    const webview: IWebView2 | undefined = (window as any).chrome?.webview;
+    const isEmbedded = !!webview;
 
     React.useEffect(() => {
         initState();
-        if (isEmbedded) {
-            const extensions = (window as any).WebviewPlus.getExtensions().join(
-                ','
-            );
-            (window as any).chrome.webview.hostObjects.fileProps.extensions =
-                extensions;
-        }
-    }, [initState]);
 
-    let pickerOrViewer: JSX.Element;
-    if (fileContent === null) {
-        if (isEmbedded || fileName) {
-            return (
-                <Box sx={classes.root}>
-                    <CircularProgress />
-                </Box>
-            );
+        if (isEmbedded) {
+            webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
+            webview.addEventListener('message', handleWebMessage);
+            webview.postMessage('AppReadyForData');
+            const extensions = getEnabledExtensions().join(',');
+            webview.postMessage(extensions);
         }
-        pickerOrViewer = <FilePicker />;
-    } else {
-        pickerOrViewer = <FileViewer />;
-    }
+        return () => {
+            if (isEmbedded) {
+                webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
+                webview.removeEventListener('message', handleWebMessage);
+            }
+        }
+    }, []);
 
     const toggleSettings = () => {
         useStore.setState({ showConfig: !showConfig });
@@ -108,7 +85,20 @@ const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            {pickerOrViewer}
+            {fileContent === null &&  (
+                <>
+                    {(isEmbedded || fileName) ? (
+                        <Box sx={classes.root}>
+                            <CircularProgress />
+                        </Box>
+                    ) : (
+                        <FilePicker />
+                    )}
+                </>
+            )}
+            {fileContent !== null && (
+                <FileViewer />
+            )}
             <IconButton sx={[classes.floatButton, classes.settingsButton] as SxProps} onClick={toggleSettings}>
                 <SettingsIcon />
             </IconButton>

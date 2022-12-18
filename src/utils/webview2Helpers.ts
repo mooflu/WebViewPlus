@@ -1,66 +1,80 @@
-import { log } from '@utils/log';
 import { store } from '@hooks/useStore';
+import { log } from '@utils/log';
 
-export function initWebview2() {
-    const ext2Mime: { [index: string]: string } = {
-        pdf: 'application/pdf',
-        webp: 'image/webp',
-    };
+export interface IWebView2 {
+    postMessage: (obj: any) => void;
+    releaseBuffer: (buffer: ArrayBuffer) => void;
+    addEventListener: (type: string, listener: (arg: any) => void) => void;
+    removeEventListener: (type: string, listener: (arg: any) => void) => void;
+    // hostObjects
+    // postMessageWithAdditionalObjects
+    // dispatchEvent
+};
 
-    (window as any).WebviewPlus = {
-        openFile: async (fileName: string, fileSize: number) => {
-            log(`openFile: "${fileName}" ${fileSize}`);
-            const fileExt =
-                fileName.split('.').pop()?.toLocaleLowerCase() || '';
+export const getEnabledExtensions = () => {
+    const { plugins, disabledExtensions } = store.getState();
+    const extensions = new Set<string>();
+    for (const p of plugins) {
+        for (const fileExt of p.extensions.keys()) {
+            const isDisabled =
+                disabledExtensions[fileExt] &&
+                disabledExtensions[fileExt][p.shortName];
 
-            const fileContent = await (window as any).chrome.webview.hostObjects
-                .fileProps.Contents;
-            const binFileContent = await (window as any).chrome.webview
-                .hostObjects.fileProps.BinContents;
-
-            log(`openFile: init url data START`);
-            let blob: Blob;
-            if (fileContent) {
-                blob = new Blob([fileContent], { type: 'text/html' });
-            } else {
-                let mimeType = ext2Mime[fileExt]
-                    ? ext2Mime[fileExt]
-                    : 'application/octet-stream';
-                blob = new Blob([new Uint8Array(binFileContent).buffer], {
-                    type: mimeType,
-                });
+            if (!isDisabled) {
+                extensions.add(fileExt);
             }
-            const fileUrl = URL.createObjectURL(blob); // returns a blob url - won't expose local file system location
-            log(`openFile: init url data END`);
-
-            store.setState({
-                fileSize,
-                fileContent: fileContent || binFileContent,
-                fileName,
-                fileExt,
-                fileUrl,
-            });
-
-            const extensions = (window as any).WebviewPlus.getExtensions().join(
-                ','
-            );
-            (window as any).chrome.webview.hostObjects.fileProps.extensions = extensions;
-        },
-        getExtensions: () => {
-            const { plugins, disabledExtensions } = store.getState();
-            const extensions = new Set<string>();
-            for (const p of plugins) {
-                for (const fileExt of p.extensions.keys()) {
-                    const isDisabled =
-                        disabledExtensions[fileExt] &&
-                        disabledExtensions[fileExt][p.shortName];
-
-                    if (!isDisabled) {
-                        extensions.add(fileExt);
-                    }
-                }
-            }
-            return [...extensions];
-        },
-    };
+        }
+    }
+    return [...extensions];
 }
+
+export const handleWebMessage = (e: MessageEvent & {data: string}) => {
+    log(`Received handleWebMessage: ${e.data}`);
+    if (e.data === 'unload') {
+        store.setState({
+            fileSize: 0,
+            fileContent: null,
+            fileName: '',
+            fileExt: '',
+            fileUrl: '',
+        });
+    }
+};
+
+const ext2Mime: { [index: string]: string } = {
+    pdf: 'application/pdf',
+    webp: 'image/webp',
+};
+
+export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: any, getBuffer: any}) => {
+    const binContent: ArrayBuffer = e.getBuffer();
+    const fileName = e.additionalData.fileName;
+    const fileSize = e.additionalData.fileSize;
+    const isBinary = e.additionalData.isBinary;
+    const textContent = e.additionalData.textContent;
+    const fileExt = fileName.split('.').pop()?.toLocaleLowerCase() || '';
+    log(`Received handleSharedBufferReceived: File=${fileName}`);
+
+    // fileUrl for iframed content (pdf, webp, html, etc.)
+    let fileUrl = '';
+    if (isBinary) {
+        const  mimeType = ext2Mime[fileExt]
+            ? ext2Mime[fileExt]
+            : 'application/octet-stream';
+        const blob = new Blob([binContent], {
+            type: mimeType,
+        });
+        fileUrl = URL.createObjectURL(blob);
+    } else {
+        const blob = new Blob([textContent], { type: 'text/html' });
+        fileUrl = URL.createObjectURL(blob);
+    }
+
+    store.setState({
+        fileSize,
+        fileContent: isBinary ? binContent : textContent,
+        fileName,
+        fileExt,
+        fileUrl,
+    });
+};

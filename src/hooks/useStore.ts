@@ -22,7 +22,7 @@ export const store = createVanilla(
             fileContent: null as string | ArrayBuffer | null,
             plugins: [
                 new IFramePlugin(),
-                new XLSXPlugin(), // csv & xlsx
+                new XLSXPlugin(),
                 new SVGPlugin(),
                 new MarkdownPlugin(),
                 new ModelViewerPlugin(),
