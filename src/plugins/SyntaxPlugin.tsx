@@ -85,7 +85,7 @@ const SyntaxViewer: React.FC = () => {
 
 export class SyntaxPlugin implements IPlugin {
     public shortName = 'syntax';
-    public name = 'Syntax Highlighter';
+    public name = 'Syntax highlighter';
     public extensions = new Set<string>();
     public viewer = (<SyntaxViewer />);
 

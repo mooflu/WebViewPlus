@@ -13,7 +13,7 @@ html, pdf, webp
 
 ### Tabular data
 
-csv, xlsx
+csv, xlsx, tsv
 
 ### Scalable Vector Graphics (pan & zoom)
 
@@ -23,9 +23,9 @@ svg
 
 md
 
-### Google model-viewer
+### 3D model viewer
 
-gltf, glb
+gltf, glb, fbx, obj
 
 ### Syntax Highlighter
 

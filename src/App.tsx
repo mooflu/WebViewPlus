@@ -88,7 +88,7 @@ const App: React.FC = () => {
             {fileContent === null &&  (
                 <>
                     {(isEmbedded || fileName) ? (
-                        <Box sx={classes.root}>
+                        <Box component="div" sx={classes.root}>
                             <CircularProgress />
                         </Box>
                     ) : (

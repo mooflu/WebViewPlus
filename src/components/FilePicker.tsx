@@ -82,7 +82,7 @@ const FilePicker: React.FC = () => {
     };
 
     return (
-        <Box sx={classes.root}>
+        <Box component="div" sx={classes.root}>
             <label htmlFor='raised-button-file'>
                 <Button
                     sx={classes.button}
