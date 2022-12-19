@@ -53,24 +53,25 @@ const useTheme = () => {
                             fontFamily: 'monospace',
                             fontSize: '1rem !important',
                             height: '100% !important',
+                            color: isDark ? '#aaa !important' : '#333 !important',
                         },
-                        '.rdg-header-row:not(:hover)': {
-                            backgroundColor: isDark ? '#338 !important' : '#eef !important',
+                        '.rdg-header-row': {
+                            backgroundColor: isDark ? '#115 !important' : '#eef !important',
                         },
                         '.rdg-header-row:hover': {
-                            backgroundColor:  isDark ? 'lighten(#338, 10%) !important' : 'darken(#eef, 10%) !important',
+                            filter:  isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
-                        '.rdg-row-odd:not(:hover)': {
-                            backgroundColor:  isDark ? '#883 !important' : '#ffe !important',
+                        '.rdg-row-odd': {
+                            backgroundColor:  isDark ? '#551 !important' : '#ffe !important',
                         },
                         '.rdg-row-odd:hover': {
-                            backgroundColor:  isDark ? 'lighten(#883, 10%) !important' : 'darken(#ffe, 10%) !important',
+                            filter:  isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
-                        '.rdg-row-even:not(:hover)': {
-                            backgroundColor:  isDark ? '#383 !important' : '#efe !important',
+                        '.rdg-row-even': {
+                            backgroundColor:  isDark ? '#151 !important' : '#efe !important',
                         },
                         '.rdg-row-even:hover': {
-                            backgroundColor:  isDark ? 'lighten(#383, 10%) !important' : 'darken(#efe, 10%) !important',
+                            filter:  isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
                     },
                 },

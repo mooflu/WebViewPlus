@@ -53,7 +53,7 @@ export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: an
     const isBinary = e.additionalData.isBinary;
     const textContent = e.additionalData.textContent;
     const fileExt = fileName.split('.').pop()?.toLocaleLowerCase() || '';
-    log(`Received handleSharedBufferReceived: File=${fileName}`);
+    log(`Received handleSharedBufferReceived: File=${fileName} Size=${fileSize}`);
 
     // fileUrl for iframed content (pdf, webp, html, etc.)
     let fileUrl = '';

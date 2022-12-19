@@ -1,6 +1,17 @@
+export enum ViewerType {
+    Unknown,
+    Tabular,
+    SVG,
+    Syntax,
+    Model3D,
+    Markdown,
+    IFrame,
+    // Jupyter,
+}
+
 export interface IPlugin {
     shortName: string;
     name: string;
     extensions: Set<string>;
-    viewer: JSX.Element;
+    viewerType: ViewerType;
 }
