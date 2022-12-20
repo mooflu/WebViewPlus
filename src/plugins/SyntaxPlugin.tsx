@@ -44,10 +44,13 @@ export class SyntaxPlugin implements IPlugin {
     public name = 'Syntax highlighter';
     public extensions = new Set<string>();
     public viewerType = ViewerType.Syntax;
+    public enabled = true;
 
     constructor() {
         for (const ext in Ext2Lang) {
-            this.extensions.add(ext);
+            if ({}.hasOwnProperty.call(Ext2Lang, ext)) {
+                this.extensions.add(ext);
+            }
         }
     }
 }

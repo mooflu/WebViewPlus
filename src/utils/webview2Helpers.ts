@@ -9,7 +9,7 @@ export interface IWebView2 {
     // hostObjects
     // postMessageWithAdditionalObjects
     // dispatchEvent
-};
+}
 
 export const getEnabledExtensions = () => {
     const { plugins, disabledExtensions } = store.getState();
@@ -26,7 +26,7 @@ export const getEnabledExtensions = () => {
         }
     }
     return [...extensions];
-}
+};
 
 export const handleWebMessage = (e: MessageEvent & {data: string}) => {
     log(`Received handleWebMessage: ${e.data}`);
@@ -58,7 +58,7 @@ export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: an
     // fileUrl for iframed content (pdf, webp, html, etc.)
     let fileUrl = '';
     if (isBinary) {
-        const  mimeType = ext2Mime[fileExt]
+        const mimeType = ext2Mime[fileExt]
             ? ext2Mime[fileExt]
             : 'application/octet-stream';
         const blob = new Blob([binContent], {

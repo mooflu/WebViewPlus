@@ -1,8 +1,8 @@
 import create from 'zustand';
 import createVanilla from 'zustand/vanilla';
-
 import { combine } from 'zustand/middleware';
 
+import { IPlugin } from '@plugins/PluginInterface';
 import { SyntaxPlugin } from '@plugins/SyntaxPlugin';
 import { XLSXPlugin } from '@plugins/XLSXPlugin';
 import { SVGPlugin } from '@plugins/SVGPlugin';
@@ -34,17 +34,24 @@ export const store = createVanilla(
                 [ext: string]: { [pluginShortName: string]: boolean };
             },
         },
-        (set) => ({
+        set => ({
             actions: {
+                // TODO: embedded to use QL config to store, otherwise localStorage
                 init: () => {
                     set((state) => {
                         const de = window.localStorage.getItem(
-                            DISABLED_EXTENSIONS_KEY
+                            DISABLED_EXTENSIONS_KEY,
                         );
                         if (de) {
                             return { disabledExtensions: JSON.parse(de) };
                         }
                         return { disabledExtensions: state.disabledExtensions };
+                    });
+                },
+                togglePlugin: (p: IPlugin) => {
+                    set((state) => {
+                        p.enabled = !p.enabled;
+                        return { plugins: [...state.plugins] };
                     });
                 },
                 toggleExtension: (ext: string, pluginShortName: string) => {
@@ -60,14 +67,14 @@ export const store = createVanilla(
                         }
                         window.localStorage.setItem(
                             DISABLED_EXTENSIONS_KEY,
-                            JSON.stringify(newde)
+                            JSON.stringify(newde),
                         );
                         return { disabledExtensions: newde };
                     });
                 },
             },
-        })
-    )
+        }),
+    ),
 );
 
 const useStore = create(store);

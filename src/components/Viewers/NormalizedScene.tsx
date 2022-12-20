@@ -1,6 +1,8 @@
+/* eslint-disable react/no-unknown-property */
 import React from 'react';
-
 import * as THREE from 'three';
+
+import { log } from '@utils/log';
 
 interface NormalizedSceneProps {
     scene: THREE.Group;
@@ -16,11 +18,11 @@ const NormalizedScene: React.FC<NormalizedSceneProps> = (props) => {
             box.geometry.computeBoundingBox();
 
             const bb = box.geometry.boundingBox || new THREE.Box3();
-            console.log(`Scene bounding box: ${JSON.stringify(bb, null, 2)}`);
+            log(`Scene bounding box: ${JSON.stringify(bb, null, 2)}`);
 
             bb.getCenter(center);
             setCenter(center);
-            console.log(`Scene center: ${JSON.stringify(center, null, 2)}`);
+            log(`Scene center: ${JSON.stringify(center, null, 2)}`);
 
             const size = new THREE.Vector3();
             bb.getSize(size);
@@ -38,7 +40,7 @@ const NormalizedScene: React.FC<NormalizedSceneProps> = (props) => {
                 </group>
             </group>
         </>
-    )
+    );
 };
 
 export default NormalizedScene;

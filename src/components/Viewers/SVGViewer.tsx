@@ -1,5 +1,4 @@
 import React from 'react';
-
 import svgPanZoom from 'svg-pan-zoom';
 
 import { Box, SxProps } from '@mui/material';
@@ -19,7 +18,7 @@ const classes = {
 
 const SVGViewer: React.FC = () => {
     const container = React.useRef<HTMLDivElement>(null);
-    const fileContent = useStore((state) => state.fileContent) as string;
+    const fileContent = useStore(state => state.fileContent) as string;
 
     React.useEffect(() => {
         if (container.current && container.current.children.length) {
@@ -36,7 +35,7 @@ const SVGViewer: React.FC = () => {
             sx={classes.root}
             ref={container}
             dangerouslySetInnerHTML={{ __html: fileContent }}
-        ></Box>
+        />
     );
 };
 

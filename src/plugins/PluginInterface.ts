@@ -6,7 +6,7 @@ export enum ViewerType {
     Model3D,
     Markdown,
     IFrame,
-    // Jupyter,
+    Jupyter,
 }
 
 export interface IPlugin {
@@ -14,4 +14,5 @@ export interface IPlugin {
     name: string;
     extensions: Set<string>;
     viewerType: ViewerType;
+    enabled: boolean;
 }

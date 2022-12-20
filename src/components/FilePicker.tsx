@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 
 import { Box, Button, Input, SxProps } from '@mui/material';
@@ -31,9 +32,11 @@ const classes = {
             position: 'absolute',
             height: '100%',
             cursor: 'pointer',
-        }
+        },
     } as SxProps,
 };
+
+const FILE_BUTTON_ID = 'raised-button-file';
 
 const FilePicker: React.FC = () => {
     const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
@@ -48,7 +51,7 @@ const FilePicker: React.FC = () => {
                     fileSize: e.total,
                 });
             } else {
-                console.error('File content not supported');
+                log('File content not supported');
             }
         }
     };
@@ -83,20 +86,20 @@ const FilePicker: React.FC = () => {
 
     return (
         <Box component="div" sx={classes.root}>
-            <label htmlFor='raised-button-file'>
+            <label htmlFor={FILE_BUTTON_ID}>
                 <Button
                     sx={classes.button}
-                    variant='outlined'
+                    variant="outlined"
                 >
                     <Input
+                        inputProps={{ id: FILE_BUTTON_ID }}
                         sx={classes.filePicker}
-                        id='raised-button-file'
-                        type='file'
+                        type="file"
                         onChange={handleOpen}
                     />
                     Select or drag and drop file here.
                 </Button>
-            </label>{' '}
+            </label>
         </Box>
     );
 };

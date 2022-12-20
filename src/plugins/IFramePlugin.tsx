@@ -5,6 +5,7 @@ export class IFramePlugin implements IPlugin {
     public name = 'Native via iframe';
     public extensions = new Set<string>();
     public viewerType = ViewerType.IFrame;
+    public enabled = true;
 
     constructor() {
         this.extensions.add('html');

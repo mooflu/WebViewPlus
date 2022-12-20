@@ -5,6 +5,7 @@ export class MarkdownPlugin implements IPlugin {
     public name = 'Markdown';
     public extensions = new Set<string>();
     public viewerType = ViewerType.Markdown;
+    public enabled = true;
 
     constructor() {
         this.extensions.add('md');

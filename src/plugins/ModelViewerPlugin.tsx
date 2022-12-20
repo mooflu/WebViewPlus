@@ -5,6 +5,7 @@ export class ModelViewerPlugin implements IPlugin {
     public name = '3D model viewer';
     public extensions = new Set<string>();
     public viewerType = ViewerType.Model3D;
+    public enabled = true;
 
     constructor() {
         this.extensions.add('gltf');

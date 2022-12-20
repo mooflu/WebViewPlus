@@ -6,9 +6,9 @@ import {
     Undo as UndoIcon,
 } from '@mui/icons-material';
 
-import SettingsDialog from '@components/SettingsDialog';
+import SettingsDialog from '@components/Settings/SettingsDialog';
 import FilePicker from '@components/FilePicker';
-import FileViewer from '@components/FileViewer';
+import FileViewer from '@components/Viewers/FileViewer';
 import useStore from '@hooks/useStore';
 import {
     getEnabledExtensions,
@@ -48,10 +48,10 @@ const classes = {
 
 const App: React.FC = () => {
     const theme = useTheme();
-    const fileContent = useStore((state) => state.fileContent);
-    const fileName = useStore((state) => state.fileName);
-    const showConfig = useStore((state) => state.showConfig);
-    const initState = useStore((state) => state.actions.init);
+    const fileContent = useStore(state => state.fileContent);
+    const fileName = useStore(state => state.fileName);
+    const showConfig = useStore(state => state.showConfig);
+    const initState = useStore(state => state.actions.init);
     // MS webview2
     const webview: IWebView2 | undefined = (window as any).chrome?.webview;
     const isEmbedded = !!webview;
@@ -62,16 +62,16 @@ const App: React.FC = () => {
         if (isEmbedded) {
             webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
             webview.addEventListener('message', handleWebMessage);
-            webview.postMessage('AppReadyForData');
-            const extensions = getEnabledExtensions().join(',');
-            webview.postMessage(extensions);
+            webview.postMessage({ command: 'AppReadyForData', data: null });
+            const extensions = getEnabledExtensions();
+            webview.postMessage({ command: 'Extensions', data: extensions });
         }
         return () => {
             if (isEmbedded) {
                 webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
                 webview.removeEventListener('message', handleWebMessage);
             }
-        }
+        };
     }, []);
 
     const toggleSettings = () => {
@@ -85,7 +85,7 @@ const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            {fileContent === null &&  (
+            {fileContent === null && (
                 <>
                     {(isEmbedded || fileName) ? (
                         <Box component="div" sx={classes.root}>

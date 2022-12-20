@@ -8,22 +8,22 @@ const classes = {
     root: {
         width: '100%',
         height: '100%',
-        'iframe': {
+        iframe: {
             border: 'none',
         },
     } as SxProps,
 };
 
 const IFrameViewer: React.FC = () => {
-    const fileUrl = useStore((state) => state.fileUrl);
+    const fileUrl = useStore(state => state.fileUrl);
     return (
         <Box component="div" sx={classes.root}>
             <iframe
-                title='iframe preview'
-                width='100%'
-                height='100%'
+                title="iframe preview"
+                width="100%"
+                height="100%"
                 src={fileUrl}
-            ></iframe>
+            />
         </Box>
     );
 };

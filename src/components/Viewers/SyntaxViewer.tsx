@@ -9,8 +9,8 @@ import useStore from '@hooks/useStore';
 import { Ext2Lang } from '@plugins/SyntaxPlugin';
 
 const SyntaxViewer: React.FC = () => {
-    const fileContent = useStore((state) => state.fileContent) as string;
-    const fileExt = useStore((state) => state.fileExt);
+    const fileContent = useStore(state => state.fileContent) as string;
+    const fileExt = useStore(state => state.fileExt);
 
     const lang = Ext2Lang[fileExt];
 

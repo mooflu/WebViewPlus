@@ -12,17 +12,17 @@ const useTheme = () => {
             palette: {
                 mode: isDark ? 'dark' : 'light',
                 ...(isDark
-                ? {
-                    // palette values for dark mode
-                    primary: indigo,
-                    divider: indigo[700],
-                    background: {
-                        default: grey[900],
-                        paper: grey[900],
-                    },
-                } : {
-                    // palette values for light mode
-                }),
+                    ? {
+                        // palette values for dark mode
+                        primary: indigo,
+                        divider: indigo[700],
+                        background: {
+                            default: grey[900],
+                            paper: grey[900],
+                        },
+                    } : {
+                        // palette values for light mode
+                    }),
             },
             components: {
                 MuiCssBaseline: {
@@ -59,19 +59,37 @@ const useTheme = () => {
                             backgroundColor: isDark ? '#115 !important' : '#eef !important',
                         },
                         '.rdg-header-row:hover': {
-                            filter:  isDark ? 'brightness(1.2)' : 'brightness(0.8)',
+                            filter: isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
                         '.rdg-row-odd': {
-                            backgroundColor:  isDark ? '#551 !important' : '#ffe !important',
+                            backgroundColor: isDark ? '#551 !important' : '#ffe !important',
                         },
                         '.rdg-row-odd:hover': {
-                            filter:  isDark ? 'brightness(1.2)' : 'brightness(0.8)',
+                            filter: isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
                         '.rdg-row-even': {
-                            backgroundColor:  isDark ? '#151 !important' : '#efe !important',
+                            backgroundColor: isDark ? '#151 !important' : '#efe !important',
                         },
                         '.rdg-row-even:hover': {
-                            filter:  isDark ? 'brightness(1.2)' : 'brightness(0.8)',
+                            filter: isDark ? 'brightness(1.2)' : 'brightness(0.8)',
+                        },
+                    },
+                },
+                MuiTab: {
+                    styleOverrides: {
+                        root: {
+                            borderBottom: isDark ? '1px solid #333' : '1px solid #eee',
+                            '&.Mui-selected': {
+                                backgroundColor: isDark ? '#282828' : '#e8e8e8',
+                            },
+                        },
+                    },
+                },
+                MuiDialogTitle: {
+                    styleOverrides: {
+                        root: {
+                            backgroundColor: isDark ? '#282828' : '#ddd',
+                            borderBottom: isDark ? '1px solid #444' : '1px solid #aaa',
                         },
                     },
                 },
@@ -80,6 +98,6 @@ const useTheme = () => {
     }, [isDark]);
 
     return theme;
-}
+};
 
 export default useTheme;

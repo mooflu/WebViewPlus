@@ -4,7 +4,7 @@ import gfm from 'remark-gfm';
 import math from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
-import '../markdown.css';
+import './markdown.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {
     vscDarkPlus,
@@ -16,7 +16,7 @@ import { Box } from '@mui/material';
 import useStore from '@hooks/useStore';
 
 const MarkdownViewer: React.FC = () => {
-    const fileContent = useStore((state) => state.fileContent) as string;
+    const fileContent = useStore(state => state.fileContent) as string;
 
     let style = vs;
     if (
@@ -44,13 +44,15 @@ const MarkdownViewer: React.FC = () => {
                                     data: 'textLine', // className doesn't work :(
                                 }}
                                 showLineNumbers
-                                children={String(children).replace(/\n$/, '')}
-                            />
+                            >
+                                {String(children).replace(/\n$/, '')}
+                            </SyntaxHighlighter>
                         );
                     },
                 }}
-                children={fileContent}
-            />
+            >
+                {fileContent}
+            </ReactMarkdown>
         </Box>
     );
 };

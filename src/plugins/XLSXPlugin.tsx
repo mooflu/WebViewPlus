@@ -5,9 +5,10 @@ import { IPlugin, ViewerType } from './PluginInterface';
 
 export class XLSXPlugin implements IPlugin {
     public shortName = 'xlsx';
-    public name = 'Tabular data (XLSX, CSV, TSV)';
+    public name = 'Tabular data';
     public extensions = new Set<string>();
     public viewerType = ViewerType.Tabular;
+    public enabled = true;
 
     constructor() {
         this.extensions.add('xlsx');
