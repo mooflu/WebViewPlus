@@ -32,7 +32,7 @@ const PluginWithSwitch: React.FC<PluginWithSwitchProps> = (props) => {
                 width: '100%',
             }}
         >
-            <Typography>
+            <Typography sx={{ color: p.enabled ? '' : 'action.disabled' }}>
                 {p.name}
             </Typography>
             <Switch checked={p.enabled} onChange={handleChange} />

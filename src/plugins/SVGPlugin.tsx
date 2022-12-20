@@ -3,11 +3,10 @@ import { IPlugin, ViewerType } from './PluginInterface';
 export class SVGPlugin implements IPlugin {
     public shortName = 'svg';
     public name = 'SVG';
-    public extensions = new Set<string>();
     public viewerType = ViewerType.SVG;
     public enabled = true;
-
-    constructor() {
-        this.extensions.add('svg');
-    }
+    public extraExtensions: string[] = [];
+    public extensions: { [index: string]: boolean } = {
+        svg: true,
+    };
 }

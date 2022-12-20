@@ -12,15 +12,13 @@ export interface IWebView2 {
 }
 
 export const getEnabledExtensions = () => {
-    const { plugins, disabledExtensions } = store.getState();
+    const { plugins } = store.getState();
     const extensions = new Set<string>();
     for (const p of plugins) {
-        for (const fileExt of p.extensions.keys()) {
-            const isDisabled =
-                disabledExtensions[fileExt] &&
-                disabledExtensions[fileExt][p.shortName];
+        if (!p.enabled) continue;
 
-            if (!isDisabled) {
+        for (const fileExt in p.extensions) {
+            if (p.extensions[fileExt]) {
                 extensions.add(fileExt);
             }
         }

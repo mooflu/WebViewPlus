@@ -42,14 +42,15 @@ export const Ext2Lang: { [index: string]: string } = {
 export class SyntaxPlugin implements IPlugin {
     public shortName = 'syntax';
     public name = 'Syntax highlighter';
-    public extensions = new Set<string>();
     public viewerType = ViewerType.Syntax;
     public enabled = true;
+    public extraExtensions: string[] = [];
+    public extensions: { [index: string]: boolean } = {};
 
     constructor() {
         for (const ext in Ext2Lang) {
             if ({}.hasOwnProperty.call(Ext2Lang, ext)) {
-                this.extensions.add(ext);
+                this.extensions[ext] = true;
             }
         }
     }

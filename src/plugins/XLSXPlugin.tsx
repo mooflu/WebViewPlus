@@ -6,13 +6,12 @@ import { IPlugin, ViewerType } from './PluginInterface';
 export class XLSXPlugin implements IPlugin {
     public shortName = 'xlsx';
     public name = 'Tabular data';
-    public extensions = new Set<string>();
     public viewerType = ViewerType.Tabular;
     public enabled = true;
-
-    constructor() {
-        this.extensions.add('xlsx');
-        this.extensions.add('csv');
-        this.extensions.add('tsv');
-    }
+    public extraExtensions: string[] = [];
+    public extensions: { [index: string]: boolean } = {
+        xlsx: true,
+        csv: true,
+        tsv: true,
+    };
 }

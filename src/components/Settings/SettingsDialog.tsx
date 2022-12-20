@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
     Box,
+    Button,
     Dialog,
     Slide,
     IconButton,
@@ -73,7 +74,7 @@ const SettingsDialog: React.FC = () => {
             fullScreen
         >
             <DialogTitle>
-                <Typography sx={{ fontSize: '1.3rem' }}>Settings</Typography>
+                <Typography sx={{ fontSize: '1.6rem' }}>Settings</Typography>
                 <IconButton
                     sx={{ position: 'absolute', right: 8, top: 8 }}
                     onClick={closeSettings}
@@ -81,12 +82,19 @@ const SettingsDialog: React.FC = () => {
                 >
                     <CloseIcon />
                 </IconButton>
+                <Button
+                    variant="outlined"
+                    sx={{ position: 'absolute', right: 11, bottom: 8 }}
+                    onClick={closeSettings}
+                >
+                    Close
+                </Button>
             </DialogTitle>
 
-            <DialogContent sx={{ margin: 0, padding: 0 }}>
+            <DialogContent sx={{ margin: 0, padding: 0, bgcolor: 'background.paper' }}>
                 <Box
                     component="div"
-                    sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex', height: '100%' }}
+                    sx={{ flexGrow: 1, display: 'flex', height: '100%' }}
                 >
                     <Tabs
                         orientation="vertical"

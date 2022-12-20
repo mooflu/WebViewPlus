@@ -1,5 +1,10 @@
 import React from 'react';
 
+import {
+    Box,
+    Typography,
+} from '@mui/material';
+
 import IFrameViewer from '@components/Viewers/IFrameViewer';
 import MarkdownViewer from '@components/Viewers/MarkdownViewer';
 import ModelViewer from '@components/Viewers/ModelViewer';
@@ -10,21 +15,37 @@ import TabularViewer from '@components/Viewers/TabularViewer';
 import { ViewerType } from '@plugins/PluginInterface';
 import useStore from '@hooks/useStore';
 
+const FileTypeNotSupported: React.FC = () => {
+    return (
+        <Box
+            component="div"
+            sx={{
+                display: 'flex',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
+                padding: '1rem',
+            }}
+        >
+            <Typography variant="h4">
+                File type not enabled or not supported.
+            </Typography>
+        </Box>
+    );
+};
+
 const FileViewer: React.FC = () => {
     const fileExt = useStore(state => state.fileExt);
     const plugins = useStore(state => state.plugins);
     const [viewerType, setViewerType] = React.useState<ViewerType>(ViewerType.Unknown);
-    const disabledExtensions = useStore(state => state.disabledExtensions);
 
     React.useEffect(() => {
+        setViewerType(ViewerType.Unknown);
         for (const p of plugins) {
-            const isDisabled =
-                disabledExtensions[fileExt] &&
-                disabledExtensions[fileExt][p.shortName];
+            if (!p.enabled) continue;
 
-            if (isDisabled) continue;
-
-            if (p.extensions.has(fileExt)) {
+            if (p.extensions[fileExt]) {
                 setViewerType(p.viewerType);
                 break;
             }
@@ -40,8 +61,8 @@ const FileViewer: React.FC = () => {
                 [ViewerType.SVG]: <SVGViewer />,
                 [ViewerType.Syntax]: <SyntaxViewer />,
                 [ViewerType.Tabular]: <TabularViewer />,
-                [ViewerType.Jupyter]: <div>File type not supported.</div>,
-                [ViewerType.Unknown]: <div>File type not supported.</div>,
+                [ViewerType.Jupyter]: <FileTypeNotSupported />,
+                [ViewerType.Unknown]: <FileTypeNotSupported />,
             }[viewerType]}
         </>
     );

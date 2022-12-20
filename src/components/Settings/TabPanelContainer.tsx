@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
     Box,
-    Typography,
 } from '@mui/material';
 
 interface TabPanelContainerProps {
@@ -24,7 +23,7 @@ const TabPanelContainer: React.FC<TabPanelContainerProps> = (props) => {
         >
             {value === index && (
                 <Box component="div" sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </Box>

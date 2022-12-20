@@ -3,16 +3,15 @@ import { IPlugin, ViewerType } from './PluginInterface';
 export class IFramePlugin implements IPlugin {
     public shortName = 'iframe';
     public name = 'Native via iframe';
-    public extensions = new Set<string>();
     public viewerType = ViewerType.IFrame;
     public enabled = true;
-
-    constructor() {
-        this.extensions.add('html');
-        this.extensions.add('htm');
-        this.extensions.add('mht');
-        this.extensions.add('mhtml');
-        this.extensions.add('pdf');
-        this.extensions.add('webp');
-    }
+    public extraExtensions: string[] = [];
+    public extensions: { [index: string]: boolean } = {
+        html: true,
+        htm: true,
+        mht: true,
+        mhtml: true,
+        pdf: true,
+        webp: true,
+    };
 }

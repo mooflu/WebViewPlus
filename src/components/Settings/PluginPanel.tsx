@@ -17,29 +17,27 @@ interface PluginPanelProps {
 
 const PluginPanel: React.FC<PluginPanelProps> = (props) => {
     const { p } = props;
-    const disabledExtensions = useStore(state => state.disabledExtensions);
     const toggleExtension = useStore(state => state.actions.toggleExtension);
 
-    const extensionItems = Array.from(p.extensions).map((e) => {
-        const isDisabled =
-            disabledExtensions[e] &&
-            disabledExtensions[e][p.shortName];
+    const extensionItems = Object.keys(p.extensions).map((ext: string) => {
+        const enabled = p.extensions[ext];
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-            toggleExtension(e, p.shortName);
+            toggleExtension(ext, p.shortName);
         };
         return (
             <FormControlLabel
+                key={ext}
                 sx={{ width: '8rem' }}
-                control={<Checkbox disabled={!p.enabled} checked={!isDisabled} onChange={handleChange} />}
-                label={e}
+                control={<Checkbox disabled={!p.enabled} checked={enabled} onChange={handleChange} />}
+                label={ext}
             />
         );
     });
 
     return (
         <>
-            <Typography variant="h5">
-                File Extensions:
+            <Typography variant="h6" sx={{ mb: '1rem' }}>
+                File Extensions
             </Typography>
             <Box component="div" sx={{ display: 'flex' }}>
                 <FormGroup sx={{ flexDirection: 'row' }}>

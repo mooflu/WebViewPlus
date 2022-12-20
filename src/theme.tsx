@@ -31,6 +31,20 @@ const useTheme = () => {
                             width: '100%',
                             height: '100%',
                             margin: 0,
+                            // width of the entire scrollbar
+                            '*::-webkit-scrollbar': {
+                                width: '10px',
+                            },
+                            /* color of the tracking area
+                            '*::-webkit-scrollbar-track': {
+                                backgroundColor: '#888',
+                            },
+                            */
+                            '*::-webkit-scrollbar-thumb': {
+                                backgroundColor: isDark ? '#444' : '#ccc',
+                                borderRadius: '5px',
+                                border: isDark ? '2px solid #222' : '2px solid #fff',
+                            },
                         },
                         body: {
                             width: '100%',
