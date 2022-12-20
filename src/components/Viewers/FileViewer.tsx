@@ -38,7 +38,7 @@ const FileTypeNotSupported: React.FC = () => {
 const FileViewer: React.FC = () => {
     const fileExt = useStore(state => state.fileExt);
     const plugins = useStore(state => state.plugins);
-    const [viewerType, setViewerType] = React.useState<ViewerType>(ViewerType.Unknown);
+    const [viewerType, setViewerType] = React.useState<ViewerType | null>(null);
 
     React.useEffect(() => {
         for (const p of plugins) {
@@ -51,6 +51,10 @@ const FileViewer: React.FC = () => {
         }
         setViewerType(ViewerType.Unknown);
     }, [fileExt, plugins]);
+
+    if (viewerType === null) {
+        return (<></>);
+    }
 
     return (
         <>

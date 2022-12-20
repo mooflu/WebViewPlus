@@ -73,7 +73,7 @@ const App: React.FC = () => {
     };
 
     const resetFile = () => {
-        useStore.setState({ fileName: '', fileSize: 0, fileContent: null });
+        useStore.getState().actions.unload();
     };
 
     return (

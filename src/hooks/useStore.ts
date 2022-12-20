@@ -103,6 +103,17 @@ export const store = createVanilla(
                         return { plugins: [...state.plugins] };
                     });
                 },
+                unload: () => {
+                    set(() => {
+                        return {
+                            fileSize: 0,
+                            fileContent: null,
+                            fileName: '',
+                            fileExt: '',
+                            fileUrl: '',
+                        };
+                    });
+                },
                 togglePlugin: (p: IPlugin) => {
                     set((state) => {
                         p.enabled = !p.enabled;

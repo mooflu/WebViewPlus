@@ -31,9 +31,9 @@ const useTheme = () => {
                             width: '100%',
                             height: '100%',
                             margin: 0,
-                            // width of the entire scrollbar
                             '*::-webkit-scrollbar': {
-                                width: '10px',
+                                width: '10px', // width of vertical scrollbar
+                                height: '10px', // height of horizontal scrollbar
                             },
                             /* color of the tracking area
                             '*::-webkit-scrollbar-track': {
@@ -44,6 +44,9 @@ const useTheme = () => {
                                 backgroundColor: isDark ? '#444' : '#ccc',
                                 borderRadius: '5px',
                                 border: isDark ? '2px solid #222' : '2px solid #fff',
+                            },
+                            '*::-webkit-scrollbar-corner': {
+                                backgroundColor: isDark ? '#222' : '#fff',
                             },
                         },
                         body: {
@@ -70,19 +73,19 @@ const useTheme = () => {
                             color: isDark ? '#aaa !important' : '#333 !important',
                         },
                         '.rdg-header-row': {
-                            backgroundColor: isDark ? '#115 !important' : '#eef !important',
+                            backgroundColor: isDark ? '#115 !important' : '#ccf !important',
                         },
                         '.rdg-header-row:hover': {
                             filter: isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
                         '.rdg-row-odd': {
-                            backgroundColor: isDark ? '#551 !important' : '#ffe !important',
+                            backgroundColor: isDark ? '#222 !important' : '#fff !important',
                         },
                         '.rdg-row-odd:hover': {
                             filter: isDark ? 'brightness(1.2)' : 'brightness(0.8)',
                         },
                         '.rdg-row-even': {
-                            backgroundColor: isDark ? '#151 !important' : '#efe !important',
+                            backgroundColor: isDark ? '#333 !important' : '#eee !important',
                         },
                         '.rdg-row-even:hover': {
                             filter: isDark ? 'brightness(1.2)' : 'brightness(0.8)',

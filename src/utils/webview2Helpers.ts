@@ -14,13 +14,7 @@ export interface IWebView2 {
 export const handleWebMessage = (e: MessageEvent & {data: string}) => {
     log(`Received handleWebMessage: ${e.data}`);
     if (e.data === 'unload') {
-        store.setState({
-            fileSize: 0,
-            fileContent: null,
-            fileName: '',
-            fileExt: '',
-            fileUrl: '',
-        });
+        store.getState().actions.unload();
     }
 };
 
