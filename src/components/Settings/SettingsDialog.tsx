@@ -18,6 +18,7 @@ import {
 import { TransitionProps } from '@mui/material/transitions';
 
 import useStore from '@hooks/useStore';
+import { ViewerType } from '@plugins/PluginInterface';
 
 import PluginPanel from './PluginPanel';
 import PluginWithSwitch from './PluginWithSwitch';
@@ -44,6 +45,7 @@ const SettingsDialog: React.FC = () => {
     };
 
     const pluginTabs = plugins.map((p) => {
+        const withSwitch = p.viewerType !== ViewerType.IFrame;
         return (
             <Tab
                 key={p.name}
@@ -53,7 +55,7 @@ const SettingsDialog: React.FC = () => {
                     justifyContent: 'space-between',
                     textTransform: 'initial',
                 }}
-                label={<PluginWithSwitch p={p} />}
+                label={<PluginWithSwitch p={p} withSwitch={withSwitch} />}
             />
         );
     });

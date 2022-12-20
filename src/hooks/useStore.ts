@@ -9,6 +9,7 @@ import { SVGPlugin } from '@plugins/SVGPlugin';
 import { IFramePlugin } from '@plugins/IFramePlugin';
 import { MarkdownPlugin } from '@plugins/MarkdownPlugin';
 import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
+import { IWebView2 } from '@utils/webview2Helpers';
 
 const PLUGIN_SETTINGS_KEY = 'pluginSettings';
 
@@ -29,6 +30,21 @@ interface PluginSettings {
     extraExtensions: string[];
 }
 
+const getEnabledExtensions = () => {
+    const { plugins } = store.getState();
+    const extensions = new Set<string>();
+    for (const p of plugins) {
+        if (!p.enabled) continue;
+
+        for (const fileExt in p.extensions) {
+            if (p.extensions[fileExt]) {
+                extensions.add(fileExt);
+            }
+        }
+    }
+    return [...extensions];
+};
+
 const savePluginSettings = (plugins: IPlugin[]) => {
     const pluginSettings: PluginSettings[] = [];
     for (const p of plugins) {
@@ -45,39 +61,45 @@ const savePluginSettings = (plugins: IPlugin[]) => {
     );
 };
 
+const loadPluginSettings = () => {
+    const { pluginByShortName } = store.getState();
+
+    const pluginSettings: PluginSettings[] = JSON.parse(
+        window.localStorage.getItem(PLUGIN_SETTINGS_KEY) || '[]',
+    );
+    for (const ps of pluginSettings) {
+        const p = pluginByShortName[ps.shortName];
+        if (p) {
+            p.enabled = ps.enabled;
+            p.extraExtensions = ps.extraExtensions;
+            for (const ext in ps.extensions) {
+                if (ext in p.extensions) {
+                    p.extensions[ext] = ps.extensions[ext];
+                }
+            }
+        }
+    }
+};
+
 export const store = createVanilla(
     combine(
         {
+            webview: (window as any).chrome?.webview as IWebView2 | undefined,
             fileSize: 0,
             fileName: '',
             fileExt: '',
             fileUrl: '',
             fileContent: null as string | ArrayBuffer | null,
-            plugins: PLUGINS,
-            showConfig: false,
+            plugins: PLUGINS as IPlugin[],
+            showConfig: false as boolean,
             pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
         },
         set => ({
             actions: {
-                // TODO: embedded to use QL config to store, otherwise localStorage
                 init: () => {
                     set((state) => {
-                        const pluginSettings: PluginSettings[] = JSON.parse(
-                            window.localStorage.getItem(PLUGIN_SETTINGS_KEY) || '[]',
-                        );
-                        for (const ps of pluginSettings) {
-                            const p = state.pluginByShortName[ps.shortName];
-                            if (p) {
-                                p.enabled = ps.enabled;
-                                p.extraExtensions = ps.extraExtensions;
-                                for (const ext in ps.extensions) {
-                                    if (ext in p.extensions) {
-                                        p.extensions[ext] = ps.extensions[ext];
-                                    }
-                                }
-                            }
-                        }
-
+                        loadPluginSettings();
+                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };
                     });
                 },
@@ -85,6 +107,7 @@ export const store = createVanilla(
                     set((state) => {
                         p.enabled = !p.enabled;
                         savePluginSettings(state.plugins);
+                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };
                     });
                 },
@@ -95,6 +118,7 @@ export const store = createVanilla(
                             p.extensions[ext] = !p.extensions[ext];
                         }
                         savePluginSettings(state.plugins);
+                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };
                     });
                 },

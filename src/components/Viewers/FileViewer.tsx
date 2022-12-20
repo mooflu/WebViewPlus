@@ -41,15 +41,15 @@ const FileViewer: React.FC = () => {
     const [viewerType, setViewerType] = React.useState<ViewerType>(ViewerType.Unknown);
 
     React.useEffect(() => {
-        setViewerType(ViewerType.Unknown);
         for (const p of plugins) {
             if (!p.enabled) continue;
 
             if (p.extensions[fileExt]) {
                 setViewerType(p.viewerType);
-                break;
+                return;
             }
         }
+        setViewerType(ViewerType.Unknown);
     }, [fileExt, plugins]);
 
     return (

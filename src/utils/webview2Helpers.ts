@@ -11,21 +11,6 @@ export interface IWebView2 {
     // dispatchEvent
 }
 
-export const getEnabledExtensions = () => {
-    const { plugins } = store.getState();
-    const extensions = new Set<string>();
-    for (const p of plugins) {
-        if (!p.enabled) continue;
-
-        for (const fileExt in p.extensions) {
-            if (p.extensions[fileExt]) {
-                extensions.add(fileExt);
-            }
-        }
-    }
-    return [...extensions];
-};
-
 export const handleWebMessage = (e: MessageEvent & {data: string}) => {
     log(`Received handleWebMessage: ${e.data}`);
     if (e.data === 'unload') {

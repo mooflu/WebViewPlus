@@ -11,10 +11,8 @@ import FilePicker from '@components/FilePicker';
 import FileViewer from '@components/Viewers/FileViewer';
 import useStore from '@hooks/useStore';
 import {
-    getEnabledExtensions,
     handleSharedBufferReceived,
     handleWebMessage,
-    IWebView2,
 } from '@utils/webview2Helpers';
 
 import useTheme from './theme';
@@ -48,26 +46,22 @@ const classes = {
 
 const App: React.FC = () => {
     const theme = useTheme();
+    const webview = useStore(state => state.webview);
     const fileContent = useStore(state => state.fileContent);
     const fileName = useStore(state => state.fileName);
     const showConfig = useStore(state => state.showConfig);
     const initState = useStore(state => state.actions.init);
-    // MS webview2
-    const webview: IWebView2 | undefined = (window as any).chrome?.webview;
-    const isEmbedded = !!webview;
 
     React.useEffect(() => {
         initState();
 
-        if (isEmbedded) {
+        if (webview) {
             webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
             webview.addEventListener('message', handleWebMessage);
             webview.postMessage({ command: 'AppReadyForData', data: null });
-            const extensions = getEnabledExtensions();
-            webview.postMessage({ command: 'Extensions', data: extensions });
         }
         return () => {
-            if (isEmbedded) {
+            if (webview) {
                 webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
                 webview.removeEventListener('message', handleWebMessage);
             }
@@ -87,7 +81,7 @@ const App: React.FC = () => {
             <CssBaseline />
             {fileContent === null && (
                 <>
-                    {(isEmbedded || fileName) ? (
+                    {(webview || fileName) ? (
                         <Box component="div" sx={classes.root}>
                             <CircularProgress />
                         </Box>
@@ -102,7 +96,7 @@ const App: React.FC = () => {
             <IconButton sx={[classes.floatButton, classes.settingsButton] as SxProps} onClick={toggleSettings}>
                 <SettingsIcon />
             </IconButton>
-            {!isEmbedded && fileName && (
+            {!webview && fileName && (
                 <IconButton sx={[classes.floatButton, classes.resetButton] as SxProps} onClick={resetFile}>
                     <UndoIcon />
                 </IconButton>

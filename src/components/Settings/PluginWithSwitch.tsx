@@ -11,10 +11,11 @@ import { IPlugin } from '@plugins/PluginInterface';
 
 interface PluginWithSwitchProps {
     p: IPlugin;
+    withSwitch: boolean;
 }
 
 const PluginWithSwitch: React.FC<PluginWithSwitchProps> = (props) => {
-    const { p } = props;
+    const { p, withSwitch } = props;
     const togglePlugin = useStore(state => state.actions.togglePlugin);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +36,7 @@ const PluginWithSwitch: React.FC<PluginWithSwitchProps> = (props) => {
             <Typography sx={{ color: p.enabled ? '' : 'action.disabled' }}>
                 {p.name}
             </Typography>
-            <Switch checked={p.enabled} onChange={handleChange} />
+            {withSwitch && <Switch checked={p.enabled} onChange={handleChange} />}
         </Box>
     );
 };

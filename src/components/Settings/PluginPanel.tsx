@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 
 import useStore from '@hooks/useStore';
-import { IPlugin } from '@plugins/PluginInterface';
+import { IPlugin, ViewerType } from '@plugins/PluginInterface';
 
 interface PluginPanelProps {
     p: IPlugin;
@@ -20,7 +20,8 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
     const toggleExtension = useStore(state => state.actions.toggleExtension);
 
     const extensionItems = Object.keys(p.extensions).map((ext: string) => {
-        const enabled = p.extensions[ext];
+        const checked = p.extensions[ext];
+        const enabled = p.enabled && !(p.viewerType === ViewerType.IFrame && ext === 'html');
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             toggleExtension(ext, p.shortName);
         };
@@ -28,7 +29,7 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
             <FormControlLabel
                 key={ext}
                 sx={{ width: '8rem' }}
-                control={<Checkbox disabled={!p.enabled} checked={enabled} onChange={handleChange} />}
+                control={<Checkbox disabled={!enabled} checked={checked} onChange={handleChange} />}
                 label={ext}
             />
         );
