@@ -41,6 +41,9 @@ const getEnabledExtensions = () => {
                 extensions.add(fileExt);
             }
         }
+        for (const fileExt of p.extraExtensions) {
+            extensions.add(fileExt);
+        }
     }
     return [...extensions];
 };
@@ -128,6 +131,15 @@ export const store = createVanilla(
                         if (ext in p.extensions) {
                             p.extensions[ext] = !p.extensions[ext];
                         }
+                        savePluginSettings(state.plugins);
+                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
+                        return { plugins: [...state.plugins] };
+                    });
+                },
+                setExtraExtensions: (extensions: string[], pluginShortName: string) => {
+                    set((state) => {
+                        const p = state.pluginByShortName[pluginShortName];
+                        p.extraExtensions = extensions;
                         savePluginSettings(state.plugins);
                         state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };

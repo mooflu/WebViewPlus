@@ -48,6 +48,11 @@ const FileViewer: React.FC = () => {
                 setViewerType(p.viewerType);
                 return;
             }
+
+            if (p.extraExtensions.filter(e => e === fileExt).length > 0) {
+                setViewerType(p.viewerType);
+                return;
+            }
         }
         setViewerType(ViewerType.Unknown);
     }, [fileExt, plugins]);

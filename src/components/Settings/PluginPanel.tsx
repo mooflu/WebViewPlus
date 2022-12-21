@@ -5,6 +5,7 @@ import {
     Checkbox,
     FormGroup,
     FormControlLabel,
+    TextField,
     Typography,
 } from '@mui/material';
 
@@ -18,6 +19,12 @@ interface PluginPanelProps {
 const PluginPanel: React.FC<PluginPanelProps> = (props) => {
     const { p } = props;
     const toggleExtension = useStore(state => state.actions.toggleExtension);
+    const setExtraExtensions = useStore(state => state.actions.setExtraExtensions);
+    const [extensionsStr, setExtensionsStr] = React.useState(p.extraExtensions.join(','));
+
+    React.useEffect(() => {
+        setExtensionsStr(p.extraExtensions.join(','));
+    }, [p]);
 
     const extensionItems = Object.keys(p.extensions).map((ext: string) => {
         const checked = p.extensions[ext];
@@ -35,6 +42,12 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
         );
     });
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const extraExtensions = event.target.value.split(',').map(e => e.trim().replace('.', '').toLocaleLowerCase());
+        setExtraExtensions(extraExtensions, p.shortName);
+        setExtensionsStr(event.target.value);
+    };
+
     return (
         <>
             <Typography variant="h6" sx={{ mb: '1rem' }}>
@@ -45,6 +58,18 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
                     {extensionItems}
                 </FormGroup>
             </Box>
+            <TextField
+                fullWidth
+                sx={{ mt: '1rem' }}
+                size="small"
+                label="Extra file extensions (comma separated; without dot)"
+                variant="outlined"
+                onChange={handleChange}
+                value={extensionsStr}
+            />
+            <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
+                Note: Extensions for binary files require code changes
+            </Typography>
         </>
     );
 };

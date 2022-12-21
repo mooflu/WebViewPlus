@@ -11,6 +11,8 @@ export class XLSXPlugin implements IPlugin {
     public extraExtensions: string[] = [];
     public extensions: { [index: string]: boolean } = {
         xlsx: true,
+        xls: true,
+        ods: true,
         csv: true,
         tsv: true,
     };

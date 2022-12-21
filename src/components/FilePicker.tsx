@@ -67,6 +67,8 @@ const FilePicker: React.FC = () => {
             fileReader.onloadend = handledDataLoaded;
             if (
                 ext === 'xlsx' ||
+                ext === 'xls' ||
+                ext === 'ods' ||
                 ext === 'gltf' ||
                 ext === 'glb' ||
                 ext === 'pdf' ||

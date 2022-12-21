@@ -20,6 +20,7 @@ const TabPanelContainer: React.FC<TabPanelContainerProps> = (props) => {
             hidden={value !== index}
             id={`vertical-tabpanel-${index}`}
             aria-labelledby={`vertical-tab-${index}`}
+            sx={{ width: '100%' }}
         >
             {value === index && (
                 <Box component="div" sx={{ p: 3 }}>

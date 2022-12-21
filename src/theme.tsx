@@ -110,6 +110,13 @@ const useTheme = () => {
                         },
                     },
                 },
+                MuiTypography: {
+                    styleOverrides: {
+                        caption: {
+                            color: isDark ? '#666' : '#aaa',
+                        },
+                    },
+                },
             },
         }));
     }, [isDark]);

@@ -12,7 +12,7 @@ const SyntaxViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
     const fileExt = useStore(state => state.fileExt);
 
-    const lang = Ext2Lang[fileExt];
+    const lang = Ext2Lang[fileExt] || fileExt;
 
     let style = vs;
     if (
