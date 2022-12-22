@@ -11,6 +11,7 @@ import ModelViewer from '@components/Viewers/ModelViewer';
 import SVGViewer from '@components/Viewers/SVGViewer';
 import SyntaxViewer from '@components/Viewers/SyntaxViewer';
 import TabularViewer from '@components/Viewers/TabularViewer';
+import ImageViewer from '@components/Viewers/ImageViewer';
 // import JupyterNBViewer from '@components/Viewers/JupyterNBViewer';
 import { ViewerType } from '@plugins/PluginInterface';
 import useStore from '@hooks/useStore';
@@ -70,6 +71,7 @@ const FileViewer: React.FC = () => {
                 [ViewerType.SVG]: <SVGViewer />,
                 [ViewerType.Syntax]: <SyntaxViewer />,
                 [ViewerType.Tabular]: <TabularViewer />,
+                [ViewerType.Image]: <ImageViewer />,
                 [ViewerType.Jupyter]: <FileTypeNotSupported />,
                 [ViewerType.Unknown]: <FileTypeNotSupported />,
             }[viewerType]}

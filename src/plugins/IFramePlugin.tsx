@@ -11,6 +11,5 @@ export class IFramePlugin implements IPlugin {
         mht: true,
         mhtml: true,
         pdf: true,
-        webp: true,
     };
 }

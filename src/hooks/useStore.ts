@@ -9,15 +9,17 @@ import { SVGPlugin } from '@plugins/SVGPlugin';
 import { IFramePlugin } from '@plugins/IFramePlugin';
 import { MarkdownPlugin } from '@plugins/MarkdownPlugin';
 import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
+import { ImagePlugin } from '@plugins/ImagePlugin';
 import { IWebView2 } from '@utils/webview2Helpers';
 
 const PLUGIN_SETTINGS_KEY = 'pluginSettings';
 
 const PLUGINS = [
     new IFramePlugin(),
-    new XLSXPlugin(),
     new SVGPlugin(),
+    new ImagePlugin(),
     new MarkdownPlugin(),
+    new XLSXPlugin(),
     new ModelViewerPlugin(),
     new SyntaxPlugin(),
     // new JupyterNBPlugin(), // notebookjs + deps is large; notebooksjs not working with vite

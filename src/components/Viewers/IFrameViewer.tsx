@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, SxProps } from '@mui/material';
 
 import useStore from '@hooks/useStore';
+import { log } from '@utils/log';
 
 const classes = {
     root: {
@@ -16,6 +17,7 @@ const classes = {
 
 const IFrameViewer: React.FC = () => {
     const fileUrl = useStore(state => state.fileUrl);
+    log(`IFrameViewer url:${fileUrl}`);
     return (
         <Box component="div" sx={classes.root}>
             <iframe

@@ -6,6 +6,7 @@ pluginName:
   svg: SVG
   syntax: Syntax-Highlighter
   jupyter: Jupyter Notebook
+  image: Bild
 SelectOrDnDFile: Wählen Sie eine Datei aus oder ziehen Sie sie per Drag & Drop hierher.
 Settings: Einstellungen
 FileExtensions: Dateierweiterungen

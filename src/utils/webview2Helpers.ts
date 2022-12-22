@@ -21,6 +21,13 @@ export const handleWebMessage = (e: MessageEvent & {data: string}) => {
 const ext2Mime: { [index: string]: string } = {
     pdf: 'application/pdf',
     webp: 'image/webp',
+    png: 'image/png',
+    apng: 'image/png',
+    jpg: 'image/jpeg',
+    jpeg: 'image/jpeg',
+    gif: 'image/gif',
+    tif: 'image/tiff',
+    tiff: 'image/tiff',
 };
 
 export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: any, getBuffer: any}) => {
@@ -32,7 +39,7 @@ export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: an
     const fileExt = fileName.split('.').pop()?.toLocaleLowerCase() || '';
     log(`Received handleSharedBufferReceived: File=${fileName} Size=${fileSize}`);
 
-    // fileUrl for iframed content (pdf, webp, html, etc.)
+    // fileUrl for iframed and img content (pdf, html, etc.)
     let fileUrl = '';
     if (isBinary) {
         const mimeType = ext2Mime[fileExt]

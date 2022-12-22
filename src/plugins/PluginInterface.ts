@@ -7,6 +7,7 @@ export enum ViewerType {
     Markdown,
     IFrame,
     Jupyter,
+    Image,
 }
 
 export interface IPlugin {
