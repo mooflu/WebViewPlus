@@ -1,0 +1,14 @@
+pluginName:
+  iframe: Native via iframe
+  xlsx: Tabular data
+  md: Markdown
+  modelViewer: 3D model viewer
+  svg: SVG
+  syntax: Syntax highlighter
+  jupyter: Jupyter Notebook
+SelectOrDnDFile: Select or drag and drop file here.
+Settings: Settings
+FileExtensions: File Extensions
+NoteExtraExtensions: "Note: Extensions for binary files require code changes"
+ExtraExtensionsLabel: Extra file extensions (comma separated; without dot)
+Close: Close

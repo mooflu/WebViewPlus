@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
     Box,
@@ -15,8 +16,10 @@ interface PluginWithSwitchProps {
 }
 
 const PluginWithSwitch: React.FC<PluginWithSwitchProps> = (props) => {
+    const { t } = useTranslation();
     const { p, withSwitch } = props;
     const togglePlugin = useStore(state => state.actions.togglePlugin);
+    const name = t(p.shortName, { keyPrefix: 'pluginName' });
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         togglePlugin(p);
@@ -34,7 +37,7 @@ const PluginWithSwitch: React.FC<PluginWithSwitchProps> = (props) => {
             }}
         >
             <Typography sx={{ color: p.enabled ? '' : 'action.disabled' }}>
-                {p.name}
+                {name}
             </Typography>
             {withSwitch && <Switch checked={p.enabled} onChange={handleChange} />}
         </Box>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
     Box,
@@ -17,6 +18,7 @@ interface PluginPanelProps {
 }
 
 const PluginPanel: React.FC<PluginPanelProps> = (props) => {
+    const { t } = useTranslation();
     const { p } = props;
     const toggleExtension = useStore(state => state.actions.toggleExtension);
     const setExtraExtensions = useStore(state => state.actions.setExtraExtensions);
@@ -51,7 +53,7 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
     return (
         <>
             <Typography variant="h6" sx={{ mb: '1rem' }}>
-                File Extensions
+                {t('FileExtensions')}
             </Typography>
             <Box component="div" sx={{ display: 'flex' }}>
                 <FormGroup sx={{ flexDirection: 'row' }}>
@@ -62,13 +64,13 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
                 fullWidth
                 sx={{ mt: '1rem' }}
                 size="small"
-                label="Extra file extensions (comma separated; without dot)"
+                label={t('ExtraExtensionsLabel')}
                 variant="outlined"
                 onChange={handleChange}
                 value={extensionsStr}
             />
             <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-                Note: Extensions for binary files require code changes
+                {t('NoteExtraExtensions')}
             </Typography>
         </>
     );

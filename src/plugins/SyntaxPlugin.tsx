@@ -41,7 +41,6 @@ export const Ext2Lang: { [index: string]: string } = {
 
 export class SyntaxPlugin implements IPlugin {
     public shortName = 'syntax';
-    public name = 'Syntax highlighter';
     public viewerType = ViewerType.Syntax;
     public enabled = true;
     public extraExtensions: string[] = [];

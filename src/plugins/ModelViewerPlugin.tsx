@@ -1,8 +1,7 @@
 import { IPlugin, ViewerType } from './PluginInterface';
 
 export class ModelViewerPlugin implements IPlugin {
-    public shortName = 'ModelViewer';
-    public name = '3D model viewer';
+    public shortName = 'modelViewer';
     public viewerType = ViewerType.Model3D;
     public enabled = true;
     public extraExtensions: string[] = [];

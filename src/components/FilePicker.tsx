@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Input, SxProps } from '@mui/material';
 
@@ -14,6 +15,7 @@ const classes = {
         alignItems: 'center',
     } as SxProps,
     button: {
+        margin: '4rem',
         padding: '4rem',
         height: '20rem',
         borderRadius: '1rem',
@@ -39,6 +41,8 @@ const classes = {
 const FILE_BUTTON_ID = 'raised-button-file';
 
 const FilePicker: React.FC = () => {
+    const { t } = useTranslation();
+
     const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
         if (e?.target?.result) {
             log(`handledDataLoaded: size: ${e.total}`);
@@ -99,7 +103,7 @@ const FilePicker: React.FC = () => {
                         type="file"
                         onChange={handleOpen}
                     />
-                    Select or drag and drop file here.
+                    {t('SelectOrDnDFile')}
                 </Button>
             </label>
         </Box>

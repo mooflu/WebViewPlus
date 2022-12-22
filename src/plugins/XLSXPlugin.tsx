@@ -5,7 +5,6 @@ import { IPlugin, ViewerType } from './PluginInterface';
 
 export class XLSXPlugin implements IPlugin {
     public shortName = 'xlsx';
-    public name = 'Tabular data';
     public viewerType = ViewerType.Tabular;
     public enabled = true;
     public extraExtensions: string[] = [];

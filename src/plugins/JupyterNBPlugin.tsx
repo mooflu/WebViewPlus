@@ -1,8 +1,7 @@
 import { IPlugin, ViewerType } from './PluginInterface';
 
 export class JupyterNBPlugin implements IPlugin {
-    public shortName = 'JupyterNB';
-    public name = 'Jupyter Notebook';
+    public shortName = 'jupyter';
     public viewerType = ViewerType.Jupyter;
     public enabled = true;
     public extraExtensions: string[] = [];

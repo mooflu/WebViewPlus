@@ -99,6 +99,7 @@ const useTheme = () => {
                             '&.Mui-selected': {
                                 backgroundColor: isDark ? '#282828' : '#e8e8e8',
                             },
+                            textAlign: 'left',
                         },
                     },
                 },

@@ -11,7 +11,6 @@ export enum ViewerType {
 
 export interface IPlugin {
     shortName: string;
-    name: string;
     viewerType: ViewerType;
     enabled: boolean;
     extensions: { [index: string]: boolean };

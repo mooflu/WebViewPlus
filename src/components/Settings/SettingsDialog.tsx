@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
     Box,
@@ -32,6 +33,7 @@ const Transition = React.forwardRef((
 });
 
 const SettingsDialog: React.FC = () => {
+    const { t } = useTranslation();
     const showConfig = useStore(state => state.showConfig);
     const plugins = useStore(state => state.plugins);
     const [value, setValue] = React.useState(0);
@@ -45,10 +47,11 @@ const SettingsDialog: React.FC = () => {
     };
 
     const pluginTabs = plugins.map((p) => {
+        const name = t(p.shortName, { keyPrefix: 'pluginName' });
         const withSwitch = p.viewerType !== ViewerType.IFrame;
         return (
             <Tab
-                key={p.name}
+                key={name}
                 sx={{
                     minHeight: '3rem',
                     alignItems: 'center',
@@ -62,7 +65,7 @@ const SettingsDialog: React.FC = () => {
 
     const pluginTabPanelContainers = plugins.map((p, i) => {
         return (
-            <TabPanelContainer key={p.name} value={value} index={i}>
+            <TabPanelContainer key={p.shortName} value={value} index={i}>
                 <PluginPanel p={p} />
             </TabPanelContainer>
         );
@@ -76,11 +79,10 @@ const SettingsDialog: React.FC = () => {
             fullScreen
         >
             <DialogTitle>
-                <Typography sx={{ fontSize: '1.6rem' }}>Settings</Typography>
+                <Typography sx={{ fontSize: '1.6rem' }}>{t('Settings')}</Typography>
                 <IconButton
                     sx={{ position: 'absolute', right: 8, top: 8 }}
                     onClick={closeSettings}
-                    aria-label="close"
                 >
                     <CloseIcon />
                 </IconButton>
@@ -89,7 +91,7 @@ const SettingsDialog: React.FC = () => {
                     sx={{ position: 'absolute', right: 11, bottom: 8 }}
                     onClick={closeSettings}
                 >
-                    Close
+                    {t('Close')}
                 </Button>
             </DialogTitle>
 
