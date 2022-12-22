@@ -46,7 +46,7 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const extraExtensions = event.target.value.split(',').map(e => e.trim().replace('.', '').toLocaleLowerCase());
-        setExtraExtensions(extraExtensions, p.shortName);
+        setExtraExtensions(extraExtensions.filter(ext => ext.length > 0), p.shortName);
         setExtensionsStr(event.target.value);
     };
 
