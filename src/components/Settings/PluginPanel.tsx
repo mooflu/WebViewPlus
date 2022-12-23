@@ -30,7 +30,7 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
 
     const extensionItems = Object.keys(p.extensions).map((ext: string) => {
         const checked = p.extensions[ext];
-        const enabled = p.enabled && !(p.viewerType === ViewerType.IFrame && ext === 'html');
+        const enabled = p.enabled && !(p.viewerType === ViewerType.IFrame && ext === 'htm');
         const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             toggleExtension(ext, p.shortName);
         };

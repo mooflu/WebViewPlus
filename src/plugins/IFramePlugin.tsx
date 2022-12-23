@@ -6,8 +6,8 @@ export class IFramePlugin implements IPlugin {
     public enabled = true;
     public extraExtensions: string[] = [];
     public extensions: { [index: string]: boolean } = {
-        html: true,
         htm: true,
+        html: true,
         mht: true,
         mhtml: true,
         pdf: true,

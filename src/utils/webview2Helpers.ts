@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 import { store } from '@hooks/useStore';
 import { log } from '@utils/log';
 
@@ -11,10 +13,13 @@ export interface IWebView2 {
     // dispatchEvent
 }
 
-export const handleWebMessage = (e: MessageEvent & {data: string}) => {
+export const handleWebMessage = (e: MessageEvent<string>) => {
     log(`Received handleWebMessage: ${e.data}`);
     if (e.data === 'unload') {
         store.getState().actions.unload();
+    } else if (e.data.startsWith('setLanguage:')) {
+        const langCode = e.data.split(':')[1];
+        i18n.changeLanguage(langCode);
     }
 };
 

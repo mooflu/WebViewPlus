@@ -1,11 +1,12 @@
 import { defineConfig } from 'vite';
 import reactRefresh from '@vitejs/plugin-react-swc';
 import yaml from '@rollup/plugin-yaml';
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default defineConfig({
     base: './',
-    plugins: [reactRefresh(), yaml()],
+    plugins: [reactRefresh(), yaml(), visualizer()],
     resolve: {
         alias: {
             '@plugins/': '/src/plugins/',
