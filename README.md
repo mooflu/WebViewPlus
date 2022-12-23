@@ -9,19 +9,23 @@ Demo: https://mooflu.github.io/WebViewPlus/
 
 ### Native via iframe
 
-html, pdf, webp
-
-### Tabular data
-
-csv, xlsx, tsv
+html, pdf
 
 ### Scalable Vector Graphics (pan & zoom)
 
 svg
 
+### Images
+
+png, apng, jpeg, gif, tiff, webp
+
 ### Markdown (with math plugins)
 
 md
+
+### Tabular data
+
+xlsx, xls, ods, csv, tsv
 
 ### 3D model viewer
 
@@ -36,11 +40,11 @@ perl, pl, ps1, psm1, py,
 rb, sass, scss, sh, sql,
 tex, ts, tsx, txt, yaml, yml
 
+More file extensions can be added in settings.
+Any supported by https://prismjs.com/#supported-languages should work.
+
 ## Develop
 
 npx vite
 
 npx vite build
-
-To test release build with firefox set:
-privacy.file_unique_origin false
