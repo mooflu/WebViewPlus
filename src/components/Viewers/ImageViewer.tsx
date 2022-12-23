@@ -47,6 +47,7 @@ const ImageViewer: React.FC = () => {
     const fileName = useStore(state => state.fileName);
     const fileUrl = useStore(state => state.fileUrl);
     const transformRef = React.useRef<TransformSettings>({ ...defaultTransform });
+    const containerRef = React.useRef<HTMLDivElement>(null);
     const imgRef = React.useRef<HTMLImageElement>(null);
     const [zoom, setZoom] = React.useState(1);
     const [translate, setTranslate] = React.useState({ x: 0, y: 0 });
@@ -83,6 +84,7 @@ const ImageViewer: React.FC = () => {
 
         const handleMouseDown = (e: MouseEvent) => {
             transformRef.current.isDrag = true;
+            // prevent bubbling so it doesn't start a native drag'n drop operation
             e.stopPropagation();
             e.preventDefault();
             return false;
@@ -90,8 +92,6 @@ const ImageViewer: React.FC = () => {
 
         const handleMouseUp = (e: MouseEvent) => {
             transformRef.current.isDrag = false;
-            e.stopPropagation();
-            e.preventDefault();
             return false;
         };
 
@@ -101,8 +101,6 @@ const ImageViewer: React.FC = () => {
                 transformRef.current.translateY += e.movementY;
                 setTranslate({ x: transformRef.current.translateX, y: transformRef.current.translateY });
             }
-            e.stopPropagation();
-            e.preventDefault();
             return false;
         };
 
@@ -164,21 +162,30 @@ const ImageViewer: React.FC = () => {
             setZoom(transformRef.current.zoom);
         };
 
-        window.addEventListener('wheel', handleScroll, { passive: false });
+        const el = containerRef.current;
+        if (!el) {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            return () => {};
+        }
+        // wheel & mousedown on the plugin container element,
+        // so when the setting dialog is open while this plugin is active, you can
+        // - select a textbox in the settings
+        // - scroll in settings without changing zoom
+        el.addEventListener('wheel', handleScroll, { passive: false });
+        el.addEventListener('mousedown', handleMouseDown);
+        window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('keydown', handleKeydown);
         window.addEventListener('resize', handleResize);
-        window.addEventListener('mousedown', handleMouseDown, { passive: false });
-        window.addEventListener('mouseup', handleMouseUp, { passive: false });
-        window.addEventListener('mousemove', handleMouseMove, { passive: false });
         return () => {
-            window.removeEventListener('wheel', handleScroll);
-            window.removeEventListener('keydown', handleKeydown);
-            window.removeEventListener('resize', handleResize);
-            window.removeEventListener('mousedown', handleMouseDown);
+            el.removeEventListener('wheel', handleScroll);
+            el.removeEventListener('mousedown', handleMouseDown);
             window.removeEventListener('mouseup', handleMouseUp);
             window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('keydown', handleKeydown);
+            window.removeEventListener('resize', handleResize);
         };
-    }, []);
+    }, [containerRef]);
 
     React.useEffect(() => {
         transformRef.current = { ...defaultTransform };
@@ -196,7 +203,7 @@ const ImageViewer: React.FC = () => {
     };
 
     return (
-        <Box component="div" sx={classes.root}>
+        <Box component="div" ref={containerRef} sx={classes.root}>
             <img
                 ref={imgRef}
                 alt={fileName}
