@@ -122,8 +122,6 @@ export const store = createVanilla(
                 togglePlugin: (p: IPlugin) => {
                     set((state) => {
                         p.enabled = !p.enabled;
-                        savePluginSettings(state.plugins);
-                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };
                     });
                 },
@@ -133,8 +131,6 @@ export const store = createVanilla(
                         if (ext in p.extensions) {
                             p.extensions[ext] = !p.extensions[ext];
                         }
-                        savePluginSettings(state.plugins);
-                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };
                     });
                 },
@@ -142,10 +138,14 @@ export const store = createVanilla(
                     set((state) => {
                         const p = state.pluginByShortName[pluginShortName];
                         p.extraExtensions = extensions;
-                        savePluginSettings(state.plugins);
-                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                         return { plugins: [...state.plugins] };
                     });
+                },
+                savePluginSettings: () => {
+                    const state = store.getState();
+                    savePluginSettings(state.plugins);
+                    state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
+                    return {};
                 },
             },
         }),

@@ -20,7 +20,7 @@ const classes = {
     } as SxProps,
 };
 
-const ADJUST_ZOOM_TO = 0.85;
+const ADJUST_ZOOM_TO = 0.85; // zoom to fit to occupy 85% of max width|height
 
 interface TransformSettings {
     zoom: number;
@@ -133,7 +133,7 @@ const ImageViewer: React.FC = () => {
             const ddx = (dx2 - dx);
             const ddy = (dy2 - dy);
 
-            transformRef.current.translateX += -ddx;
+            transformRef.current.translateX -= ddx;
             transformRef.current.translateY += ddy;
             setTranslate({ x: transformRef.current.translateX, y: transformRef.current.translateY });
 

@@ -36,9 +36,11 @@ const SettingsDialog: React.FC = () => {
     const { t } = useTranslation();
     const showConfig = useStore(state => state.showConfig);
     const plugins = useStore(state => state.plugins);
+    const savePluginSettings = useStore(state => state.actions.savePluginSettings);
     const [value, setValue] = React.useState(0);
 
     const closeSettings = () => {
+        savePluginSettings();
         useStore.setState({ showConfig: false });
     };
 
