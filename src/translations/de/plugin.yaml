@@ -13,3 +13,6 @@ FileExtensions: Dateierweiterungen
 NoteExtraExtensions: "Hinweis: Erweiterungen für Binärdateien erfordern Codeänderungen"
 ExtraExtensionsLabel: Zusätzliche Dateierweiterungen (durch Komma getrennt; ohne Punkt)
 Close: Schließen
+Reload: Neu laden
+AppError: "Fehler: "
+SomethingWentWrong: Etwas ist schief gelaufen :(

@@ -1,6 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 
-import { CssBaseline, Box, CircularProgress, IconButton, SxProps, ThemeProvider } from '@mui/material';
+import {
+    CssBaseline,
+    Box,
+    Button,
+    CircularProgress,
+    IconButton,
+    SxProps,
+    ThemeProvider,
+    Typography,
+} from '@mui/material';
 import {
     Settings as SettingsIcon,
     Undo as UndoIcon,
@@ -42,6 +53,51 @@ const classes = {
     resetButton: {
         right: '3.5rem',
     } as SxProps,
+    errorComponent: {
+        display: 'flex',
+        height: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+};
+
+const CatchGlobalError: React.FC = () => {
+    const [globalError, setGlobalError] = React.useState<any>(null);
+    if (globalError) {
+        throw globalError; // re-throw error in react context so ErrorBoundary can catch and handle
+    }
+
+    const handleError = (e: ErrorEvent) => {
+        setGlobalError(e.error);
+    };
+
+    React.useEffect(() => {
+        window.addEventListener('error', handleError);
+        return () => {
+            window.removeEventListener('error', handleError);
+        };
+    }, []);
+
+    return <></>;
+};
+
+const ErrorFallback: React.FC<FallbackProps> = (props) => {
+    const { t } = useTranslation();
+    const [disabled, setDisabled] = React.useState(false);
+
+    const onReload = () => {
+        setDisabled(true);
+        window.location.reload();
+    };
+
+    return (
+        <Box component="div" sx={classes.errorComponent}>
+            <Typography variant="h5" sx={{ mb: '1rem' }}>{t('SomethingWentWrong')}</Typography>
+            <Typography variant="body2" sx={{ mb: '1rem' }}>{t('AppError')} {props.error.message}</Typography>
+            <Button variant="contained" disabled={disabled} onClick={onReload}>{t('Reload')}</Button>
+        </Box>
+    );
 };
 
 const App: React.FC = () => {
@@ -60,6 +116,7 @@ const App: React.FC = () => {
             webview.addEventListener('message', handleWebMessage);
             webview.postMessage({ command: 'AppReadyForData', data: null });
         }
+
         return () => {
             if (webview) {
                 webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
@@ -79,30 +136,33 @@ const App: React.FC = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            {fileContent === null && (
-                <>
-                    {(webview || fileName) ? (
-                        <Box component="div" sx={classes.root}>
-                            <CircularProgress />
-                        </Box>
-                    ) : (
-                        <FilePicker />
-                    )}
-                </>
-            )}
-            {fileContent !== null && (
-                <FileViewer />
-            )}
-            <IconButton sx={[classes.floatButton, classes.settingsButton] as SxProps} onClick={toggleSettings}>
-                <SettingsIcon />
-            </IconButton>
-            {!webview && fileName && (
-                <IconButton sx={[classes.floatButton, classes.resetButton] as SxProps} onClick={resetFile}>
-                    <UndoIcon />
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <CatchGlobalError />
+                {fileContent === null && (
+                    <>
+                        {(webview || fileName) ? (
+                            <Box component="div" sx={classes.root}>
+                                <CircularProgress />
+                            </Box>
+                        ) : (
+                            <FilePicker />
+                        )}
+                    </>
+                )}
+                {fileContent !== null && (
+                    <FileViewer />
+                )}
+                <IconButton sx={[classes.floatButton, classes.settingsButton] as SxProps} onClick={toggleSettings}>
+                    <SettingsIcon />
                 </IconButton>
-            )}
+                {!webview && fileName && (
+                    <IconButton sx={[classes.floatButton, classes.resetButton] as SxProps} onClick={resetFile}>
+                        <UndoIcon />
+                    </IconButton>
+                )}
 
-            <SettingsDialog />
+                <SettingsDialog />
+            </ErrorBoundary>
         </ThemeProvider>
     );
 };

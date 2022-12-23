@@ -13,3 +13,6 @@ FileExtensions: File Extensions
 NoteExtraExtensions: "Note: Extensions for binary files require code changes"
 ExtraExtensionsLabel: Extra file extensions (comma separated; without dot)
 Close: Close
+Reload: Reload
+AppError: "Error: "
+SomethingWentWrong: Something went wrong :(
