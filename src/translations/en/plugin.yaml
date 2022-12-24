@@ -16,3 +16,4 @@ Close: Close
 Reload: Reload
 AppError: "Error: "
 SomethingWentWrong: Something went wrong :(
+NavigationRejected: Sorry, navigation not allowed.

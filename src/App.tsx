@@ -1,19 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import i18n from 'i18next';
 
 import {
+    Alert,
     CssBaseline,
     Box,
     Button,
     CircularProgress,
     IconButton,
+    Snackbar,
     SxProps,
     ThemeProvider,
     Typography,
 } from '@mui/material';
 import {
     Settings as SettingsIcon,
+    Block as NotAllowedIcon,
     Undo as UndoIcon,
 } from '@mui/icons-material';
 
@@ -23,8 +27,8 @@ import FileViewer from '@components/Viewers/FileViewer';
 import useStore from '@hooks/useStore';
 import {
     handleSharedBufferReceived,
-    handleWebMessage,
 } from '@utils/webview2Helpers';
+import { log } from '@utils/log';
 
 import useTheme from './theme';
 
@@ -101,15 +105,32 @@ const ErrorFallback: React.FC<FallbackProps> = (props) => {
 };
 
 const App: React.FC = () => {
+    const { t } = useTranslation();
     const theme = useTheme();
     const webview = useStore(state => state.webview);
     const fileContent = useStore(state => state.fileContent);
     const fileName = useStore(state => state.fileName);
     const showConfig = useStore(state => state.showConfig);
     const initState = useStore(state => state.actions.init);
+    const unload = useStore(state => state.actions.unload);
+    const [snackbarOpen, setSnackbarOpen] = React.useState(false);
 
     React.useEffect(() => {
         initState();
+
+        const handleWebMessage = (e: MessageEvent<string>) => {
+            log(`Received handleWebMessage: ${e.data}`);
+            if (e.data === 'unload') {
+                unload();
+            } else if (e.data.startsWith('setLanguage:')) {
+                const langCode = e.data.split(':')[1];
+                i18n.changeLanguage(langCode);
+            } else if (e.data === 'newWindowRejected') {
+                setSnackbarOpen(true);
+            } else if (e.data === 'frameNavigationRejected') {
+                setSnackbarOpen(true);
+            }
+        };
 
         if (webview) {
             webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
@@ -131,6 +152,10 @@ const App: React.FC = () => {
 
     const resetFile = () => {
         useStore.getState().actions.unload();
+    };
+
+    const onCloseSnackbar = () => {
+        setSnackbarOpen(false);
     };
 
     return (
@@ -162,6 +187,16 @@ const App: React.FC = () => {
                 )}
 
                 <SettingsDialog />
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={onCloseSnackbar}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                >
+                    <Alert onClose={onCloseSnackbar} severity="error" icon={<NotAllowedIcon />}>
+                        {t('NavigationRejected')}
+                    </Alert>
+                </Snackbar>
             </ErrorBoundary>
         </ThemeProvider>
     );
