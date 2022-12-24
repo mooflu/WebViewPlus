@@ -11,8 +11,7 @@ export class ImagePlugin implements IPlugin {
         jpg: true,
         jpeg: true,
         gif: true,
-        tif: true,
-        tiff: true,
+        bmp: true,
         webp: true,
     };
 }

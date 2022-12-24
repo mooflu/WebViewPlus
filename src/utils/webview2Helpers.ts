@@ -31,8 +31,7 @@ const ext2Mime: { [index: string]: string } = {
     jpg: 'image/jpeg',
     jpeg: 'image/jpeg',
     gif: 'image/gif',
-    tif: 'image/tiff',
-    tiff: 'image/tiff',
+    bmp: 'image/bmp',
 };
 
 export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: any, getBuffer: any}) => {
