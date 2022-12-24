@@ -113,8 +113,13 @@ const SettingsDialog: React.FC = () => {
                     </Tabs>
                     {pluginTabPanelContainers}
                 </Box>
+                <Box
+                    component="div"
+                    sx={{ position: 'absolute', bottom: 0, left: 5 }}
+                >
+                    <Typography sx={{ fontSize: '0.7rem', opacity: '0.3' }}>{APP_VERSION}</Typography>
+                </Box>
             </DialogContent>
-
         </Dialog>
     );
 };
