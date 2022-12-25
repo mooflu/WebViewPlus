@@ -41,6 +41,8 @@ rb, sass, scss, sh, sql,
 tex, ts, tsx, txt, yaml, yml
 
 More file extensions can be added in settings.
+Where the language doesn't match the extension, specify both separated by a colon:
+E.g. "rs:rust"
 Any supported by https://prismjs.com/#supported-languages should work.
 
 ## Develop

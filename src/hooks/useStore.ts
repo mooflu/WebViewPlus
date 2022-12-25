@@ -44,7 +44,10 @@ const getEnabledExtensions = () => {
             }
         }
         for (const fileExt of p.extraExtensions) {
-            extensions.add(fileExt);
+            // for the syntax highlighter the file extension can
+            // be followed by the language name. E.g. rs:rust
+            const rawFileExt = fileExt.split(':')[0];
+            extensions.add(rawFileExt);
         }
     }
     return [...extensions];

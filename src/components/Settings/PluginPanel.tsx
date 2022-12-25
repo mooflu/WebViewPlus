@@ -62,6 +62,7 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
             </Box>
             <TextField
                 fullWidth
+                spellCheck={false}
                 sx={{ mt: '1rem' }}
                 size="small"
                 label={t('ExtraExtensionsLabel')}

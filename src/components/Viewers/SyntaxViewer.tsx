@@ -11,8 +11,17 @@ import { Ext2Lang } from '@plugins/SyntaxPlugin';
 const SyntaxViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
     const fileExt = useStore(state => state.fileExt);
+    const pluginByShortName = useStore(state => state.pluginByShortName);
+    const plugin = pluginByShortName.syntax;
 
-    const lang = Ext2Lang[fileExt] || fileExt;
+    const matchedExtra = plugin.extraExtensions.filter(e => e.split(':')[0] === fileExt);
+    let lang = fileExt;
+    if (matchedExtra.length > 0) {
+        // e.g. rs:rust
+        lang = matchedExtra[0].split(':')[1];
+    } else {
+        lang = Ext2Lang[fileExt] || fileExt;
+    }
 
     let style = vs;
     if (

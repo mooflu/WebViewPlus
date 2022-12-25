@@ -50,7 +50,7 @@ const FileViewer: React.FC = () => {
                 return;
             }
 
-            if (p.extraExtensions.filter(e => e === fileExt).length > 0) {
+            if (p.extraExtensions.filter(e => e.split(':')[0] === fileExt).length > 0) {
                 setViewerType(p.viewerType);
                 return;
             }
