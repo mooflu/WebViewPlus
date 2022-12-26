@@ -32,6 +32,12 @@ interface PluginSettings {
     extraExtensions: string[];
 }
 
+interface TOCItem {
+    level: number,
+    id: string,
+    title: string,
+}
+
 const getEnabledExtensions = () => {
     const { plugins } = store.getState();
     const extensions = new Set<string>();
@@ -93,13 +99,16 @@ export const store = createVanilla(
     combine(
         {
             webview: (window as any).chrome?.webview as IWebView2 | undefined,
+
             fileSize: 0,
             fileName: '',
             fileExt: '',
             fileUrl: '',
             fileContent: null as string | ArrayBuffer | null,
-            plugins: PLUGINS as IPlugin[],
+            mdTableOfContentsItems: [] as TOCItem[],
+
             showConfig: false as boolean,
+            plugins: PLUGINS as IPlugin[],
             pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
         },
         set => ({
@@ -119,6 +128,7 @@ export const store = createVanilla(
                             fileName: '',
                             fileExt: '',
                             fileUrl: '',
+                            mdTableOfContentsItems: [],
                         };
                     });
                 },
@@ -149,6 +159,16 @@ export const store = createVanilla(
                     savePluginSettings(state.plugins);
                     state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
                     return {};
+                },
+                clearTableOfContent: () => {
+                    set((state) => {
+                        return { mdTableOfContentsItems: [] };
+                    });
+                },
+                addTableOfContentItem: (t: TOCItem) => {
+                    set((state) => {
+                        return { mdTableOfContentsItems: [...state.mdTableOfContentsItems, t] };
+                    });
                 },
             },
         }),
