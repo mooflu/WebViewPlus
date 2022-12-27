@@ -1,14 +1,24 @@
 import React from 'react';
-import nb from 'notebookjs';
+
+import { Box } from '@mui/material';
 
 import useStore from '@hooks/useStore';
+import * as NB from '@components/Jupyter/JupyterTypes';
+import Notebook from '@components/Jupyter/Notebook';
 
 const JupyterNBViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
-    const ipynb = JSON.parse(fileContent);
-    const __html: string = nb.parse(ipynb).render().outerHTML;
+    const nb: NB.Notebook = JSON.parse(fileContent);
 
-    return <div dangerouslySetInnerHTML={{ __html }}></div>;
+    if (nb.nbformat < 4) {
+        return <>Unsupported version</>;
+    }
+
+    return (
+        <Box component="div" sx={{ width: '100%', height: '100%', lineHeight: '1.2rem' }}>
+            <Notebook nb={nb} />
+        </Box>
+    );
 };
 
 export default JupyterNBViewer;

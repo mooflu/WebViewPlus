@@ -54,6 +54,9 @@ const useTheme = () => {
                             height: '100%',
                             lineHeight: 0,
                         },
+                        img: {
+                            float: 'none',
+                        },
                         '#root': {
                             width: '100%',
                             height: '100%',

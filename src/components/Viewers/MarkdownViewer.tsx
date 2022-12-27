@@ -86,17 +86,13 @@ const HeaderItem: React.FC<React.PropsWithChildren<HeadingProps>> = (props) => {
 const MarkdownViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
     const [hasTOC, setHasTOC] = React.useState(false);
-
-    let style = vs;
-    if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
-        style = vscDarkPlus;
-    }
+    const mdBodySx: SxProps = hasTOC
+        ? { marginLeft: '20%', width: '80%' }
+        : { };
 
     const RM = React.useMemo(() => {
         store.getState().actions.clearTableOfContent();
+        const style = window.matchMedia('(prefers-color-scheme: dark)').matches ? vscDarkPlus : vs;
 
         // This is collecting the TOC data during render (via HeaderItem)
         // Memo so it doesn't re-render (and mess with the TOC data).
@@ -141,10 +137,6 @@ const MarkdownViewer: React.FC = () => {
             </ReactMarkdown>
         );
     }, [fileContent]);
-
-    const mdBodySx: SxProps = hasTOC
-        ? { marginLeft: '20%', width: '80%' }
-        : { };
 
     return (
         <>

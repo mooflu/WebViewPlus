@@ -23,6 +23,10 @@ png, apng, jpeg, gif, bmp, webp
 
 md
 
+### Jupyter notebook
+
+ipynb
+
 ### Tabular data
 
 xlsx, xls, ods, csv, tsv
