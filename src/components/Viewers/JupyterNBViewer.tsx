@@ -3,7 +3,7 @@ import React from 'react';
 import { Box } from '@mui/material';
 
 import useStore from '@hooks/useStore';
-import * as NB from '@components/Jupyter/JupyterTypes';
+import * as NB from '@components/Jupyter/JupyterCommon';
 import Notebook from '@components/Jupyter/Notebook';
 
 const JupyterNBViewer: React.FC = () => {

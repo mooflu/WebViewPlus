@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
-import * as NB from '@components/Jupyter/JupyterTypes';
+import * as NB from '@components/Jupyter/JupyterCommon';
 
 interface RawCellProps {
     cell: NB.RawCell;
@@ -10,9 +10,21 @@ interface RawCellProps {
 
 const RawCell: React.FC<RawCellProps> = (props) => {
     const { cell } = props;
+    const theme = useTheme();
+    const rawText = NB.joinData(cell.source);
 
     return (
-        <Box component="div">Raw {cell.source}[0]</Box>
+        <Box
+            component="pre"
+            sx={{
+                fontStyle: 'italic',
+                padding: '0.5rem',
+                borderRadius: '0.2rem',
+                border: `1px solid ${theme.palette.background.paper}`,
+            }}
+        >
+            {rawText}
+        </Box>
     );
 };
 

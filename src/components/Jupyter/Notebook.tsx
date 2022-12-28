@@ -1,8 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Box, useTheme } from '@mui/material';
 
-import * as NB from '@components/Jupyter/JupyterTypes';
+import * as NB from '@components/Jupyter/JupyterCommon';
 import CodeCell from '@components/Jupyter/CodeCell';
 import MarkdownCell from '@components/Jupyter/MarkdownCell';
 import RawCell from '@components/Jupyter/RawCell';
@@ -13,10 +14,11 @@ interface NotebookProps {
 
 const Notebook: React.FC<NotebookProps> = (props) => {
     const { nb } = props;
+    const { t } = useTranslation();
     const theme = useTheme();
 
     if (nb.nbformat < 4) {
-        return <>Unsupported version</>;
+        return <>{t('UnsupportedVersion')}</>;
     }
 
     const lang = nb.metadata.kernelspec.language || nb.metadata.kernelspec.name;
@@ -24,7 +26,8 @@ const Notebook: React.FC<NotebookProps> = (props) => {
     return (
         <Box component="div" sx={{ margin: '1rem' }}>
             {nb.cells.map((c, i) => {
-                const cellBlockLabel = (c as NB.CodeCell).execution_count ? `[${(c as NB.CodeCell).execution_count}]` : '';
+                const baseCell = c as NB.BaseCell;
+                const cellBlockLabel = baseCell.execution_count ? `[${baseCell.execution_count}]` : '';
                 return (
                     // eslint-disable-next-line react/no-array-index-key
                     <Box key={`cell-${i}`} component="div" sx={{ display: 'flex' }}>

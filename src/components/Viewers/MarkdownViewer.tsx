@@ -92,7 +92,7 @@ const MarkdownViewer: React.FC = () => {
 
     const RM = React.useMemo(() => {
         store.getState().actions.clearTableOfContent();
-        const style = window.matchMedia('(prefers-color-scheme: dark)').matches ? vscDarkPlus : vs;
+        const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
 
         // This is collecting the TOC data during render (via HeaderItem)
         // Memo so it doesn't re-render (and mess with the TOC data).

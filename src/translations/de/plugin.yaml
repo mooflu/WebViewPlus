@@ -17,3 +17,5 @@ Reload: Neu laden
 AppError: "Fehler: "
 SomethingWentWrong: Etwas ist schief gelaufen :(
 NavigationRejected: Sorry, Navigation nicht erlaubt.
+UnsupportedDataType: "Nicht unterstützter Datentyp: "
+UnsupportedVersion: Nicht unterstützte Version

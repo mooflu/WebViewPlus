@@ -23,13 +23,7 @@ const SyntaxViewer: React.FC = () => {
         lang = Ext2Lang[fileExt] || fileExt;
     }
 
-    let style = vs;
-    if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
-        style = vscDarkPlus;
-    }
+    const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
     // console.log(SyntaxHighlighter.supportedLanguages);
 
     return (

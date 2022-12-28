@@ -60,6 +60,11 @@ const useTheme = () => {
                         img: {
                             float: 'none',
                         },
+                        pre: {
+                            fontSize: '0.8rem',
+                            fontFamily: 'ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace',
+                            color: isDark ? '#aaa !important' : '#333 !important',
+                        },
                         '#root': {
                             width: '100%',
                             height: '100%',

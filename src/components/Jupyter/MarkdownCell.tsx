@@ -13,7 +13,7 @@ import {
 
 import { Box } from '@mui/material';
 
-import * as NB from '@components/Jupyter/JupyterTypes';
+import * as NB from '@components/Jupyter/JupyterCommon';
 
 interface MarkdownCellProps {
     cell: NB.MarkdownCell;
@@ -21,10 +21,8 @@ interface MarkdownCellProps {
 
 const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
     const { cell } = props;
-    const style = window.matchMedia('(prefers-color-scheme: dark)').matches ? vscDarkPlus : vs;
-    const cellContent = Array.isArray(cell.source)
-        ? cell.source.join('')
-        : cell.source;
+    const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
+    const cellContent = NB.joinData(cell.source);
 
     return (
         <Box component="div" className="markdown-body" sx={{ p: 0, backgroundColor: 'initial' }}>

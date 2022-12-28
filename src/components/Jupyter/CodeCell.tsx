@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {
     vscDarkPlus,
@@ -7,7 +8,7 @@ import {
 
 import { Box, useTheme } from '@mui/material';
 
-import * as NB from '@components/Jupyter/JupyterTypes';
+import * as NB from '@components/Jupyter/JupyterCommon';
 import MarkdownCell from '@components/Jupyter/MarkdownCell';
 
 interface DataOutputProps {
@@ -23,14 +24,9 @@ const ImageMimeType = [
 ];
 
 const DataOutput: React.FC<DataOutputProps> = (props) => {
+    const { t } = useTranslation();
     const { data } = props;
-    let style = vs;
-    if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
-        style = vscDarkPlus;
-    }
+    const style = (window.matchMedia('(prefers-color-scheme: light)').matches) ? vs : vscDarkPlus;
 
     for (const mimeType of ImageMimeType) {
         const imageData = data[mimeType] as string;
@@ -42,17 +38,13 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
         }
     }
     if (data['image/svg+xml']) {
-        const svgData = data['image/svg+xml'];
-        const html = Array.isArray(svgData)
-            ? svgData.join('')
-            : svgData;
-
+        const html = NB.joinData(data['image/svg+xml']);
         return (
             <Box component="div" dangerouslySetInnerHTML={{ __html: html }} />
         );
     }
     if (data['text/html']) {
-        const html = data['text/html'];
+        const html = NB.joinData(data['text/html']);
         return (
             <Box
                 component="div"
@@ -63,7 +55,7 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
         );
     }
     if (data['text/latex']) {
-        const latex = data['text/latex'] as string;
+        const latex = NB.joinData(data['text/latex']);
         const cell: NB.MarkdownCell = {
             cell_type: NB.CellType.Markdown,
             source: latex,
@@ -74,7 +66,7 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
         );
     }
     if (data['application/javascript']) {
-        const code = data['application/javascript'];
+        const code = NB.joinData(data['application/javascript']);
         return (
             <SyntaxHighlighter
                 language="javascript"
@@ -89,12 +81,13 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
         );
     }
     if (data['text/plain']) {
-        return <pre>{data['text/plain']}</pre>;
+        const text = NB.joinData(data['text/plain']);
+        return <pre>{text}</pre>;
     }
 
     return (
         <pre>
-            Unsupported data type:
+            {t('UnsupportedDataType')}
             {JSON.stringify(data, null, 2)}
         </pre>
     );
@@ -107,7 +100,7 @@ interface StreamOutputProps {
 const StreamOutput: React.FC<StreamOutputProps> = (props) => {
     const { output } = props;
     return (
-        <pre>{output.text.join('')}</pre>
+        <pre>{NB.joinData(output.text)}</pre>
     );
 };
 
@@ -117,8 +110,11 @@ interface ErrorOutputProps {
 
 const ErrorOutput: React.FC<ErrorOutputProps> = (props) => {
     const { output } = props;
+    const theme = useTheme();
     return (
-        <>{output.ename}</>
+        <Box component="pre" sx={{ color: `${theme.palette.error.main} !important` }}>
+            {output.traceback.join('\n')}
+        </Box>
     );
 };
 
@@ -152,18 +148,8 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = (props) => {
     const { cell, lang } = props;
     const theme = useTheme();
-
-    let style = vs;
-    if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-    ) {
-        style = vscDarkPlus;
-    }
-
-    const code = Array.isArray(cell.source)
-        ? cell.source.join('')
-        : cell.source;
+    const style = (window.matchMedia('(prefers-color-scheme: light)').matches) ? vs : vscDarkPlus;
+    const code = NB.joinData(cell.source);
 
     return (
         <Box component="div">

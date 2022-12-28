@@ -1,5 +1,4 @@
 // https://nbformat.readthedocs.io/en/latest/format_description.html
-
 export type Notebook = {
     cells: Cell[];
     metadata: NotebookMetadata;
@@ -25,7 +24,11 @@ export enum CellType {
     Raw = 'raw',
 }
 
-export type CodeCell = {
+export type BaseCell = {
+    execution_count: number | null;
+}
+
+export type CodeCell = BaseCell & {
     cell_type: CellType.Code;
     source: string[];
     execution_count: number | null;
@@ -108,3 +111,8 @@ export type OutputMetadata = {
         height: number;
     };
 }
+
+// Helpers
+export const joinData = (data: string | string[]) => {
+    return Array.isArray(data) ? data.join('') : data;
+};

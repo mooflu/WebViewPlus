@@ -17,3 +17,5 @@ Reload: Reload
 AppError: "Error: "
 SomethingWentWrong: Something went wrong :(
 NavigationRejected: Sorry, navigation not allowed.
+UnsupportedDataType: "Unsupported data type: "
+UnsupportedVersion: Unsupported version
