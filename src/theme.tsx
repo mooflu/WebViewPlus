@@ -18,10 +18,13 @@ const useTheme = () => {
                         divider: indigo[700],
                         background: {
                             default: grey[900],
-                            paper: grey[900],
+                            paper: grey[800],
                         },
                     } : {
                         // palette values for light mode
+                        background: {
+                            paper: grey[200],
+                        },
                     }),
             },
             components: {

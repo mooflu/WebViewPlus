@@ -347,6 +347,7 @@
 .markdown-body h4,
 .markdown-body h5,
 .markdown-body h6 {
+    padding-top: .5em;
     margin-top: 24px;
     margin-bottom: 16px;
     font-weight: 600;

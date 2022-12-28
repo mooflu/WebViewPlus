@@ -5,7 +5,7 @@ import {
     vs,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import * as NB from '@components/Jupyter/JupyterTypes';
 import MarkdownCell from '@components/Jupyter/MarkdownCell';
@@ -42,7 +42,11 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
         }
     }
     if (data['image/svg+xml']) {
-        const html = data['image/svg+xml'];
+        const svgData = data['image/svg+xml'];
+        const html = Array.isArray(svgData)
+            ? svgData.join('')
+            : svgData;
+
         return (
             <Box component="div" dangerouslySetInnerHTML={{ __html: html }} />
         );
@@ -147,6 +151,7 @@ interface CodeCellProps {
 
 const CodeCell: React.FC<CodeCellProps> = (props) => {
     const { cell, lang } = props;
+    const theme = useTheme();
 
     let style = vs;
     if (
@@ -165,6 +170,11 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
             <SyntaxHighlighter
                 language={lang}
                 style={style}
+                customStyle={{
+                    padding: '0.5rem',
+                    borderRadius: '0.2rem',
+                    border: `1px solid ${theme.palette.background.paper}`,
+                }}
                 wrapLines
                 lineProps={{
                     data: 'textLine', // className doesn't work :(

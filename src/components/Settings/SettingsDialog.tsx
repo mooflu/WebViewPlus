@@ -97,7 +97,7 @@ const SettingsDialog: React.FC = () => {
                 </Button>
             </DialogTitle>
 
-            <DialogContent sx={{ margin: 0, padding: 0, bgcolor: 'background.paper' }}>
+            <DialogContent sx={{ margin: 0, padding: 0, bgcolor: 'background.default' }}>
                 <Box
                     component="div"
                     sx={{ flexGrow: 1, display: 'flex', height: '100%' }}

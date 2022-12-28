@@ -27,7 +27,7 @@ const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
         : cell.source;
 
     return (
-        <Box component="div" className="markdown-body" sx={{ backgroundColor: 'initial' }}>
+        <Box component="div" className="markdown-body" sx={{ p: 0, backgroundColor: 'initial' }}>
             <ReactMarkdown
                 remarkPlugins={[gfm, math]}
                 rehypePlugins={[rehypeKatex, rehypeRaw]}

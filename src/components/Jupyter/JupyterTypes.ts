@@ -28,6 +28,7 @@ export enum CellType {
 export type CodeCell = {
     cell_type: CellType.Code;
     source: string[];
+    execution_count: number | null;
     metadata: {
         collapsed: boolean;
         scrolled: boolean | 'auto';
