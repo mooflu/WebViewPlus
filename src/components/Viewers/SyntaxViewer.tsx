@@ -18,7 +18,8 @@ const SyntaxViewer: React.FC = () => {
     let lang = fileExt;
     if (matchedExtra.length > 0) {
         // e.g. rs:rust
-        lang = matchedExtra[0].split(':')[1];
+        const extAndLang = matchedExtra[0].split(':');
+        lang = (extAndLang.length === 1) ? extAndLang[0] : extAndLang[1];
     } else {
         lang = Ext2Lang[fileExt] || fileExt;
     }

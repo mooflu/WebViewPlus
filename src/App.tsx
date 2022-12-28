@@ -24,6 +24,7 @@ import {
 import SettingsDialog from '@components/Settings/SettingsDialog';
 import FilePicker from '@components/FilePicker';
 import FileViewer from '@components/Viewers/FileViewer';
+import YingYangIcon from '@components/icons/YingYang';
 import useStore from '@hooks/useStore';
 import {
     handleSharedBufferReceived,
@@ -39,10 +40,17 @@ const classes = {
         justifyContent: 'center',
         alignItems: 'center',
     } as SxProps,
-    floatButton: {
+    floatButtons: {
+        display: 'flex',
+        flexDirection: 'row',
         position: 'fixed',
         bottom: '0.5rem',
+        right: '0.5rem',
+    } as SxProps,
+    floatButton: {
+        ml: '0.5rem',
         '@media (prefers-color-scheme:light)': {
+            color: '#222',
             backgroundColor: '#ccc',
         },
         '@media (prefers-color-scheme:dark)': {
@@ -50,13 +58,7 @@ const classes = {
             backgroundColor: '#333',
         },
         opacity: 0.7,
-    } as SxProps,
-    settingsButton: {
-        right: '0.5rem',
-    } as SxProps,
-    resetButton: {
-        right: '3.5rem',
-    } as SxProps,
+    },
     errorComponent: {
         display: 'flex',
         height: '100%',
@@ -111,6 +113,7 @@ const App: React.FC = () => {
     const fileContent = useStore(state => state.fileContent);
     const fileName = useStore(state => state.fileName);
     const showConfig = useStore(state => state.showConfig);
+    const yingYang = useStore(state => state.yingYang);
     const initState = useStore(state => state.actions.init);
     const unload = useStore(state => state.actions.unload);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -150,6 +153,15 @@ const App: React.FC = () => {
         useStore.setState({ showConfig: !showConfig });
     };
 
+    const toggleYingYang = () => {
+        // toggle background color - useful for items with transparent background
+        // where the forground color is the similar to light/dark theme.
+        const yy = !yingYang;
+        useStore.setState({ yingYang: yy });
+        const body = document.getElementsByTagName('body')[0];
+        body.style.backgroundColor = yy ? theme.palette.background.default : '#777';
+    };
+
     const resetFile = () => {
         useStore.getState().actions.unload();
     };
@@ -177,14 +189,19 @@ const App: React.FC = () => {
                 {fileContent !== null && (
                     <FileViewer />
                 )}
-                <IconButton sx={[classes.floatButton, classes.settingsButton] as SxProps} onClick={toggleSettings}>
-                    <SettingsIcon />
-                </IconButton>
-                {!webview && fileName && (
-                    <IconButton sx={[classes.floatButton, classes.resetButton] as SxProps} onClick={resetFile}>
-                        <UndoIcon />
+                <Box component="div" sx={classes.floatButtons}>
+                    {!webview && fileName && (
+                        <IconButton onClick={resetFile} sx={classes.floatButton}>
+                            <UndoIcon />
+                        </IconButton>
+                    )}
+                    <IconButton onClick={toggleYingYang} sx={classes.floatButton}>
+                        <YingYangIcon />
                     </IconButton>
-                )}
+                    <IconButton onClick={toggleSettings} sx={classes.floatButton}>
+                        <SettingsIcon />
+                    </IconButton>
+                </Box>
 
                 <SettingsDialog />
                 <Snackbar

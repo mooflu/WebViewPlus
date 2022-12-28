@@ -49,7 +49,12 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
             <Box
                 component="div"
                 className="markdown-body"
-                sx={{ backgroundColor: 'initial' }}
+                sx={{
+                    backgroundColor: 'initial',
+                    '& img': {
+                        backgroundColor: 'initial',
+                    },
+                }}
                 dangerouslySetInnerHTML={{ __html: html }}
             />
         );

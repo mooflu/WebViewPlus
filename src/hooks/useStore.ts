@@ -111,6 +111,7 @@ export const store = createVanilla(
             showConfig: false as boolean,
             plugins: PLUGINS as IPlugin[],
             pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
+            yingYang: true as boolean,
         },
         set => ({
             actions: {

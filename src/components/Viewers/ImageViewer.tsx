@@ -20,7 +20,7 @@ const classes = {
     } as SxProps,
 };
 
-const ADJUST_ZOOM_TO = 0.85; // zoom to fit to occupy 85% of max width|height
+const ADJUST_ZOOM_TO = 1; // zoom to fit to occupy 100% of max width|height
 
 interface TransformSettings {
     zoom: number;
