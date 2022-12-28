@@ -17,7 +17,6 @@ import { Box, ListItem, List, Typography, SxProps } from '@mui/material';
 import useStore, { store } from '@hooks/useStore';
 
 interface TOCProps {
-    setHasTOC: (b: boolean) => void;
 }
 
 const TOC: React.FC<TOCProps> = (props) => {
@@ -27,16 +26,13 @@ const TOC: React.FC<TOCProps> = (props) => {
         return <></>;
     }
 
-    props.setHasTOC(true);
-
     const minLevel = tocItems.reduce((l, t) => Math.min(l, t.level), 100);
     return (
         <Box
             component="div"
             className="markdown-body"
             sx={{
-                position: 'fixed',
-                width: '20%',
+                flex: '0 0 12rem',
                 padding: '1rem',
                 height: '100%',
                 overflow: 'auto',
@@ -49,7 +45,7 @@ const TOC: React.FC<TOCProps> = (props) => {
                     <ListItem
                         key={id}
                         sx={{
-                            pl: `${(6 - level) - minLevel}rem`,
+                            pl: `${level - minLevel}rem`,
                             pt: 0,
                             pb: 0,
                         }}
@@ -85,10 +81,6 @@ const HeaderItem: React.FC<React.PropsWithChildren<HeadingProps>> = (props) => {
 
 const MarkdownViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
-    const [hasTOC, setHasTOC] = React.useState(false);
-    const mdBodySx: SxProps = hasTOC
-        ? { marginLeft: '20%', width: '80%' }
-        : { };
 
     const RM = React.useMemo(() => {
         store.getState().actions.clearTableOfContent();
@@ -122,6 +114,7 @@ const MarkdownViewer: React.FC = () => {
                                 style={style}
                                 useInlineStyles={false}
                                 wrapLines
+                                wrapLongLines
                                 lineProps={{
                                     data: 'textLine', // className doesn't work :(
                                 }}
@@ -139,12 +132,26 @@ const MarkdownViewer: React.FC = () => {
     }, [fileContent]);
 
     return (
-        <>
-            <TOC setHasTOC={setHasTOC} />
-            <Box component="div" className="markdown-body" sx={mdBodySx}>
+        <Box
+            component="div"
+            sx={{
+                display: 'flex',
+                height: '100%',
+            }}
+        >
+            <TOC />
+            <Box
+                component="div"
+                className="markdown-body"
+                sx={{
+                    position: 'relative',
+                    flex: '1 1 auto',
+                    overflow: 'auto',
+                }}
+            >
                 {RM}
             </Box>
-        </>
+        </Box>
     );
 };
 
