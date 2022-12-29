@@ -116,9 +116,11 @@ interface ErrorOutputProps {
 const ErrorOutput: React.FC<ErrorOutputProps> = (props) => {
     const { output } = props;
     const theme = useTheme();
+    // eslint-disable-next-line no-control-regex
+    const stripAnsiSeq = /\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g;
     return (
         <Box component="pre" sx={{ color: `${theme.palette.error.main} !important` }}>
-            {output.traceback.join('\n')}
+            {output.traceback.join('\n').replace(stripAnsiSeq, '')}
         </Box>
     );
 };
