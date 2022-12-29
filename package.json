@@ -15,6 +15,7 @@
     "@react-three/drei": "^9.47.1",
     "@react-three/fiber": "^8.9.1",
     "comma-separated-values": "^3.6.4",
+    "epubjs": "^0.3.93",
     "i18next": "^22.4.6",
     "i18next-browser-languagedetector": "^7.0.1",
     "katex": "^0.16.4",

@@ -7,6 +7,7 @@ pluginName:
   syntax: Syntax highlighter
   jupyter: Jupyter Notebook
   image: Image
+  epub: ePub
 SelectOrDnDFile: Select or drag and drop file here.
 Settings: Settings
 FileExtensions: File Extensions

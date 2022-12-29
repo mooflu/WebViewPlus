@@ -8,6 +8,7 @@ export enum ViewerType {
     IFrame,
     Jupyter,
     Image,
+    Epub,
 }
 
 export interface IPlugin {

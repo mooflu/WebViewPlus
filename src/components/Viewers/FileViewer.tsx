@@ -13,6 +13,7 @@ import SyntaxViewer from '@components/Viewers/SyntaxViewer';
 import TabularViewer from '@components/Viewers/TabularViewer';
 import ImageViewer from '@components/Viewers/ImageViewer';
 import JupyterNBViewer from '@components/Viewers/JupyterNBViewer';
+import EpubViewer from '@components/Viewers/EpubViewer';
 import { ViewerType } from '@plugins/PluginInterface';
 import useStore from '@hooks/useStore';
 
@@ -73,6 +74,7 @@ const FileViewer: React.FC = () => {
                 [ViewerType.Tabular]: <TabularViewer />,
                 [ViewerType.Image]: <ImageViewer />,
                 [ViewerType.Jupyter]: <JupyterNBViewer />,
+                [ViewerType.Epub]: <EpubViewer />,
                 [ViewerType.Unknown]: <FileTypeNotSupported />,
             }[viewerType]}
         </>

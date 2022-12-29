@@ -11,6 +11,7 @@ import { MarkdownPlugin } from '@plugins/MarkdownPlugin';
 import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
 import { ImagePlugin } from '@plugins/ImagePlugin';
 import { JupyterNBPlugin } from '@plugins/JupyterNBPlugin';
+import { EpubPlugin } from '@plugins/EpubPlugin';
 import { IWebView2 } from '@utils/webview2Helpers';
 
 const PLUGIN_SETTINGS_KEY = 'pluginSettings';
@@ -24,6 +25,7 @@ const PLUGINS = [
     new ModelViewerPlugin(),
     new SyntaxPlugin(),
     new JupyterNBPlugin(),
+    new EpubPlugin(),
 ];
 
 interface PluginSettings {

@@ -76,6 +76,7 @@ const FilePicker: React.FC = () => {
                 ext === 'gltf' ||
                 ext === 'glb' ||
                 ext === 'pdf' ||
+                ext === 'epub' ||
                 ext === 'webp'
             ) {
                 fileReader.readAsArrayBuffer(file);
