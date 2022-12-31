@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Box, Button, Input, SxProps } from '@mui/material';
 
-import useStore from '@hooks/useStore';
-import { log } from '@utils/log';
+import { openFile } from '@utils/openFile';
 
 const classes = {
     root: {
@@ -43,50 +42,10 @@ const FILE_BUTTON_ID = 'raised-button-file';
 const FilePicker: React.FC = () => {
     const { t } = useTranslation();
 
-    const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
-        if (e?.target?.result) {
-            log(`handledDataLoaded: size: ${e.total}`);
-            const content = e.target.result;
-            if (typeof content === 'string') {
-                useStore.setState({ fileContent: content, fileSize: e.total });
-            } else if (content instanceof ArrayBuffer) {
-                useStore.setState({
-                    fileContent: content,
-                    fileSize: e.total,
-                });
-            } else {
-                log('File content not supported');
-            }
-        }
-    };
-
     const handleOpen = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e?.target?.files) {
             const file = e.target.files[0];
-            log(`handleOpen: ${file.name}`);
-            const ext = file.name.split('.').pop()?.toLocaleLowerCase() || '';
-
-            const url = URL.createObjectURL(file); // returns a blob url - won't expose local file system location
-            const fileReader = new FileReader();
-            fileReader.onloadend = handledDataLoaded;
-            if (
-                ext === 'xlsx' ||
-                ext === 'xls' ||
-                ext === 'ods' ||
-                ext === 'gltf' ||
-                ext === 'glb' ||
-                ext === 'pdf' ||
-                ext === 'webp'
-            ) {
-                fileReader.readAsArrayBuffer(file);
-            } else {
-                fileReader.readAsText(file);
-            }
-            useStore.setState({
-                fileName: file.name,
-                fileExt: ext,
-                fileUrl: url,
-            });
+            openFile(file);
         }
     };
 

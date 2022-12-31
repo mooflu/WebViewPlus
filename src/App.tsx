@@ -30,6 +30,7 @@ import {
     handleSharedBufferReceived,
 } from '@utils/webview2Helpers';
 import { log } from '@utils/log';
+import { openFile } from '@utils/openFile';
 
 import useTheme from './theme';
 
@@ -117,6 +118,7 @@ const App: React.FC = () => {
     const initState = useStore(state => state.actions.init);
     const unload = useStore(state => state.actions.unload);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+    const [dragInProgress, setDragInProgress] = React.useState(false);
 
     React.useEffect(() => {
         initState();
@@ -135,16 +137,27 @@ const App: React.FC = () => {
             }
         };
 
+        const body = document.getElementsByTagName('body')[0];
         if (webview) {
             webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
             webview.addEventListener('message', handleWebMessage);
             webview.postMessage({ command: 'AppReadyForData', data: null });
+        } else {
+            body.addEventListener('dragenter', handleDragEnter);
+            body.addEventListener('dragover', handleDragOver);
+            body.addEventListener('dragleave', handleDragExit);
+            body.addEventListener('drop', handleDrop);
         }
 
         return () => {
             if (webview) {
                 webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
                 webview.removeEventListener('message', handleWebMessage);
+            } else {
+                body.removeEventListener('dragenter', handleDragEnter);
+                body.removeEventListener('dragover', handleDragOver);
+                body.removeEventListener('dragleave', handleDragExit);
+                body.removeEventListener('drop', handleDrop);
             }
         };
     }, []);
@@ -170,11 +183,53 @@ const App: React.FC = () => {
         setSnackbarOpen(false);
     };
 
+    const handleDrop = (e: DragEvent) => {
+        setDragInProgress(false);
+        unload();
+        if (e.dataTransfer?.items) {
+            for (const item of e.dataTransfer.items) {
+                if (item.kind === 'file') {
+                    const file = item.getAsFile();
+                    if (file) {
+                        e.preventDefault();
+                        openFile(file);
+                    }
+                }
+            }
+        }
+    };
+
+    const handleDragEnter = (e: DragEvent) => {
+        setDragInProgress(true);
+        e.preventDefault();
+    };
+
+    const handleDragOver = (e: DragEvent) => {
+        setDragInProgress(true);
+        e.preventDefault();
+    };
+
+    const handleDragExit = (e: DragEvent) => {
+        setDragInProgress(false);
+        e.preventDefault();
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <CatchGlobalError />
+                <Box
+                    component="div"
+                    sx={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        height: '100%',
+                        width: '100%',
+                        boxShadow: dragInProgress ? `inset 0 0 15px ${theme.palette.primary.main}` : '',
+                    }}
+                />
                 {fileContent === null && (
                     <>
                         {(webview || fileName) ? (
