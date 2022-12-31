@@ -1,7 +1,7 @@
 # WebViewPlus
 
 Browser file viewer
-(meant to be used with MS WebView2)
+(meant to be used with this [QuickLook plugin](https://github.com/mooflu/QuickLook.Plugin.WebViewPlus))
 
 Demo: https://mooflu.github.io/WebViewPlus/
 
@@ -15,7 +15,7 @@ html, pdf
 
 svg
 
-### Images
+### Images (including animated)
 
 png, apng, jpeg, gif, bmp, webp
 
