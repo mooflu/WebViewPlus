@@ -12,14 +12,11 @@ import {
     vs,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { Box, ListItem, List, Typography, SxProps } from '@mui/material';
+import { Box, ListItem, List, Typography } from '@mui/material';
 
 import useStore, { store } from '@hooks/useStore';
 
-interface TOCProps {
-}
-
-const TOC: React.FC<TOCProps> = (props) => {
+const TOC: React.FC = () => {
     const tocItems = useStore(state => state.mdTableOfContentsItems);
 
     if (tocItems.length === 0) {
