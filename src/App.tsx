@@ -113,7 +113,7 @@ const App: React.FC = () => {
     const webview = useStore(state => state.webview);
     const fileContent = useStore(state => state.fileContent);
     const fileName = useStore(state => state.fileName);
-    const showConfig = useStore(state => state.showConfig);
+    const showSettings = useStore(state => state.showSettings);
     const yingYang = useStore(state => state.yingYang);
     const initState = useStore(state => state.actions.init);
     const unload = useStore(state => state.actions.unload);
@@ -162,8 +162,15 @@ const App: React.FC = () => {
         };
     }, []);
 
+    React.useEffect(() => {
+        if (showSettings) {
+            // if a new preview comes in, turn settings dialog off
+            useStore.setState({ showSettings: !showSettings });
+        }
+    }, [fileContent]);
+
     const toggleSettings = () => {
-        useStore.setState({ showConfig: !showConfig });
+        useStore.setState({ showSettings: !showSettings });
     };
 
     const toggleYingYang = () => {

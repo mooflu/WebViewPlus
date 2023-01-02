@@ -108,7 +108,7 @@ export const store = createVanilla(
             fileContent: null as string | ArrayBuffer | null,
             mdTableOfContentsItems: [] as TOCItem[],
 
-            showConfig: false as boolean,
+            showSettings: false as boolean,
             plugins: PLUGINS as IPlugin[],
             pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
             yingYang: true as boolean,

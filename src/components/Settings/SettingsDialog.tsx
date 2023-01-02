@@ -20,6 +20,7 @@ import { TransitionProps } from '@mui/material/transitions';
 
 import useStore from '@hooks/useStore';
 import { ViewerType } from '@plugins/PluginInterface';
+import WebViewPlus from '@components/icons/WebViewPlus';
 
 import PluginPanel from './PluginPanel';
 import PluginWithSwitch from './PluginWithSwitch';
@@ -34,14 +35,14 @@ const Transition = React.forwardRef((
 
 const SettingsDialog: React.FC = () => {
     const { t } = useTranslation();
-    const showConfig = useStore(state => state.showConfig);
+    const showSettings = useStore(state => state.showSettings);
     const plugins = useStore(state => state.plugins);
     const savePluginSettings = useStore(state => state.actions.savePluginSettings);
     const [value, setValue] = React.useState(0);
 
     const closeSettings = () => {
         savePluginSettings();
-        useStore.setState({ showConfig: false });
+        useStore.setState({ showSettings: false });
     };
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -75,13 +76,16 @@ const SettingsDialog: React.FC = () => {
 
     return (
         <Dialog
-            open={showConfig}
+            open={showSettings}
             onClose={closeSettings}
             TransitionComponent={Transition}
             fullScreen
         >
-            <DialogTitle>
-                <Typography sx={{ fontSize: '1.6rem' }}>{t('Settings')}</Typography>
+            <DialogTitle sx={{ p: '0.7rem' }}>
+                <Box component="div" sx={{ display: 'flex', alignItems: 'center' }}>
+                    <WebViewPlus sx={{ fontSize: '2.2rem' }} />
+                    <Typography component="span" sx={{ fontSize: '1.6rem', ml: '1rem' }}>{t('Settings')}</Typography>
+                </Box>
                 <IconButton
                     sx={{ position: 'absolute', right: 8, top: 8 }}
                     onClick={closeSettings}
