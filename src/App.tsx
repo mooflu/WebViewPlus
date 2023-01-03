@@ -226,17 +226,6 @@ const App: React.FC = () => {
             <CssBaseline />
             <ErrorBoundary FallbackComponent={ErrorFallback}>
                 <CatchGlobalError />
-                <Box
-                    component="div"
-                    sx={{
-                        position: 'fixed',
-                        top: 0,
-                        left: 0,
-                        height: '100%',
-                        width: '100%',
-                        boxShadow: dragInProgress ? `inset 0 0 15px ${theme.palette.primary.main}` : '',
-                    }}
-                />
                 {fileContent === null && (
                     <>
                         {(webview || fileName) ? (
@@ -276,6 +265,18 @@ const App: React.FC = () => {
                         {t('NavigationRejected')}
                     </Alert>
                 </Snackbar>
+                <Box
+                    component="div"
+                    sx={{
+                        pointerEvents: 'none',
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        height: '100%',
+                        width: '100%',
+                        border: dragInProgress ? `3px dashed ${theme.palette.primary.main}` : '',
+                    }}
+                />
             </ErrorBoundary>
         </ThemeProvider>
     );

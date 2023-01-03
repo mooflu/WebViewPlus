@@ -1,6 +1,6 @@
 {
   "name": "webviewplus",
-  "version": "0.9.12",
+  "version": "0.9.13",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
