@@ -40,14 +40,14 @@ const classes = {
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    } as SxProps,
+    },
     floatButtons: {
         display: 'flex',
         flexDirection: 'row',
         position: 'fixed',
         bottom: '0.5rem',
         right: '0.5rem',
-    } as SxProps,
+    },
     floatButton: {
         ml: '0.5rem',
         '@media (prefers-color-scheme:light)': {
@@ -67,7 +67,7 @@ const classes = {
         justifyContent: 'center',
         alignItems: 'center',
     },
-};
+} satisfies Record<string, SxProps>;
 
 const CatchGlobalError: React.FC = () => {
     const [globalError, setGlobalError] = React.useState<any>(null);

@@ -12,8 +12,8 @@ const classes = {
         iframe: {
             border: 'none',
         },
-    } as SxProps,
-};
+    },
+} satisfies Record<string, SxProps>;
 
 const IFrameViewer: React.FC = () => {
     const fileUrl = useStore(state => state.fileUrl);

@@ -19,3 +19,5 @@ SomethingWentWrong: Something went wrong :(
 NavigationRejected: Sorry, navigation not allowed.
 UnsupportedDataType: "Unsupported data type: "
 UnsupportedVersion: Unsupported version
+ExtraSettings: Extra Settings
+Pixelated: Pixelated (Nearest Neighbor)

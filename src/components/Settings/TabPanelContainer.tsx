@@ -6,23 +6,23 @@ import {
 
 interface TabPanelContainerProps {
     children?: React.ReactNode;
-    index: number;
+    viewerType: number;
     value: number;
 }
 
 const TabPanelContainer: React.FC<TabPanelContainerProps> = (props) => {
-    const { children, value, index } = props;
+    const { children, value, viewerType } = props;
 
     return (
         <Box
             component="div"
             role="tabpanel"
-            hidden={value !== index}
-            id={`vertical-tabpanel-${index}`}
-            aria-labelledby={`vertical-tab-${index}`}
+            hidden={value !== viewerType}
+            id={`vertical-tabpanel-${viewerType}`}
+            aria-labelledby={`vertical-tab-${viewerType}`}
             sx={{ width: '100%' }}
         >
-            {value === index && (
+            {value === viewerType && (
                 <Box component="div" sx={{ p: 3 }}>
                     {children}
                 </Box>

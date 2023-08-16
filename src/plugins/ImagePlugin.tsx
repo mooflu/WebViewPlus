@@ -1,3 +1,7 @@
+import React from 'react';
+
+import ImageViewerSettings from '@components/Settings/ImageViewerSettings';
+
 import { IPlugin, ViewerType } from './PluginInterface';
 
 export class ImagePlugin implements IPlugin {
@@ -14,4 +18,6 @@ export class ImagePlugin implements IPlugin {
         bmp: true,
         webp: true,
     };
+
+    public customSettings = <ImageViewerSettings />;
 }

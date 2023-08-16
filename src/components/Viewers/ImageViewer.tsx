@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 
 import useStore from '@hooks/useStore';
+import { ImageRendering } from '@utils/types';
 
 const classes = {
     root: {
@@ -12,13 +13,13 @@ const classes = {
         width: '100%',
         height: '100%',
         overflow: 'hidden',
-    } as SxProps,
+    },
     zoomValue: {
         position: 'absolute',
         top: 8,
         right: 8,
-    } as SxProps,
-};
+    },
+} satisfies Record<string, SxProps>;
 
 const ADJUST_ZOOM_TO = 1; // zoom to fit to occupy 100% of max width|height
 
@@ -46,6 +47,8 @@ const ImageViewer: React.FC = () => {
     const theme = useTheme();
     const fileName = useStore(state => state.fileName);
     const fileUrl = useStore(state => state.fileUrl);
+    const pixelated = useStore(state => state.pixelated);
+    const togglePixelated = useStore(state => state.actions.togglePixelated);
     const transformRef = React.useRef<TransformSettings>({ ...defaultTransform });
     const containerRef = React.useRef<HTMLDivElement>(null);
     const imgRef = React.useRef<HTMLImageElement>(null);
@@ -158,6 +161,11 @@ const ImageViewer: React.FC = () => {
             } else if (e.key === '-') {
                 newZoom = Math.max(minZoom, Math.min(zoom - (0.1 * zoomToFit), maxZoom));
             }
+            if (e.key === 'p') {
+                togglePixelated();
+                return;
+            }
+
             transformRef.current.zoom = newZoom;
             setZoom(transformRef.current.zoom);
         };
@@ -208,7 +216,10 @@ const ImageViewer: React.FC = () => {
                 ref={imgRef}
                 alt={fileName}
                 src={fileUrl}
-                style={{ transform: `translateX(${translate.x}px) translateY(${translate.y}px) scale(${zoom})` }}
+                style={{
+                    transform: `translateX(${translate.x}px) translateY(${translate.y}px) scale(${zoom})`,
+                    imageRendering: pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
+                }}
                 onLoad={onImageLoad}
             />
             <Box

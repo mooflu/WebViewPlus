@@ -12,7 +12,7 @@ const classes = {
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    } as SxProps,
+    },
     button: {
         margin: '4rem',
         padding: '4rem',
@@ -21,7 +21,7 @@ const classes = {
         border: '1px dashed #888',
         textTransform: 'none',
         fontSize: '2rem',
-    } as SxProps,
+    },
     filePicker: {
         position: 'absolute',
         left: 0,
@@ -34,8 +34,8 @@ const classes = {
             height: '100%',
             cursor: 'pointer',
         },
-    } as SxProps,
-};
+    },
+} satisfies Record<string, SxProps>;
 
 const FILE_BUTTON_ID = 'raised-button-file';
 

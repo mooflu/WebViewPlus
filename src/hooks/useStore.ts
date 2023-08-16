@@ -2,7 +2,7 @@ import create from 'zustand';
 import createVanilla from 'zustand/vanilla';
 import { combine } from 'zustand/middleware';
 
-import { IPlugin } from '@plugins/PluginInterface';
+import { IPlugin, ViewerType } from '@plugins/PluginInterface';
 import { SyntaxPlugin } from '@plugins/SyntaxPlugin';
 import { XLSXPlugin } from '@plugins/XLSXPlugin';
 import { SVGPlugin } from '@plugins/SVGPlugin';
@@ -12,8 +12,10 @@ import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
 import { ImagePlugin } from '@plugins/ImagePlugin';
 import { JupyterNBPlugin } from '@plugins/JupyterNBPlugin';
 import { IWebView2 } from '@utils/webview2Helpers';
+import { ImageRendering } from '@utils/types';
 
 const PLUGIN_SETTINGS_KEY = 'pluginSettings';
+const PLUGIN_IMAGERENDERING_KEY = 'imageRendering';
 
 const PLUGINS = [
     new IFramePlugin(),
@@ -108,10 +110,14 @@ export const store = createVanilla(
             fileContent: null as string | ArrayBuffer | null,
             mdTableOfContentsItems: [] as TOCItem[],
 
+            activeViewer: ViewerType.Unknown,
             showSettings: false as boolean,
             plugins: PLUGINS as IPlugin[],
             pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
             yingYang: true as boolean,
+
+            // aka nearest neighbour - css image-rendering for image plugin
+            pixelated: window.localStorage.getItem(PLUGIN_IMAGERENDERING_KEY) === ImageRendering.Pixelated,
         },
         set => ({
             actions: {
@@ -156,6 +162,11 @@ export const store = createVanilla(
                         return { plugins: [...state.plugins] };
                     });
                 },
+                setActiveViewer: (viewer: ViewerType) => {
+                    set((state) => {
+                        return { activeViewer: viewer };
+                    });
+                },
                 savePluginSettings: () => {
                     const state = store.getState();
                     savePluginSettings(state.plugins);
@@ -170,6 +181,17 @@ export const store = createVanilla(
                 addTableOfContentItem: (t: TOCItem) => {
                     set((state) => {
                         return { mdTableOfContentsItems: [...state.mdTableOfContentsItems, t] };
+                    });
+                },
+
+                togglePixelated: () => {
+                    set((state) => {
+                        const pixelated = !state.pixelated;
+                        window.localStorage.setItem(
+                            PLUGIN_IMAGERENDERING_KEY,
+                            pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
+                        );
+                        return { pixelated };
                     });
                 },
             },

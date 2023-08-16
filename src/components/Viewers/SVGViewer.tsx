@@ -9,12 +9,13 @@ const classes = {
     root: {
         width: '100%',
         height: '100%',
+        lineHeight: 0,
         '& SVG': {
             width: '100%',
             height: '100%',
         },
-    } as SxProps,
-};
+    },
+} satisfies Record<string, SxProps>;
 
 const SVGViewer: React.FC = () => {
     const container = React.useRef<HTMLDivElement>(null);

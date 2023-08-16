@@ -33,7 +33,7 @@
     "svg-pan-zoom": "^3.6.1",
     "three": "^0.147.0",
     "three-stdlib": "^2.20.5",
-    "xlsx": "^0.18.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
     "zustand": "^4.1.5"
   },
   "devDependencies": {

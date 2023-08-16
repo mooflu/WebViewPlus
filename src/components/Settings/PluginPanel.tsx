@@ -70,9 +70,15 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
                 onChange={handleChange}
                 value={extensionsStr}
             />
-            <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
+            <Typography component="div" variant="caption" sx={{ fontStyle: 'italic' }}>
                 {t('NoteExtraExtensions')}
             </Typography>
+
+            {p.customSettings && (
+                <Box component="div">
+                    {p.customSettings}
+                </Box>
+            )}
         </>
     );
 };

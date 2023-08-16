@@ -16,4 +16,5 @@ export interface IPlugin {
     enabled: boolean;
     extensions: { [index: string]: boolean };
     extraExtensions: string[];
+    customSettings?: JSX.Element;
 }

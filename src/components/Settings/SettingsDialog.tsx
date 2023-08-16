@@ -37,16 +37,22 @@ const SettingsDialog: React.FC = () => {
     const { t } = useTranslation();
     const showSettings = useStore(state => state.showSettings);
     const plugins = useStore(state => state.plugins);
+    const activeViewerType = useStore(state => state.activeViewer);
     const savePluginSettings = useStore(state => state.actions.savePluginSettings);
-    const [value, setValue] = React.useState(0);
+    const [viewerType, setViewerType] = React.useState(activeViewerType);
+
+    React.useEffect(() => {
+        // activate the tab for the file type currently being viewed
+        setViewerType(activeViewerType);
+    }, [activeViewerType]);
 
     const closeSettings = () => {
         savePluginSettings();
         useStore.setState({ showSettings: false });
     };
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+    const handleChange = (event: React.SyntheticEvent, newViewerType: ViewerType) => {
+        setViewerType(newViewerType);
     };
 
     const pluginTabs = plugins.map((p) => {
@@ -55,6 +61,7 @@ const SettingsDialog: React.FC = () => {
         return (
             <Tab
                 key={name}
+                value={p.viewerType}
                 sx={{
                     minHeight: '3rem',
                     alignItems: 'center',
@@ -68,7 +75,7 @@ const SettingsDialog: React.FC = () => {
 
     const pluginTabPanelContainers = plugins.map((p, i) => {
         return (
-            <TabPanelContainer key={p.shortName} value={value} index={i}>
+            <TabPanelContainer key={p.shortName} value={viewerType} viewerType={p.viewerType}>
                 <PluginPanel p={p} />
             </TabPanelContainer>
         );
@@ -109,7 +116,7 @@ const SettingsDialog: React.FC = () => {
                     <Tabs
                         orientation="vertical"
                         visibleScrollbar
-                        value={value}
+                        value={viewerType || ViewerType.IFrame} // viewerType might be Unknown (0)
                         onChange={handleChange}
                         sx={{ minWidth: '14rem', borderRight: 1, borderColor: 'divider' }}
                     >
