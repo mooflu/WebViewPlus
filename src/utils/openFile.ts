@@ -1,6 +1,27 @@
 import useStore from '@hooks/useStore';
 import { log } from '@utils/log';
 
+const BINARY_EXTENSIONS = new Set([
+    // tabular
+    'xlsx',
+    'xls',
+    'ods',
+    // 3d model
+    'gltf',
+    'glb',
+    'obj',
+    'fbx',
+    // pdf & images
+    'pdf',
+    'jpg',
+    'jpeg',
+    'apng',
+    'png',
+    'gif',
+    'bmp',
+    'webp',
+]);
+
 const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
     if (e?.target?.result) {
         log(`handledDataLoaded: size: ${e.total}`);
@@ -25,15 +46,7 @@ export const openFile = (file: File) => {
     const url = URL.createObjectURL(file); // returns a blob url - won't expose local file system location
     const fileReader = new FileReader();
     fileReader.onloadend = handledDataLoaded;
-    if (
-        ext === 'xlsx' ||
-        ext === 'xls' ||
-        ext === 'ods' ||
-        ext === 'gltf' ||
-        ext === 'glb' ||
-        ext === 'pdf' ||
-        ext === 'webp'
-    ) {
+    if (BINARY_EXTENSIONS.has(ext)) {
         fileReader.readAsArrayBuffer(file);
     } else {
         fileReader.readAsText(file);

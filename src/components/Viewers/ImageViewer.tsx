@@ -1,9 +1,12 @@
 import React from 'react';
+import ExifReader from 'exifreader';
 
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 
 import useStore from '@hooks/useStore';
 import { ImageRendering } from '@utils/types';
+import { log } from '@utils/log';
+import ExifInfo from '@components/Viewers/ExifInfo';
 
 const classes = {
     root: {
@@ -47,6 +50,7 @@ const ImageViewer: React.FC = () => {
     const theme = useTheme();
     const fileName = useStore(state => state.fileName);
     const fileUrl = useStore(state => state.fileUrl);
+    const fileContent = useStore(state => state.fileContent);
     const pixelated = useStore(state => state.pixelated);
     const togglePixelated = useStore(state => state.actions.togglePixelated);
     const transformRef = React.useRef<TransformSettings>({ ...defaultTransform });
@@ -54,6 +58,7 @@ const ImageViewer: React.FC = () => {
     const imgRef = React.useRef<HTMLImageElement>(null);
     const [zoom, setZoom] = React.useState(1);
     const [translate, setTranslate] = React.useState({ x: 0, y: 0 });
+    const [tags, setTags] = React.useState(null as ExifReader.Tags | null);
 
     const updateZoomSettings = (z: number) => {
         transformRef.current.zoom = z;
@@ -204,6 +209,21 @@ const ImageViewer: React.FC = () => {
         setZoom(transformRef.current.zoom);
     }, [fileUrl]);
 
+    React.useEffect(() => {
+        setTags(null);
+        const readTags = async () => {
+            if (fileContent && fileContent instanceof ArrayBuffer) {
+                const eTags = await ExifReader.load(fileContent);
+                delete eTags.MakerNote;
+                delete eTags.Thumbnail;
+                delete eTags.UserComment;
+                delete eTags.MPEntry;
+                setTags(eTags);
+            }
+        };
+        readTags().catch(reason => log(`ExifReader: ${reason}`));
+    }, [fileContent]);
+
     const onImageLoad = () => {
         const zoomToFit = getZoomToFit();
         updateZoomSettings(zoomToFit);
@@ -211,31 +231,36 @@ const ImageViewer: React.FC = () => {
     };
 
     return (
-        <Box component="div" ref={containerRef} sx={classes.root}>
-            <img
-                ref={imgRef}
-                alt={fileName}
-                src={fileUrl}
-                style={{
-                    transform: `translateX(${translate.x}px) translateY(${translate.y}px) scale(${zoom})`,
-                    imageRendering: pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
-                }}
-                onLoad={onImageLoad}
-            />
-            <Box
-                component="div"
-                sx={classes.zoomValue}
-            >
-                <Typography
-                    variant="h5"
-                    sx={{
-                        textShadow: `0px 0px 4px ${theme.palette.background.default}`,
+        <>
+            <Box component="div" ref={containerRef} sx={classes.root}>
+                <img
+                    ref={imgRef}
+                    alt={fileName}
+                    src={fileUrl}
+                    style={{
+                        transform: `translateX(${translate.x}px) translateY(${translate.y}px) scale(${zoom})`,
+                        imageRendering: pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
                     }}
+                    onLoad={onImageLoad}
+                />
+                <Box
+                    component="div"
+                    sx={classes.zoomValue}
                 >
-                    {`${Math.round(zoom * 100)}%`}
-                </Typography>
+                    <Typography
+                        variant="h5"
+                        sx={{
+                            textShadow: `0px 0px 4px ${theme.palette.background.default}`,
+                        }}
+                    >
+                        {`${Math.round(zoom * 100)}%`}
+                    </Typography>
+                </Box>
             </Box>
-        </Box>
+            {tags && (
+                <ExifInfo tags={tags} />
+            )}
+        </>
     );
 };
 

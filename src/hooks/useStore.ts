@@ -118,6 +118,7 @@ export const store = createVanilla(
 
             // aka nearest neighbour - css image-rendering for image plugin
             pixelated: window.localStorage.getItem(PLUGIN_IMAGERENDERING_KEY) === ImageRendering.Pixelated,
+            openExifPanel: false,
         },
         set => ({
             actions: {
@@ -183,7 +184,6 @@ export const store = createVanilla(
                         return { mdTableOfContentsItems: [...state.mdTableOfContentsItems, t] };
                     });
                 },
-
                 togglePixelated: () => {
                     set((state) => {
                         const pixelated = !state.pixelated;
