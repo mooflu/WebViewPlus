@@ -21,3 +21,8 @@ UnsupportedDataType: "Nicht unterstützter Datentyp: "
 UnsupportedVersion: Nicht unterstützte Version
 ExtraSettings: Extra Einstellungen
 Pixelated: Verpixelt (nächster Nachbar)
+NewImageZoomBehaviour: Zoomverhalten beim Bildwechsel
+ResizeZoomBehaviour: Zoomverhalten bei Größenänderung des Fensters
+KeepZoom: Zoom beibehalten
+ZoomToFit: Zoom anpassen
+Zoom1To1: Zoom 1:1

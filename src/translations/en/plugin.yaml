@@ -20,4 +20,9 @@ NavigationRejected: Sorry, navigation not allowed.
 UnsupportedDataType: "Unsupported data type: "
 UnsupportedVersion: Unsupported version
 ExtraSettings: Extra Settings
-Pixelated: Pixelated (Nearest Neighbor)
+Pixelated: Pixelated (Nearest Neighbour)
+NewImageZoomBehaviour: Zoom behaviour when changing images
+ResizeZoomBehaviour: Zoom behaviour when resizing window
+KeepZoom: Keep zoom
+ZoomToFit: Zoom to fit
+Zoom1To1: Zoom 1:1

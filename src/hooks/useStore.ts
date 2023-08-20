@@ -1,5 +1,5 @@
-import create from 'zustand';
-import createVanilla from 'zustand/vanilla';
+import { create } from 'zustand';
+import { createStore } from 'zustand/vanilla';
 import { combine } from 'zustand/middleware';
 
 import { IPlugin, ViewerType } from '@plugins/PluginInterface';
@@ -12,10 +12,12 @@ import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
 import { ImagePlugin } from '@plugins/ImagePlugin';
 import { JupyterNBPlugin } from '@plugins/JupyterNBPlugin';
 import { IWebView2 } from '@utils/webview2Helpers';
-import { ImageRendering } from '@utils/types';
+import { ImageRendering, ZoomBehaviour } from '@utils/types';
 
 const PLUGIN_SETTINGS_KEY = 'pluginSettings';
 const PLUGIN_IMAGERENDERING_KEY = 'imageRendering';
+const PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY = 'zoomBehaviourNewImage';
+const PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY = 'zoomBehaviourResize';
 
 const PLUGINS = [
     new IFramePlugin(),
@@ -98,7 +100,7 @@ const loadPluginSettings = () => {
     }
 };
 
-export const store = createVanilla(
+export const store = createStore(
     combine(
         {
             webview: (window as any).chrome?.webview as IWebView2 | undefined,
@@ -119,6 +121,11 @@ export const store = createVanilla(
             // aka nearest neighbour - css image-rendering for image plugin
             pixelated: window.localStorage.getItem(PLUGIN_IMAGERENDERING_KEY) === ImageRendering.Pixelated,
             openExifPanel: false,
+            newImageZoomBehaviour: (window.localStorage.getItem(PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY)
+                || ZoomBehaviour.ZoomToFit) as ZoomBehaviour,
+            resizeImageZoomBehaviour: (window.localStorage.getItem(PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY)
+                || ZoomBehaviour.KeepZoom) as ZoomBehaviour,
+            zoom: 1,
         },
         set => ({
             actions: {
@@ -192,6 +199,24 @@ export const store = createVanilla(
                             pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
                         );
                         return { pixelated };
+                    });
+                },
+                setNewImageZoomBehaviour: (newImageZoomBehaviour: ZoomBehaviour) => {
+                    set((state) => {
+                        window.localStorage.setItem(
+                            PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY,
+                            newImageZoomBehaviour,
+                        );
+                        return { newImageZoomBehaviour };
+                    });
+                },
+                setResizeImageZoomBehaviour: (resizeImageZoomBehaviour: ZoomBehaviour) => {
+                    set((state) => {
+                        window.localStorage.setItem(
+                            PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY,
+                            resizeImageZoomBehaviour,
+                        );
+                        return { resizeImageZoomBehaviour };
                     });
                 },
             },

@@ -9,6 +9,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    Tooltip,
 } from '@mui/material';
 import {
     Info as InfoIcon,
@@ -58,11 +59,35 @@ const ExifInfo: React.FC<ExifInfoProps> = (props) => {
         useStore.setState({ openExifPanel: !openExifPanel });
     };
 
+    const infoTable = (
+        <Table size="small">
+            <TableBody>
+                {tagList.map((tag) => {
+                    return (
+                        <TableRow key={tag.name}>
+                            <TableCell sx={{ fontSize: '0.7rem', p: 0, pr: '0.5rem' }}>{tag.name}</TableCell>
+                            <TableCell sx={{ fontSize: '0.7rem', p: 0 }}>{getDescription(tag)}</TableCell>
+                        </TableRow>
+                    );
+                })}
+            </TableBody>
+        </Table>
+    );
+
     if (!openExifPanel) {
         return (
-            <IconButton onClick={toggleInfoPanel} sx={classes.infoContainer}>
-                <InfoIcon sx={{ width: '1rem', height: '1rem' }} />
-            </IconButton>
+            <Tooltip
+                title={infoTable}
+                leaveDelay={250}
+                componentsProps={{
+                    popper: { sx: { ...classes.infoContainer, maxHeight: 'calc(100% - 8rem)' } },
+                    tooltip: { sx: { mt: '0 !important', mr: '1px' } },
+                }}
+            >
+                <IconButton onClick={toggleInfoPanel} sx={classes.infoContainer}>
+                    <InfoIcon sx={{ width: '1rem', height: '1rem' }} />
+                </IconButton>
+            </Tooltip>
         );
     }
 
@@ -72,20 +97,7 @@ const ExifInfo: React.FC<ExifInfoProps> = (props) => {
                 elevation={4}
                 sx={classes.infoContainer}
             >
-                {openExifPanel && (
-                    <Table size="small">
-                        <TableBody>
-                            {tagList.map((tag) => {
-                                return (
-                                    <TableRow key={tag.name}>
-                                        <TableCell sx={{ fontSize: '0.7rem', p: 0, pr: '0.5rem' }}>{tag.name}</TableCell>
-                                        <TableCell sx={{ fontSize: '0.7rem', p: 0 }}>{getDescription(tag)}</TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                )}
+                {openExifPanel && infoTable}
             </Paper>
             <IconButton onClick={toggleInfoPanel} sx={classes.infoContainer}>
                 <CloseIcon sx={{ width: '1rem', height: '1rem' }} />

@@ -4,7 +4,7 @@ import ExifReader from 'exifreader';
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 
 import useStore from '@hooks/useStore';
-import { ImageRendering } from '@utils/types';
+import { ImageRendering, ZoomBehaviour } from '@utils/types';
 import { log } from '@utils/log';
 import ExifInfo from '@components/Viewers/ExifInfo';
 
@@ -37,7 +37,7 @@ interface TransformSettings {
 }
 
 const defaultTransform: TransformSettings = {
-    zoom: 1,
+    zoom: 1.5,
     minZoom: 1,
     maxZoom: 1,
     zoomToFit: 1,
@@ -52,6 +52,9 @@ const ImageViewer: React.FC = () => {
     const fileUrl = useStore(state => state.fileUrl);
     const fileContent = useStore(state => state.fileContent);
     const pixelated = useStore(state => state.pixelated);
+    const lastZoom = useStore(state => state.zoom);
+    const newImageZoomBehaviour = useStore(state => state.newImageZoomBehaviour);
+    const resizeImageZoomBehaviour = useStore(state => state.resizeImageZoomBehaviour);
     const togglePixelated = useStore(state => state.actions.togglePixelated);
     const transformRef = React.useRef<TransformSettings>({ ...defaultTransform });
     const containerRef = React.useRef<HTMLDivElement>(null);
@@ -59,6 +62,14 @@ const ImageViewer: React.FC = () => {
     const [zoom, setZoom] = React.useState(1);
     const [translate, setTranslate] = React.useState({ x: 0, y: 0 });
     const [tags, setTags] = React.useState(null as ExifReader.Tags | null);
+
+    React.useEffect(() => {
+        updateZoomSettings(lastZoom);
+        setZoom(lastZoom);
+        return () => {
+            useStore.setState({ zoom: transformRef.current.zoom }); // remember zoom across mounts
+        };
+    }, []);
 
     const updateZoomSettings = (z: number) => {
         transformRef.current.zoom = z;
@@ -85,9 +96,14 @@ const ImageViewer: React.FC = () => {
 
     React.useEffect(() => {
         const handleResize = (e: UIEvent) => {
-            const zoomToFit = getZoomToFit();
-            updateZoomSettings(zoomToFit);
-            setZoom(transformRef.current.zoom);
+            transformRef.current.zoomToFit = getZoomToFit();
+            updateZoomSettings(transformRef.current.zoomToFit);
+            if (resizeImageZoomBehaviour === ZoomBehaviour.Zoom1To1) {
+                transformRef.current.zoom = 1;
+                setZoom(transformRef.current.zoom);
+            } else if (resizeImageZoomBehaviour === ZoomBehaviour.ZoomToFit) {
+                setZoom(transformRef.current.zoomToFit);
+            }
         };
 
         const handleMouseDown = (e: MouseEvent) => {
@@ -153,7 +169,7 @@ const ImageViewer: React.FC = () => {
 
         const handleKeydown = (e: KeyboardEvent) => {
             const { zoom, minZoom, maxZoom, zoomToFit } = transformRef.current;
-            let newZoom = zoom;
+            let newZoom: number | null = null;
             if (e.key === '0') {
                 newZoom = getZoomToFit();
                 transformRef.current.translateX = 0;
@@ -161,6 +177,22 @@ const ImageViewer: React.FC = () => {
                 setTranslate({ x: transformRef.current.translateX, y: transformRef.current.translateY });
             } else if (e.key === '1') {
                 newZoom = 1;
+            } else if (e.key === '2') {
+                newZoom = 2;
+            } else if (e.key === '3') {
+                newZoom = 3;
+            } else if (e.key === '4') {
+                newZoom = 4;
+            } else if (e.key === '5') {
+                newZoom = 5;
+            } else if (e.key === '6') {
+                newZoom = 6;
+            } else if (e.key === '7') {
+                newZoom = 7;
+            } else if (e.key === '8') {
+                newZoom = 8;
+            } else if (e.key === '9') {
+                newZoom = 9;
             } else if (e.key === '+') {
                 newZoom = Math.max(minZoom, Math.min(zoom + (0.1 * zoomToFit), maxZoom));
             } else if (e.key === '-') {
@@ -171,8 +203,10 @@ const ImageViewer: React.FC = () => {
                 return;
             }
 
-            transformRef.current.zoom = newZoom;
-            setZoom(transformRef.current.zoom);
+            if (newZoom) {
+                transformRef.current.zoom = newZoom;
+                setZoom(transformRef.current.zoom);
+            }
         };
 
         const el = containerRef.current;
@@ -198,15 +232,20 @@ const ImageViewer: React.FC = () => {
             window.removeEventListener('keydown', handleKeydown);
             window.removeEventListener('resize', handleResize);
         };
-    }, [containerRef]);
+    }, [containerRef, newImageZoomBehaviour, resizeImageZoomBehaviour]);
 
     React.useEffect(() => {
-        transformRef.current = { ...defaultTransform };
-        setTranslate({ x: transformRef.current.translateX, y: transformRef.current.translateY });
+        if (newImageZoomBehaviour === ZoomBehaviour.Zoom1To1) {
+            transformRef.current.zoom = 1;
+            setZoom(transformRef.current.zoom);
+        } else if (newImageZoomBehaviour === ZoomBehaviour.ZoomToFit) {
+            transformRef.current = { ...defaultTransform };
+            setTranslate({ x: transformRef.current.translateX, y: transformRef.current.translateY });
 
-        const zoomToFit = getZoomToFit();
-        updateZoomSettings(zoomToFit);
-        setZoom(transformRef.current.zoom);
+            const zoomToFit = getZoomToFit();
+            updateZoomSettings(zoomToFit);
+            setZoom(transformRef.current.zoom);
+        }
     }, [fileUrl]);
 
     React.useEffect(() => {
@@ -225,9 +264,14 @@ const ImageViewer: React.FC = () => {
     }, [fileContent]);
 
     const onImageLoad = () => {
-        const zoomToFit = getZoomToFit();
-        updateZoomSettings(zoomToFit);
-        setZoom(transformRef.current.zoom);
+        if (newImageZoomBehaviour === ZoomBehaviour.Zoom1To1) {
+            transformRef.current.zoom = 1;
+            setZoom(transformRef.current.zoom);
+        } else if (newImageZoomBehaviour === ZoomBehaviour.ZoomToFit) {
+            const zoomToFit = getZoomToFit();
+            updateZoomSettings(zoomToFit);
+            setZoom(transformRef.current.zoom);
+        }
     };
 
     return (
