@@ -27,7 +27,10 @@ const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
         log(`handledDataLoaded: size: ${e.total}`);
         const content = e.target.result;
         if (typeof content === 'string') {
-            useStore.setState({ fileContent: content, fileSize: e.total });
+            useStore.setState({
+                fileContent: content,
+                fileSize: e.total,
+            });
         } else if (content instanceof ArrayBuffer) {
             useStore.setState({
                 fileContent: content,
@@ -51,7 +54,9 @@ export const openFile = (file: File) => {
     } else {
         fileReader.readAsText(file);
     }
-    useStore.setState({
+    useStore.getState().actions.updateFileData({
+        fileSize: 0,
+        fileContent: null,
         fileName: file.name,
         fileExt: ext,
         fileUrl: url,

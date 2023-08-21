@@ -38,9 +38,17 @@ interface PluginSettings {
 }
 
 interface TOCItem {
-    level: number,
-    id: string,
-    title: string,
+    level: number;
+    id: string;
+    title: string;
+}
+
+interface FileData {
+    fileSize: number;
+    fileName: string;
+    fileExt: string;
+    fileUrl: string;
+    fileContent: string | ArrayBuffer | null;
 }
 
 const getEnabledExtensions = () => {
@@ -145,6 +153,15 @@ export const store = createStore(
                             fileExt: '',
                             fileUrl: '',
                             mdTableOfContentsItems: [],
+                            activeViewer: ViewerType.Unknown,
+                        };
+                    });
+                },
+                updateFileData: (fileData: FileData) => {
+                    set((state) => {
+                        return {
+                            ...fileData,
+                            activeViewer: ViewerType.Unknown,
                         };
                     });
                 },

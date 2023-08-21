@@ -79,8 +79,14 @@ const ImageViewer: React.FC = () => {
     };
 
     const getZoomToFit = () => {
-        const iw = imgRef.current!.width;
-        const ih = imgRef.current!.height;
+        if (!imgRef.current) {
+            return 0;
+        }
+        const iw = imgRef.current.width;
+        const ih = imgRef.current.height;
+        if (iw === 0 || ih === 0) {
+            return 0;
+        }
         const iar = iw / ih;
         const ww = window.innerWidth;
         const wh = window.innerHeight;

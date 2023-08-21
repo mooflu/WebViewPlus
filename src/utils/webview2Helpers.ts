@@ -46,7 +46,7 @@ export const handleSharedBufferReceived = (e: MessageEvent & {additionalData: an
         fileUrl = URL.createObjectURL(blob);
     }
 
-    store.setState({
+    store.getState().actions.updateFileData({
         fileSize,
         fileContent: isBinary ? binContent : textContent,
         fileName,

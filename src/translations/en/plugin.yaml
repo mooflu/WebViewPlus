@@ -26,3 +26,4 @@ ResizeZoomBehaviour: Zoom behaviour when resizing window
 KeepZoom: Keep zoom
 ZoomToFit: Zoom to fit
 Zoom1To1: Zoom 1:1
+FileTypeNotSupported: File type not enabled or not supported.
