@@ -1,6 +1,7 @@
 import useStore from '@hooks/useStore';
 import { log } from '@utils/log';
 
+// These should match the ones in the QL plugin WebpagePanel._binExtensions
 const BINARY_EXTENSIONS = new Set([
     // tabular
     'xlsx',
