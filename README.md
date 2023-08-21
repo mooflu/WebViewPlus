@@ -49,6 +49,10 @@ Where the language doesn't match the extension, specify both separated by a colo
 E.g. "rs:rust"
 Any language supported by https://prismjs.com/#supported-languages should work.
 
+### Fonts
+
+ttf, otf, woff2 (without font info), woff
+
 ## Develop
 
 make dev

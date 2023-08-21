@@ -11,6 +11,11 @@ const BINARY_EXTENSIONS = new Set([
     'glb',
     'obj',
     'fbx',
+    // fonts
+    'ttf',
+    'otf',
+    'woff',
+    'woff2',
     // pdf & images
     'pdf',
     'jpg',

@@ -11,6 +11,7 @@ import { MarkdownPlugin } from '@plugins/MarkdownPlugin';
 import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
 import { ImagePlugin } from '@plugins/ImagePlugin';
 import { JupyterNBPlugin } from '@plugins/JupyterNBPlugin';
+import { FontPlugin } from '@plugins/FontPlugin';
 import { IWebView2 } from '@utils/webview2Helpers';
 import { ImageRendering, ZoomBehaviour } from '@utils/types';
 
@@ -28,6 +29,7 @@ const PLUGINS = [
     new ModelViewerPlugin(),
     new SyntaxPlugin(),
     new JupyterNBPlugin(),
+    new FontPlugin(),
 ];
 
 interface PluginSettings {

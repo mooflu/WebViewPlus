@@ -7,6 +7,7 @@ pluginName:
   syntax: Syntax-Highlighter
   jupyter: Jupyter Notebook
   image: Bild
+  font: Schriftart
 SelectOrDnDFile: Wählen Sie eine Datei aus oder ziehen Sie sie per Drag & Drop hierher.
 Settings: Einstellungen
 FileExtensions: Dateierweiterungen
@@ -27,3 +28,4 @@ KeepZoom: Zoom beibehalten
 ZoomToFit: Zoom anpassen
 Zoom1To1: Zoom 1:1
 FileTypeNotSupported: Dateityp nicht aktiviert oder nicht unterstützt.
+NoFontInfoAvailable: Keine Informationen zur Schriftart verfügbar.
