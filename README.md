@@ -51,6 +51,8 @@ Any language supported by https://prismjs.com/#supported-languages should work.
 
 ## Develop
 
-npx vite
+make dev
 
-npx vite build
+make build
+
+make lint
