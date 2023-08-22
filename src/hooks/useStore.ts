@@ -20,6 +20,10 @@ const PLUGIN_IMAGERENDERING_KEY = 'imageRendering';
 const PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY = 'zoomBehaviourNewImage';
 const PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY = 'zoomBehaviourResize';
 const PLUGIN_FONTTEXT_KEY = 'fontText';
+const PLUGIN_SYNTAX_SHOWLINENUMBERS = 'showLineNumbers';
+const PLUGIN_SYNTAX_WRAPLINES = 'wrapLines';
+
+export const DEFAULT_FONTTEXT = 'The quick brown fox jumps over the lazy dog';
 
 const PLUGINS = [
     new IFramePlugin(),
@@ -111,7 +115,10 @@ const loadPluginSettings = () => {
     }
 };
 
-export const DEFAULT_FONTTEXT = 'The quick brown fox jumps over the lazy dog';
+function getValue<T>(key: string, value: T): string | T {
+    const v = window.localStorage.getItem(key);
+    return v === null ? value : v;
+}
 
 export const store = createStore(
     combine(
@@ -139,8 +146,9 @@ export const store = createStore(
             resizeImageZoomBehaviour: (window.localStorage.getItem(PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY)
                 || ZoomBehaviour.KeepZoom) as ZoomBehaviour,
             zoom: 1,
-            fontText: window.localStorage.getItem(PLUGIN_FONTTEXT_KEY)
-                || DEFAULT_FONTTEXT,
+            fontText: getValue(PLUGIN_FONTTEXT_KEY, DEFAULT_FONTTEXT),
+            showLineNumbers: getValue(PLUGIN_SYNTAX_SHOWLINENUMBERS, 'true') === 'true',
+            wrapLines: getValue(PLUGIN_SYNTAX_WRAPLINES, 'false') === 'true',
         },
         set => ({
             actions: {
@@ -250,6 +258,26 @@ export const store = createStore(
                             fontText,
                         );
                         return { fontText };
+                    });
+                },
+                toggleShowLineNumbers: () => {
+                    set((state) => {
+                        const showLineNumbers = !state.showLineNumbers;
+                        window.localStorage.setItem(
+                            PLUGIN_SYNTAX_SHOWLINENUMBERS,
+                            showLineNumbers.toString(),
+                        );
+                        return { showLineNumbers };
+                    });
+                },
+                toggleWrapLines: () => {
+                    set((state) => {
+                        const wrapLines = !state.wrapLines;
+                        window.localStorage.setItem(
+                            PLUGIN_SYNTAX_WRAPLINES,
+                            wrapLines.toString(),
+                        );
+                        return { wrapLines };
                     });
                 },
             },

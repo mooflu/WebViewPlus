@@ -31,3 +31,5 @@ FileTypeNotSupported: Dateityp nicht aktiviert oder nicht unterstützt.
 NoFontInfoAvailable: Keine Informationen zur Schriftart verfügbar.
 EditText: Text bearbeiten
 ResetText: Text zurücksetzen
+ShowLineNumbers: Zeilennummern anzeigen
+WrapLines: Lange Zeilen umbrechen

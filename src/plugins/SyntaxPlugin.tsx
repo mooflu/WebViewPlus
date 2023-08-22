@@ -1,3 +1,7 @@
+import React from 'react';
+
+import SyntaxViewerSettings from '@components/Settings/SyntaxViewerSettings';
+
 import { IPlugin, ViewerType } from './PluginInterface';
 
 // TODO: add more - see https://prismjs.com/#supported-languages
@@ -45,6 +49,7 @@ export class SyntaxPlugin implements IPlugin {
     public enabled = true;
     public extraExtensions: string[] = [];
     public extensions: { [index: string]: boolean } = {};
+    public customSettings = <SyntaxViewerSettings />;
 
     constructor() {
         for (const ext in Ext2Lang) {

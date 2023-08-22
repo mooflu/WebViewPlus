@@ -31,3 +31,5 @@ FileTypeNotSupported: File type not enabled or not supported.
 NoFontInfoAvailable: No font info available.
 EditText: Edit text
 ResetText: Reset text
+ShowLineNumbers: Show line numbers
+WrapLines: Wrap long lines

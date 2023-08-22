@@ -11,6 +11,8 @@ import { Ext2Lang } from '@plugins/SyntaxPlugin';
 const SyntaxViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
     const fileExt = useStore(state => state.fileExt);
+    const showLineNumbers = useStore(state => state.showLineNumbers);
+    const wrapLines = useStore(state => state.wrapLines);
     const pluginByShortName = useStore(state => state.pluginByShortName);
     const plugin = pluginByShortName.syntax;
 
@@ -32,10 +34,11 @@ const SyntaxViewer: React.FC = () => {
             language={lang}
             style={style}
             wrapLines
+            wrapLongLines={wrapLines}
             lineProps={{
                 data: 'textLine', // className doesn't work :(
             }}
-            showLineNumbers
+            showLineNumbers={showLineNumbers}
             customStyle={{
                 margin: 0,
                 padding: 0,
