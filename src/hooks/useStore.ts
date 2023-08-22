@@ -19,6 +19,7 @@ const PLUGIN_SETTINGS_KEY = 'pluginSettings';
 const PLUGIN_IMAGERENDERING_KEY = 'imageRendering';
 const PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY = 'zoomBehaviourNewImage';
 const PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY = 'zoomBehaviourResize';
+const PLUGIN_FONTTEXT_KEY = 'fontText';
 
 const PLUGINS = [
     new IFramePlugin(),
@@ -110,6 +111,8 @@ const loadPluginSettings = () => {
     }
 };
 
+export const DEFAULT_FONTTEXT = 'The quick brown fox jumps over the lazy dog';
+
 export const store = createStore(
     combine(
         {
@@ -136,6 +139,8 @@ export const store = createStore(
             resizeImageZoomBehaviour: (window.localStorage.getItem(PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY)
                 || ZoomBehaviour.KeepZoom) as ZoomBehaviour,
             zoom: 1,
+            fontText: window.localStorage.getItem(PLUGIN_FONTTEXT_KEY)
+                || DEFAULT_FONTTEXT,
         },
         set => ({
             actions: {
@@ -236,6 +241,15 @@ export const store = createStore(
                             resizeImageZoomBehaviour,
                         );
                         return { resizeImageZoomBehaviour };
+                    });
+                },
+                setFontText: (fontText: string) => {
+                    set((state) => {
+                        window.localStorage.setItem(
+                            PLUGIN_FONTTEXT_KEY,
+                            fontText,
+                        );
+                        return { fontText };
                     });
                 },
             },

@@ -4,16 +4,23 @@ import * as opentype from 'opentype.js';
 
 import {
     Box,
+    IconButton,
     Paper,
     Table,
     TableBody,
     TableRow,
     TableCell,
+    TextField,
     Typography,
     SxProps,
 } from '@mui/material';
+import {
+    Close as CloseIcon,
+    Edit as EditIcon,
+    SettingsBackupRestore as RestoreIcon,
+} from '@mui/icons-material';
 
-import useStore from '@hooks/useStore';
+import useStore, { DEFAULT_FONTTEXT } from '@hooks/useStore';
 
 const classes = {
     infoContainer: {
@@ -38,7 +45,10 @@ const FontViewer: React.FC = () => {
     const { t } = useTranslation();
     const fileUrl = useStore(state => state.fileUrl);
     const fileContent = useStore(state => state.fileContent);
+    const fontText = useStore(state => state.fontText);
+    const setFontText = useStore(state => state.actions.setFontText);
     const [fontInfo, setFontInfo] = React.useState<NameProp[] | null>(null);
+    const [showEdit, setShowEdit] = React.useState(false);
 
     React.useEffect(() => {
         try {
@@ -57,6 +67,18 @@ const FontViewer: React.FC = () => {
         }
     }, [fileContent]);
 
+    const updateFontText = (fontText: string) => {
+        setFontText(fontText);
+    };
+
+    const restoreDefaultText = () => {
+        setFontText(DEFAULT_FONTTEXT);
+    };
+
+    const toggleEdit = () => {
+        setShowEdit(!showEdit);
+    };
+
     return (
         <Box
             component="div"
@@ -68,9 +90,36 @@ const FontViewer: React.FC = () => {
                 p: 1.5,
             }}
         >
+            {!showEdit && (
+                <IconButton onClick={toggleEdit} title={t('EditText')} sx={{ mb: 1 }}>
+                    <EditIcon sx={{ width: '1rem', height: '1rem' }} />
+                </IconButton>
+            )}
+            {showEdit && (
+                <Paper elevation={4} sx={{ width: '50%', position: 'relative', mb: 1 }}>
+                    <TextField
+                        variant="standard"
+                        fullWidth
+                        value={fontText}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            updateFontText(event.target.value);
+                        }}
+                        onBlur={toggleEdit}
+                    />
+                    <Box component="div" sx={{ position: 'absolute', top: 0, right: 0 }}>
+                        <IconButton onClick={restoreDefaultText} title={t('ResetText')}>
+                            <RestoreIcon sx={{ width: '1rem', height: '1rem' }} />
+                        </IconButton>
+                        <IconButton onClick={toggleEdit} title={t('Close')}>
+                            <CloseIcon sx={{ width: '1rem', height: '1rem' }} />
+                        </IconButton>
+                    </Box>
+                </Paper>
+            )}
+
             {[0.5, 0.7, 1, 1.2, 1.5, 2, 3, 5].map(fs => (
                 <Typography key={`fs-${fs}`} sx={{ fontFamily: 'previewFont', fontSize: `${fs}rem` }}>
-                    The quick brown fox jumps over the lazy dog
+                    {fontText}
                 </Typography>
             ))}
             <Paper
