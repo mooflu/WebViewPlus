@@ -33,3 +33,6 @@ EditText: Text bearbeiten
 ResetText: Text zurücksetzen
 ShowLineNumbers: Zeilennummern anzeigen
 WrapLines: Lange Zeilen umbrechen
+FontSize: Schriftgröße
+CustomFont: Benutzerdefinierte Schriftart
+CustomFontExplain: "Eine css @font-face Schriftart. Z.B.:"

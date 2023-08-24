@@ -14,11 +14,12 @@ import {
 } from '@mui/material';
 
 import useStore from '@hooks/useStore';
-import { ZoomBehaviour } from '@utils/types';
+import { ImageRendering, ZoomBehaviour } from '@utils/types';
 
 const ImageViewerSettings: React.FC = () => {
     const { t } = useTranslation();
-    const pixelated = useStore(state => state.pixelated);
+    const imageRendering = useStore(state => state.imageRendering);
+    const pixelated = imageRendering === ImageRendering.Pixelated;
     const togglePixelated = useStore(state => state.actions.togglePixelated);
     const newImageZoomBehaviour = useStore(state => state.newImageZoomBehaviour);
     const setNewImageZoomBehaviour = useStore(state => state.actions.setNewImageZoomBehaviour);

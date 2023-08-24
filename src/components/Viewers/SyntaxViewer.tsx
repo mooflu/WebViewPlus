@@ -5,15 +5,19 @@ import {
     vs,
 } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
+import { Box, SxProps } from '@mui/material';
+
 import useStore from '@hooks/useStore';
 import { Ext2Lang } from '@plugins/SyntaxPlugin';
 
 const SyntaxViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
     const fileExt = useStore(state => state.fileExt);
-    const showLineNumbers = useStore(state => state.showLineNumbers);
-    const wrapLines = useStore(state => state.wrapLines);
+    const syntaxShowLineNumbers = useStore(state => state.syntaxShowLineNumbers);
+    const syntaxWrapLines = useStore(state => state.syntaxWrapLines);
     const pluginByShortName = useStore(state => state.pluginByShortName);
+    const syntaxFontSize = useStore(state => state.syntaxFontSize);
+    const syntaxCustomFont = useStore(state => state.syntaxCustomFont);
     const plugin = pluginByShortName.syntax;
 
     const matchedExtra = plugin.extraExtensions.filter(e => e.split(':')[0] === fileExt);
@@ -27,28 +31,41 @@ const SyntaxViewer: React.FC = () => {
     }
 
     const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
-    // console.log(SyntaxHighlighter.supportedLanguages);
+
+    const fontFaceSx: SxProps = syntaxCustomFont
+        ? {
+            '@font-face': {
+                fontFamily: 'syntaxFont',
+                src: syntaxCustomFont,
+            },
+        } : {};
 
     return (
-        <SyntaxHighlighter
-            language={lang}
-            style={style}
-            wrapLines
-            wrapLongLines={wrapLines}
-            lineProps={{
-                data: 'textLine', // className doesn't work :(
-            }}
-            showLineNumbers={showLineNumbers}
-            customStyle={{
-                margin: 0,
-                padding: 0,
-                border: 'none',
-                overflow: 'initial',
-                background: 'initial',
-            }}
+        <Box
+            component="div"
+            sx={fontFaceSx}
         >
-            {fileContent}
-        </SyntaxHighlighter>
+            <SyntaxHighlighter
+                language={lang}
+                style={style}
+                wrapLines
+                wrapLongLines={syntaxWrapLines}
+                lineProps={{
+                    data: 'textLine', // className doesn't work :(
+                    style: { fontFamily: syntaxCustomFont ? 'syntaxFont' : '', fontSize: syntaxFontSize },
+                }}
+                showLineNumbers={syntaxShowLineNumbers}
+                customStyle={{
+                    margin: 0,
+                    padding: 0,
+                    border: 'none',
+                    overflow: 'initial',
+                    background: 'initial',
+                }}
+            >
+                {fileContent}
+            </SyntaxHighlighter>
+        </Box>
     );
 };
 

@@ -33,3 +33,6 @@ EditText: Edit text
 ResetText: Reset text
 ShowLineNumbers: Show line numbers
 WrapLines: Wrap long lines
+FontSize: Font size
+CustomFont: Custom font
+CustomFontExplain: "A css @font-face font. E.g.:"

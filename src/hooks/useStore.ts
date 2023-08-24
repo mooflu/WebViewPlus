@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { createStore } from 'zustand/vanilla';
-import { combine } from 'zustand/middleware';
+import { combine, persist } from 'zustand/middleware';
 
 import { IPlugin, ViewerType } from '@plugins/PluginInterface';
 import { SyntaxPlugin } from '@plugins/SyntaxPlugin';
@@ -16,14 +16,10 @@ import { IWebView2 } from '@utils/webview2Helpers';
 import { ImageRendering, ZoomBehaviour } from '@utils/types';
 
 const PLUGIN_SETTINGS_KEY = 'pluginSettings';
-const PLUGIN_IMAGERENDERING_KEY = 'imageRendering';
-const PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY = 'zoomBehaviourNewImage';
-const PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY = 'zoomBehaviourResize';
-const PLUGIN_FONTTEXT_KEY = 'fontText';
-const PLUGIN_SYNTAX_SHOWLINENUMBERS = 'showLineNumbers';
-const PLUGIN_SYNTAX_WRAPLINES = 'wrapLines';
+const PLUGIN_EXTRA_SETTINGS_KEY = 'pluginExtraSettings';
 
 export const DEFAULT_FONTTEXT = 'The quick brown fox jumps over the lazy dog';
+export const DEFAULT_SYNTAX_FONTSIZE = 13;
 
 const PLUGINS = [
     new IFramePlugin(),
@@ -115,173 +111,171 @@ const loadPluginSettings = () => {
     }
 };
 
-function getValue<T>(key: string, value: T): string | T {
-    const v = window.localStorage.getItem(key);
-    return v === null ? value : v;
-}
-
 export const store = createStore(
-    combine(
-        {
-            webview: (window as any).chrome?.webview as IWebView2 | undefined,
+    persist(
+        combine(
+            {
+                webview: (window as any).chrome?.webview as IWebView2 | undefined,
 
-            fileSize: 0,
-            fileName: '',
-            fileExt: '',
-            fileUrl: '',
-            fileContent: null as string | ArrayBuffer | null,
-            mdTableOfContentsItems: [] as TOCItem[],
+                fileSize: 0,
+                fileName: '',
+                fileExt: '',
+                fileUrl: '',
+                fileContent: null as string | ArrayBuffer | null,
+                mdTableOfContentsItems: [] as TOCItem[],
 
-            activeViewer: ViewerType.Unknown,
-            showSettings: false as boolean,
-            plugins: PLUGINS as IPlugin[],
-            pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
-            yingYang: true as boolean,
+                activeViewer: ViewerType.Unknown,
+                showSettings: false as boolean,
+                plugins: PLUGINS as IPlugin[],
+                pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
+                yingYang: true as boolean,
 
-            // aka nearest neighbour - css image-rendering for image plugin
-            pixelated: window.localStorage.getItem(PLUGIN_IMAGERENDERING_KEY) === ImageRendering.Pixelated,
-            openExifPanel: false,
-            newImageZoomBehaviour: (window.localStorage.getItem(PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY)
-                || ZoomBehaviour.ZoomToFit) as ZoomBehaviour,
-            resizeImageZoomBehaviour: (window.localStorage.getItem(PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY)
-                || ZoomBehaviour.KeepZoom) as ZoomBehaviour,
-            zoom: 1,
-            fontText: getValue(PLUGIN_FONTTEXT_KEY, DEFAULT_FONTTEXT),
-            showLineNumbers: getValue(PLUGIN_SYNTAX_SHOWLINENUMBERS, 'true') === 'true',
-            wrapLines: getValue(PLUGIN_SYNTAX_WRAPLINES, 'false') === 'true',
-        },
-        set => ({
-            actions: {
-                init: () => {
-                    set((state) => {
-                        loadPluginSettings();
-                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
-                        return { plugins: [...state.plugins] };
-                    });
-                },
-                unload: () => {
-                    set(() => {
-                        return {
-                            fileSize: 0,
-                            fileContent: null,
-                            fileName: '',
-                            fileExt: '',
-                            fileUrl: '',
-                            mdTableOfContentsItems: [],
-                            activeViewer: ViewerType.Unknown,
-                        };
-                    });
-                },
-                updateFileData: (fileData: FileData) => {
-                    set((state) => {
-                        return {
-                            ...fileData,
-                            activeViewer: ViewerType.Unknown,
-                        };
-                    });
-                },
-                togglePlugin: (p: IPlugin) => {
-                    set((state) => {
-                        p.enabled = !p.enabled;
-                        return { plugins: [...state.plugins] };
-                    });
-                },
-                toggleExtension: (ext: string, pluginShortName: string) => {
-                    set((state) => {
-                        const p = state.pluginByShortName[pluginShortName];
-                        if (ext in p.extensions) {
-                            p.extensions[ext] = !p.extensions[ext];
-                        }
-                        return { plugins: [...state.plugins] };
-                    });
-                },
-                setExtraExtensions: (extensions: string[], pluginShortName: string) => {
-                    set((state) => {
-                        const p = state.pluginByShortName[pluginShortName];
-                        p.extraExtensions = extensions;
-                        return { plugins: [...state.plugins] };
-                    });
-                },
-                setActiveViewer: (viewer: ViewerType) => {
-                    set((state) => {
-                        return { activeViewer: viewer };
-                    });
-                },
-                savePluginSettings: () => {
-                    const state = store.getState();
-                    savePluginSettings(state.plugins);
-                    state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
-                    return {};
-                },
-                clearTableOfContent: () => {
-                    set((state) => {
-                        return { mdTableOfContentsItems: [] };
-                    });
-                },
-                addTableOfContentItem: (t: TOCItem) => {
-                    set((state) => {
-                        return { mdTableOfContentsItems: [...state.mdTableOfContentsItems, t] };
-                    });
-                },
-                togglePixelated: () => {
-                    set((state) => {
-                        const pixelated = !state.pixelated;
-                        window.localStorage.setItem(
-                            PLUGIN_IMAGERENDERING_KEY,
-                            pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
-                        );
-                        return { pixelated };
-                    });
-                },
-                setNewImageZoomBehaviour: (newImageZoomBehaviour: ZoomBehaviour) => {
-                    set((state) => {
-                        window.localStorage.setItem(
-                            PLUGIN_ZOOMBEHAVIOUR_NEWIMAGE_KEY,
-                            newImageZoomBehaviour,
-                        );
-                        return { newImageZoomBehaviour };
-                    });
-                },
-                setResizeImageZoomBehaviour: (resizeImageZoomBehaviour: ZoomBehaviour) => {
-                    set((state) => {
-                        window.localStorage.setItem(
-                            PLUGIN_ZOOMBEHAVIOUR_RESIZE_KEY,
-                            resizeImageZoomBehaviour,
-                        );
-                        return { resizeImageZoomBehaviour };
-                    });
-                },
-                setFontText: (fontText: string) => {
-                    set((state) => {
-                        window.localStorage.setItem(
-                            PLUGIN_FONTTEXT_KEY,
-                            fontText,
-                        );
-                        return { fontText };
-                    });
-                },
-                toggleShowLineNumbers: () => {
-                    set((state) => {
-                        const showLineNumbers = !state.showLineNumbers;
-                        window.localStorage.setItem(
-                            PLUGIN_SYNTAX_SHOWLINENUMBERS,
-                            showLineNumbers.toString(),
-                        );
-                        return { showLineNumbers };
-                    });
-                },
-                toggleWrapLines: () => {
-                    set((state) => {
-                        const wrapLines = !state.wrapLines;
-                        window.localStorage.setItem(
-                            PLUGIN_SYNTAX_WRAPLINES,
-                            wrapLines.toString(),
-                        );
-                        return { wrapLines };
-                    });
-                },
+                openExifPanel: false,
+                zoom: 1,
+
+                // values below are stored in localstorage (see partialize below)
+                // image plugin
+                imageRendering: ImageRendering.Auto,
+                newImageZoomBehaviour: ZoomBehaviour.ZoomToFit,
+                resizeImageZoomBehaviour: ZoomBehaviour.KeepZoom,
+                // font plugin
+                fontText: DEFAULT_FONTTEXT,
+                // syntax highlight plugin
+                syntaxShowLineNumbers: true,
+                syntaxWrapLines: false,
+                syntaxFontSize: DEFAULT_SYNTAX_FONTSIZE,
+                syntaxCustomFont: '',
             },
-        }),
+            set => ({
+                actions: {
+                    init: () => {
+                        set((state) => {
+                            loadPluginSettings();
+                            state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
+                            return { plugins: [...state.plugins] };
+                        });
+                    },
+                    unload: () => {
+                        set(() => {
+                            return {
+                                fileSize: 0,
+                                fileContent: null,
+                                fileName: '',
+                                fileExt: '',
+                                fileUrl: '',
+                                mdTableOfContentsItems: [],
+                                activeViewer: ViewerType.Unknown,
+                            };
+                        });
+                    },
+                    updateFileData: (fileData: FileData) => {
+                        set((state) => {
+                            return {
+                                ...fileData,
+                                activeViewer: ViewerType.Unknown,
+                            };
+                        });
+                    },
+                    togglePlugin: (p: IPlugin) => {
+                        set((state) => {
+                            p.enabled = !p.enabled;
+                            return { plugins: [...state.plugins] };
+                        });
+                    },
+                    toggleExtension: (ext: string, pluginShortName: string) => {
+                        set((state) => {
+                            const p = state.pluginByShortName[pluginShortName];
+                            if (ext in p.extensions) {
+                                p.extensions[ext] = !p.extensions[ext];
+                            }
+                            return { plugins: [...state.plugins] };
+                        });
+                    },
+                    setExtraExtensions: (extensions: string[], pluginShortName: string) => {
+                        set((state) => {
+                            const p = state.pluginByShortName[pluginShortName];
+                            p.extraExtensions = extensions;
+                            return { plugins: [...state.plugins] };
+                        });
+                    },
+                    setActiveViewer: (viewer: ViewerType) => {
+                        set((state) => {
+                            return { activeViewer: viewer };
+                        });
+                    },
+                    savePluginSettings: () => {
+                        const state = store.getState();
+                        savePluginSettings(state.plugins);
+                        state.webview?.postMessage({ command: 'Extensions', data: getEnabledExtensions() });
+                        return {};
+                    },
+                    clearTableOfContent: () => {
+                        set((state) => {
+                            return { mdTableOfContentsItems: [] };
+                        });
+                    },
+                    addTableOfContentItem: (t: TOCItem) => {
+                        set((state) => {
+                            return { mdTableOfContentsItems: [...state.mdTableOfContentsItems, t] };
+                        });
+                    },
+                    togglePixelated: () => {
+                        set((state) => {
+                            const pixelated = state.imageRendering === ImageRendering.Pixelated;
+                            return { imageRendering: (!pixelated) ? ImageRendering.Pixelated : ImageRendering.Auto };
+                        });
+                    },
+                    setNewImageZoomBehaviour: (newImageZoomBehaviour: ZoomBehaviour) => {
+                        set((state) => {
+                            return { newImageZoomBehaviour };
+                        });
+                    },
+                    setResizeImageZoomBehaviour: (resizeImageZoomBehaviour: ZoomBehaviour) => {
+                        set((state) => {
+                            return { resizeImageZoomBehaviour };
+                        });
+                    },
+                    setFontText: (fontText: string) => {
+                        set((state) => {
+                            return { fontText };
+                        });
+                    },
+                    toggleSyntaxShowLineNumbers: () => {
+                        set((state) => {
+                            return { syntaxShowLineNumbers: !state.syntaxShowLineNumbers };
+                        });
+                    },
+                    toggleSyntaxWrapLines: () => {
+                        set((state) => {
+                            return { syntaxWrapLines: !state.syntaxWrapLines };
+                        });
+                    },
+                    setSyntaxFontSize: (syntaxFontSize: number) => {
+                        set((state) => {
+                            return { syntaxFontSize };
+                        });
+                    },
+                    setSyntaxCustomFont: (syntaxCustomFont: string) => {
+                        set((state) => {
+                            return { syntaxCustomFont };
+                        });
+                    },
+                },
+            }),
+        ),
+        {
+            name: PLUGIN_EXTRA_SETTINGS_KEY,
+            partialize: state => ({
+                imageRendering: state.imageRendering,
+                newImageZoomBehaviour: state.newImageZoomBehaviour,
+                resizeImageZoomBehaviour: state.resizeImageZoomBehaviour,
+                fontText: state.fontText,
+                syntaxShowLineNumbers: state.syntaxShowLineNumbers,
+                syntaxWrapLines: state.syntaxWrapLines,
+                syntaxFontSize: state.syntaxFontSize,
+                syntaxCustomFont: state.syntaxCustomFont,
+            }),
+        },
     ),
 );
 
