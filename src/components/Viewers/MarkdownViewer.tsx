@@ -4,6 +4,7 @@ import { HeadingProps } from 'react-markdown/lib/ast-to-react';
 import gfm from 'remark-gfm';
 import math from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypeRaw from 'rehype-raw';
 import 'katex/dist/katex.min.css';
 import './markdown.css';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -88,7 +89,7 @@ const MarkdownViewer: React.FC = () => {
         return (
             <ReactMarkdown
                 remarkPlugins={[gfm, math]}
-                rehypePlugins={[rehypeKatex]}
+                rehypePlugins={[rehypeKatex, rehypeRaw]}
                 components={{
                     h2: HeaderItem,
                     h3: HeaderItem,
