@@ -4,7 +4,7 @@ import ExifReader from 'exifreader';
 import { Box, SxProps, Typography, useTheme } from '@mui/material';
 
 import useStore from '@hooks/useStore';
-import { ImageRendering, ZoomBehaviour } from '@utils/types';
+import { ZoomBehaviour } from '@utils/types';
 import { log } from '@utils/log';
 import ExifInfo from '@components/Viewers/ExifInfo';
 
@@ -51,7 +51,7 @@ const ImageViewer: React.FC = () => {
     const fileName = useStore(state => state.fileName);
     const fileUrl = useStore(state => state.fileUrl);
     const fileContent = useStore(state => state.fileContent);
-    const pixelated = useStore(state => state.pixelated);
+    const imageRendering = useStore(state => state.imageRendering);
     const lastZoom = useStore(state => state.zoom);
     const newImageZoomBehaviour = useStore(state => state.newImageZoomBehaviour);
     const resizeImageZoomBehaviour = useStore(state => state.resizeImageZoomBehaviour);
@@ -289,7 +289,7 @@ const ImageViewer: React.FC = () => {
                     src={fileUrl}
                     style={{
                         transform: `translateX(${translate.x}px) translateY(${translate.y}px) scale(${zoom})`,
-                        imageRendering: pixelated ? ImageRendering.Pixelated : ImageRendering.Auto,
+                        imageRendering,
                     }}
                     onLoad={onImageLoad}
                 />

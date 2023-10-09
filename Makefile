@@ -10,3 +10,6 @@ build:
 
 lint:
 	node ./node_modules/eslint/bin/eslint.js .
+
+check:
+	node ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.json
