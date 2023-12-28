@@ -1,17 +1,17 @@
 {
   "name": "webviewplus",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
+    "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.0",
-    "@mui/styles": "^5.11.0",
+    "@mui/icons-material": "^5.15.2",
+    "@mui/material": "^5.15.2",
+    "@mui/styles": "^5.15.2",
     "@react-three/drei": "^9.47.1",
     "@react-three/fiber": "^8.13.7",
     "comma-separated-values": "^3.6.4",
@@ -24,7 +24,7 @@
     "react-app-polyfill": "^3.0.0",
     "react-data-grid": "7.0.0-canary.36",
     "react-dom": "^18.2.0",
-    "react-error-boundary": "^4.0.11",
+    "react-error-boundary": "^4.0.12",
     "react-i18next": "^13.1.2",
     "react-markdown": "^8.0.4",
     "react-syntax-highlighter": "^15.5.0",
@@ -35,7 +35,7 @@
     "svg-pan-zoom": "^3.6.1",
     "three": "^0.155.0",
     "three-stdlib": "^2.20.5",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.0/xlsx-0.20.0.tgz",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz",
     "zustand": "^4.1.5"
   },
   "devDependencies": {
