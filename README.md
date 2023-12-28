@@ -60,3 +60,5 @@ make dev
 make build
 
 make lint
+
+make check
