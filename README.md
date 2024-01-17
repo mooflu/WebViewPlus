@@ -37,12 +37,7 @@ gltf, glb, fbx, obj
 
 ### Syntax Highlighter
 
-c++, h++, bat, c, cmake,
-cpp, cs, css, go, h, hpp,
-java, js, json, jsx, lua,
-perl, pl, ps1, psm1, py,
-rb, sass, scss, sh, sql,
-tex, ts, tsx, txt, yaml, yml
+See list here: https://github.com/mooflu/WebViewPlus/blob/master/src/plugins/SyntaxPlugin.tsx
 
 More file extensions can be added in settings.
 Where the language doesn't match the extension, specify both separated by a colon:
