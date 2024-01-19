@@ -258,7 +258,7 @@ const ImageViewer: React.FC = () => {
         setTags(null);
         const readTags = async () => {
             if (fileContent && fileContent instanceof ArrayBuffer) {
-                const eTags = await ExifReader.load(fileContent);
+                const eTags = await ExifReader.load(fileContent, { async: true });
                 delete eTags.MakerNote;
                 delete eTags.Thumbnail;
                 delete eTags.UserComment;
