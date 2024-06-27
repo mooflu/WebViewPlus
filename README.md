@@ -17,7 +17,7 @@ svg
 
 ### Images (including animated)
 
-png, apng, jpeg, gif, bmp, webp
+png, apng, jpeg, gif, bmp, webp, avif
 
 ### Markdown (with math plugins)
 
