@@ -8,6 +8,7 @@ pluginName:
   jupyter: Jupyter Notebook
   image: Image
   font: Font
+General: General
 SelectOrDnDFile: Select or drag and drop file here.
 Settings: Settings
 FileExtensions: File Extensions
@@ -36,3 +37,12 @@ WrapLines: Wrap long lines
 FontSize: Font size
 CustomFont: Custom font
 CustomFontExplain: "A css @font-face font. E.g.:"
+GeneralWebViewPlus: General WebViewPlus
+DetectEncoding: Detect encoding of text files
+DetectEncodingTooltip: Takes effect on next preview
+GeneralQuickLook: General Quicklook
+ShowTrayIcon: Show tray icon
+ShowTrayIconTooltip: Takes effect on Quicklook restart
+UseTransparency: Window transparency
+UseTransparencyTooltip: Takes effect on Quicklook restart
+RestartQuicklook: Restart Quicklook

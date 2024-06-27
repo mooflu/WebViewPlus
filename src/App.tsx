@@ -31,6 +31,7 @@ import {
 } from '@utils/webview2Helpers';
 import { log } from '@utils/log';
 import { openFile } from '@utils/openFile';
+import { InitData } from '@utils/types';
 
 import useTheme from './theme';
 
@@ -117,6 +118,9 @@ const App: React.FC = () => {
     const yingYang = useStore(state => state.yingYang);
     const initState = useStore(state => state.actions.init);
     const unload = useStore(state => state.actions.unload);
+    const setDetectEncoding = useStore(state => state.actions.setDetectEncoding);
+    const setShowTrayIcon = useStore(state => state.actions.setShowTrayIcon);
+    const setUseTransparency = useStore(state => state.actions.setUseTransparency);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [dragInProgress, setDragInProgress] = React.useState(false);
 
@@ -127,9 +131,13 @@ const App: React.FC = () => {
             log(`Received handleWebMessage: ${e.data}`);
             if (e.data === 'unload') {
                 unload();
-            } else if (e.data.startsWith('setLanguage:')) {
-                const langCode = e.data.split(':')[1];
-                i18n.changeLanguage(langCode);
+            } else if (e.data.startsWith('initData:')) {
+                const initDataStr = e.data.substring(9);
+                const initData: InitData = JSON.parse(initDataStr);
+                i18n.changeLanguage(initData.langCode);
+                setDetectEncoding(initData.detectEncoding, { init: true });
+                setShowTrayIcon(initData.showTrayIcon, { init: true });
+                setUseTransparency(initData.useTransparency, { init: true });
             } else if (e.data === 'newWindowRejected') {
                 setSnackbarOpen(true);
             } else if (e.data === 'frameNavigationRejected') {

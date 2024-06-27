@@ -1,5 +1,6 @@
 export enum ViewerType {
     Unknown,
+    General,
     Tabular,
     SVG,
     Syntax,

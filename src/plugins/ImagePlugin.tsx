@@ -17,6 +17,7 @@ export class ImagePlugin implements IPlugin {
         gif: true,
         bmp: true,
         webp: true,
+        avif: true,
     };
 
     public customSettings = <ImageViewerSettings />;

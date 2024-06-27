@@ -26,6 +26,7 @@ const BINARY_EXTENSIONS = new Set([
     'gif',
     'bmp',
     'webp',
+    'avif',
 ]);
 
 const handledDataLoaded = (e: ProgressEvent<FileReader>) => {

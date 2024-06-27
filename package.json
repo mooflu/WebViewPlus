@@ -1,6 +1,6 @@
 {
   "name": "webviewplus",
-  "version": "1.3.6",
+  "version": "1.4.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -35,7 +35,7 @@
     "svg-pan-zoom": "^3.6.1",
     "three": "^0.155.0",
     "three-stdlib": "^2.20.5",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "zustand": "^4.1.5"
   },
   "devDependencies": {

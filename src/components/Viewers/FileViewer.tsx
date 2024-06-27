@@ -74,6 +74,7 @@ const FileViewer: React.FC = () => {
                 [ViewerType.Image]: <ImageViewer />,
                 [ViewerType.Jupyter]: <JupyterNBViewer />,
                 [ViewerType.Font]: <FontViewer />,
+                [ViewerType.General]: <FileTypeNotSupported />,
                 [ViewerType.Unknown]: <FileTypeNotSupported />,
             }[activeViewer]}
         </>

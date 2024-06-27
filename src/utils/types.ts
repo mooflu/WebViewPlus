@@ -8,3 +8,11 @@ export enum ZoomBehaviour {
     ZoomToFit = 'zoomToFit',
     Zoom1To1 = 'zoom1To1',
 }
+
+export interface InitData
+{
+    langCode: string;
+    detectEncoding: boolean;
+    showTrayIcon: boolean;
+    useTransparency: boolean;
+}

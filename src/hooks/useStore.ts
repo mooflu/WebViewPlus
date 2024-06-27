@@ -145,6 +145,11 @@ export const store = createStore(
                 syntaxWrapLines: false,
                 syntaxFontSize: DEFAULT_SYNTAX_FONTSIZE,
                 syntaxCustomFont: '',
+                // detect text file encoding
+                detectEncoding: false,
+                // advanced QL settings from https://github.com/QL-Win/QuickLook/wiki/Advanced-configurations
+                showTrayIcon: true,
+                useTransparency: true,
             },
             set => ({
                 actions: {
@@ -260,6 +265,36 @@ export const store = createStore(
                             return { syntaxCustomFont };
                         });
                     },
+                    setDetectEncoding: (detectEncoding: boolean, options = { init: false }) => {
+                        set((state) => {
+                            if (!options.init) {
+                                state.webview?.postMessage({ command: 'DetectEncoding', boolValue: detectEncoding });
+                            }
+                            return { detectEncoding };
+                        });
+                    },
+                    setShowTrayIcon: (showTrayIcon: boolean, options = { init: false }) => {
+                        set((state) => {
+                            if (!options.init) {
+                                state.webview?.postMessage({ command: 'ShowTrayIcon', boolValue: showTrayIcon });
+                            }
+                            return { showTrayIcon };
+                        });
+                    },
+                    setUseTransparency: (useTransparency: boolean, options = { init: false }) => {
+                        set((state) => {
+                            if (!options.init) {
+                                state.webview?.postMessage({ command: 'UseTransparency', boolValue: useTransparency });
+                            }
+                            return { useTransparency };
+                        });
+                    },
+                    restartQuickLook: () => {
+                        set((state) => {
+                            state.webview?.postMessage({ command: 'Restart', boolValue: true });
+                            return {};
+                        });
+                    },
                 },
             }),
         ),
@@ -274,6 +309,9 @@ export const store = createStore(
                 syntaxWrapLines: state.syntaxWrapLines,
                 syntaxFontSize: state.syntaxFontSize,
                 syntaxCustomFont: state.syntaxCustomFont,
+                detectEncoding: state.detectEncoding,
+                showTrayIcon: state.showTrayIcon,
+                useTransparency: state.useTransparency,
             }),
         },
     ),

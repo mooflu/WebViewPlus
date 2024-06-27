@@ -25,6 +25,7 @@ import WebViewPlus from '@components/icons/WebViewPlus';
 import PluginPanel from './PluginPanel';
 import PluginWithSwitch from './PluginWithSwitch';
 import TabPanelContainer from './TabPanelContainer';
+import GeneralSettings from './GeneralSettings';
 
 const Transition = React.forwardRef((
     props: TransitionProps & { children: React.ReactElement<any, any>; },
@@ -39,6 +40,7 @@ const SettingsDialog: React.FC = () => {
     const plugins = useStore(state => state.plugins);
     const activeViewerType = useStore(state => state.activeViewer);
     const savePluginSettings = useStore(state => state.actions.savePluginSettings);
+    const webview = useStore(state => state.webview);
     const [viewerType, setViewerType] = React.useState(activeViewerType);
 
     React.useEffect(() => {
@@ -80,6 +82,42 @@ const SettingsDialog: React.FC = () => {
             </TabPanelContainer>
         );
     });
+
+    if (webview) {
+        pluginTabs.unshift((
+            <Tab
+                key={t('General')}
+                value={ViewerType.General}
+                sx={{
+                    minHeight: '3rem',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    textTransform: 'initial',
+                }}
+                label={(
+                    <Box
+                        component="div"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            width: '100%',
+                        }}
+                    >
+                        <Typography>
+                            {t('General')}
+                        </Typography>
+                    </Box>
+                )}
+            />
+        ));
+        pluginTabPanelContainers.unshift((
+            <TabPanelContainer key="general" value={viewerType} viewerType={ViewerType.General}>
+                <GeneralSettings />
+            </TabPanelContainer>
+        ));
+    }
 
     return (
         <Dialog
