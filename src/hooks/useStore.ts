@@ -154,7 +154,7 @@ export const store = createStore(
                 useTransparency: true,
                 // EPub plugin
                 ePubFontSize: 0,
-                ePubCustomFont: 'initial',
+                ePubCustomFont: '',
             },
             set => ({
                 actions: {
