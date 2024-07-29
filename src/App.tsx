@@ -42,6 +42,10 @@ const classes = {
         justifyContent: 'center',
         alignItems: 'center',
     },
+    floatButtonsHidden: {
+        opacity: '0',
+        transition: 'opacity 0.5s linear',
+    },
     floatButtons: {
         display: 'flex',
         flexDirection: 'row',
@@ -123,6 +127,7 @@ const App: React.FC = () => {
     const setUseTransparency = useStore(state => state.actions.setUseTransparency);
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [dragInProgress, setDragInProgress] = React.useState(false);
+    const [settingsButtonsVisible, setSettingsButtonsVisible] = React.useState(true);
 
     React.useEffect(() => {
         initState();
@@ -150,22 +155,30 @@ const App: React.FC = () => {
             webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
             webview.addEventListener('message', handleWebMessage);
             webview.postMessage({ command: 'AppReadyForData', data: null });
+            document.addEventListener('pointerenter', handlePointerEnter);
+            document.addEventListener('keydown', handleKeyDown);
         } else {
             body.addEventListener('dragenter', handleDragEnter);
             body.addEventListener('dragover', handleDragOver);
             body.addEventListener('dragleave', handleDragExit);
             body.addEventListener('drop', handleDrop);
+            document.addEventListener('pointerenter', handlePointerEnter);
+            document.addEventListener('keydown', handleKeyDown);
         }
 
         return () => {
             if (webview) {
                 webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
                 webview.removeEventListener('message', handleWebMessage);
+                document.removeEventListener('pointerenter', handlePointerEnter);
+                document.removeEventListener('keydown', handleKeyDown);
             } else {
                 body.removeEventListener('dragenter', handleDragEnter);
                 body.removeEventListener('dragover', handleDragOver);
                 body.removeEventListener('dragleave', handleDragExit);
                 body.removeEventListener('drop', handleDrop);
+                document.removeEventListener('pointerenter', handlePointerEnter);
+                document.removeEventListener('keydown', handleKeyDown);
             }
         };
     }, []);
@@ -176,6 +189,18 @@ const App: React.FC = () => {
             useStore.setState({ showSettings: !showSettings });
         }
     }, [fileContent]);
+
+    React.useEffect(() => {
+        if (settingsButtonsVisible) {
+            const timerId = window.setTimeout(() => {
+                setSettingsButtonsVisible(false);
+            }, 3000);
+            return () => {
+                window.clearTimeout(timerId);
+            };
+        }
+        return () => {};
+    }, [settingsButtonsVisible]);
 
     const toggleSettings = () => {
         useStore.setState({ showSettings: !showSettings });
@@ -229,6 +254,19 @@ const App: React.FC = () => {
         e.preventDefault();
     };
 
+    const handlePointerEnter = (e: Event) => {
+        setSettingsButtonsVisible(true);
+    };
+
+    const handleKeyDown = (e: Event) => {
+        setSettingsButtonsVisible(true);
+    };
+
+    const floatButtonsStyles: SxProps[] = [classes.floatButtons];
+    if (!settingsButtonsVisible) {
+        floatButtonsStyles.push(classes.floatButtonsHidden);
+    }
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -248,7 +286,8 @@ const App: React.FC = () => {
                 {fileContent !== null && (
                     <FileViewer />
                 )}
-                <Box component="div" sx={classes.floatButtons}>
+
+                <Box component="div" sx={floatButtonsStyles}>
                     {!webview && fileName && (
                         <IconButton onClick={resetFile} sx={classes.floatButton}>
                             <UndoIcon />
