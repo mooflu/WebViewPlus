@@ -12,6 +12,7 @@ import { ModelViewerPlugin } from '@plugins/ModelViewerPlugin';
 import { ImagePlugin } from '@plugins/ImagePlugin';
 import { JupyterNBPlugin } from '@plugins/JupyterNBPlugin';
 import { FontPlugin } from '@plugins/FontPlugin';
+import { EPubPlugin } from '@plugins/EPubPlugin';
 import { IWebView2 } from '@utils/webview2Helpers';
 import { ImageRendering, ZoomBehaviour } from '@utils/types';
 
@@ -31,6 +32,7 @@ const PLUGINS = [
     new SyntaxPlugin(),
     new JupyterNBPlugin(),
     new FontPlugin(),
+    new EPubPlugin(),
 ];
 
 interface PluginSettings {
@@ -150,6 +152,9 @@ export const store = createStore(
                 // advanced QL settings from https://github.com/QL-Win/QuickLook/wiki/Advanced-configurations
                 showTrayIcon: true,
                 useTransparency: true,
+                // EPub plugin
+                ePubFontSize: 0,
+                ePubCustomFont: 'initial',
             },
             set => ({
                 actions: {
@@ -265,6 +270,16 @@ export const store = createStore(
                             return { syntaxCustomFont };
                         });
                     },
+                    setEPubFontSize: (ePubFontSize: number) => {
+                        set((state) => {
+                            return { ePubFontSize };
+                        });
+                    },
+                    setEPubCustomFont: (ePubCustomFont: string) => {
+                        set((state) => {
+                            return { ePubCustomFont };
+                        });
+                    },
                     setDetectEncoding: (detectEncoding: boolean, options = { init: false }) => {
                         set((state) => {
                             if (!options.init) {
@@ -312,6 +327,8 @@ export const store = createStore(
                 detectEncoding: state.detectEncoding,
                 showTrayIcon: state.showTrayIcon,
                 useTransparency: state.useTransparency,
+                ePubFontSize: state.ePubFontSize,
+                ePubCustomFont: state.ePubCustomFont,
             }),
         },
     ),

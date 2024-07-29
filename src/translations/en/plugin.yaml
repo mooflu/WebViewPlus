@@ -8,6 +8,7 @@ pluginName:
   jupyter: Jupyter Notebook
   image: Image
   font: Font
+  epub: EPub
 General: General
 SelectOrDnDFile: Select or drag and drop file here.
 Settings: Settings
@@ -46,3 +47,4 @@ ShowTrayIconTooltip: Takes effect on Quicklook restart
 UseTransparency: Window transparency
 UseTransparencyTooltip: Takes effect on Quicklook restart
 RestartQuicklook: Restart Quicklook
+EpubCustomFontExplain: "A font name. E.g.:"

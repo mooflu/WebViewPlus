@@ -10,6 +10,7 @@ export enum ViewerType {
     Jupyter,
     Image,
     Font,
+    EPub,
 }
 
 export interface IPlugin {

@@ -8,6 +8,7 @@ pluginName:
   jupyter: Jupyter Notebook
   image: Bild
   font: Schriftart
+  epub: EPub
 General: Allgemein
 SelectOrDnDFile: Wählen Sie eine Datei aus oder ziehen Sie sie per Drag & Drop hierher.
 Settings: Einstellungen
@@ -46,3 +47,4 @@ ShowTrayIconTooltip: Tritt beim Neustart von Quicklook in Kraft
 UseTransparency: Fenster-Transparenz
 UseTransparencyTooltip: Tritt beim Neustart von Quicklook in Kraft
 RestartQuicklook: Quicklook neu starten
+EpubCustomFontExplain: "Der Name einer Schriftart. z.B.:"

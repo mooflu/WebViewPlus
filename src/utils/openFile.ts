@@ -27,6 +27,8 @@ const BINARY_EXTENSIONS = new Set([
     'bmp',
     'webp',
     'avif',
+    // epub
+    'epub',
 ]);
 
 const handledDataLoaded = (e: ProgressEvent<FileReader>) => {

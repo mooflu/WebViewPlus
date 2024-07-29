@@ -48,6 +48,10 @@ Any language supported by https://prismjs.com/#supported-languages should work.
 
 ttf, otf, woff2 (without font info), woff
 
+### e-books
+
+epub
+
 ## Develop
 
 make dev
