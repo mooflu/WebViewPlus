@@ -25,6 +25,7 @@ const IFrameViewer: React.FC = () => {
                 width="100%"
                 height="100%"
                 src={fileUrl}
+                style={{ display: 'block' }} // iframe is inline by default which adds extra space at bottom
             />
         </Box>
     );
