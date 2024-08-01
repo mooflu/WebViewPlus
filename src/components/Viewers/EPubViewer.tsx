@@ -1,5 +1,5 @@
 import React from 'react';
-import { type Rendition } from 'epubjs';
+import { type Rendition, type Contents } from 'epubjs';
 import { ReactReader, ReactReaderStyle, type IReactReaderStyle } from 'react-reader';
 
 import { Box, useMediaQuery } from '@mui/material';
@@ -143,6 +143,13 @@ function updateTheme(rendition: Rendition, isDark: boolean, ePubFontSize: number
         p: {
             'font-size': fontSize,
             'font-family': fontFamily,
+            'font-weight': 'normal',
+        },
+        body: {
+            'font-size': fontSize,
+            'font-family': fontFamily,
+            'font-weight': 'normal',
+            'background-color': 'transparent !important',
         },
     };
     themes.default(themeSettings);
@@ -172,6 +179,15 @@ const EPubViewer: React.FC = () => {
                 epubOptions={{ spread: 'none' }} // single column
                 getRendition={(_rendition) => {
                     updateTheme(_rendition, isDark, ePubFontSize, ePubCustomFont);
+                    _rendition.hooks.content.register((content: Contents) => {
+                        content.document.addEventListener('wheel', (e: WheelEvent) => {
+                            if (e.deltaY > 0) {
+                                _rendition.next();
+                            } else {
+                                _rendition.prev();
+                            }
+                        });
+                    });
                     rendition.current = _rendition;
                 }}
             />
