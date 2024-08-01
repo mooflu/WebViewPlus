@@ -217,7 +217,6 @@ const ImageViewer: React.FC = () => {
 
         const el = containerRef.current;
         if (!el) {
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             return () => {};
         }
         // wheel & mousedown on the plugin container element,

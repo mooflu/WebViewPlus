@@ -62,6 +62,7 @@ const FontViewer: React.FC = () => {
                 value: nameTable[name],
             }));
             setFontInfo(nameProps);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (ex) {
             setFontInfo(null);
         }
