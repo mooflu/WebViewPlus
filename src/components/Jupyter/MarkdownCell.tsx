@@ -30,7 +30,11 @@ const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
                 remarkPlugins={[gfm, math]}
                 rehypePlugins={[rehypeKatex, rehypeRaw]}
                 components={{
-                    code({ node, inline, className, children, ...props }) {
+                    code({ node, className, children, ref, ...props }) {
+                        if (!node?.position || !children) {
+                            return <Box component="code">ERROR</Box>;
+                        }
+                        const inline = node.position.start.line === node.position.end.line;
                         if (inline) {
                             return (
                                 <Box component="code">
@@ -44,12 +48,17 @@ const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
                                 {...props}
                                 language={match ? match[1] : ''}
                                 style={style}
-                                useInlineStyles={false}
                                 wrapLines
                                 lineProps={{
                                     data: 'textLine', // className doesn't work :(
                                 }}
-                                PreTag="span"
+                                customStyle={{
+                                    margin: 0,
+                                    padding: 0,
+                                    border: 'none',
+                                    overflow: 'initial',
+                                    background: 'initial',
+                                }}
                             >
                                 {String(children).replace(/\n$/, '')}
                             </SyntaxHighlighter>

@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { HeadingProps } from 'react-markdown/lib/ast-to-react';
+import ReactMarkdown, { ExtraProps } from 'react-markdown';
 import gfm from 'remark-gfm';
 import math from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -56,25 +55,25 @@ const TOC: React.FC = () => {
     );
 };
 
-const HeaderItem: React.FC<React.PropsWithChildren<HeadingProps>> = (props) => {
-    const { children, node } = props;
+const HeaderItem = ({ node, className, children, ref, ...props }:
+    React.DetailedHTMLProps<React.HTMLAttributes<HTMLHeadingElement>, HTMLHeadingElement> & ExtraProps) => {
     const addTableOfContentItem = useStore(state => state.actions.addTableOfContentItem);
 
     // Based on https://github.com/remarkjs/react-markdown/issues/48#issuecomment-1074699244
-    const level = Number(node.tagName.match(/h(\d)/)?.slice(1));
-    if (level && children && typeof children[0] === 'string') {
-        const id = children[0].toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const level = Number(node!.tagName.match(/h(\d)/)?.slice(1));
+    if (level && children && typeof children === 'string') {
+        const id = children.toLowerCase().replace(/[^a-z0-9]+/g, '-');
         addTableOfContentItem({
             level,
             id,
-            title: children[0],
+            title: children,
         });
         return React.createElement(
-            node.tagName, { id }, children,
+            node!.tagName, { id }, children,
         );
     }
 
-    return React.createElement(props.node.tagName, props, children);
+    return React.createElement(node!.tagName, props, children);
 };
 
 const MarkdownViewer: React.FC = () => {
@@ -96,7 +95,11 @@ const MarkdownViewer: React.FC = () => {
                     h4: HeaderItem,
                     h5: HeaderItem,
                     h6: HeaderItem,
-                    code({ node, inline, className, children, ...props }) {
+                    code({ node, className, children, ref, ...props }) {
+                        if (!node?.position || !children) {
+                            return <Box component="code">ERROR</Box>;
+                        }
+                        const inline = node.position.start.line === node.position.end.line;
                         if (inline) {
                             return (
                                 <Box component="code">
@@ -110,13 +113,18 @@ const MarkdownViewer: React.FC = () => {
                                 {...props}
                                 language={match ? match[1] : ''}
                                 style={style}
-                                useInlineStyles={false}
                                 wrapLines
                                 wrapLongLines
                                 lineProps={{
                                     data: 'textLine', // className doesn't work :(
                                 }}
-                                PreTag="span"
+                                customStyle={{
+                                    margin: 0,
+                                    padding: 0,
+                                    border: 'none',
+                                    overflow: 'initial',
+                                    background: 'initial',
+                                }}
                             >
                                 {String(children).replace(/\n$/, '')}
                             </SyntaxHighlighter>
