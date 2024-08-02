@@ -35,8 +35,8 @@
     "remark-math": "^6.0.0",
     "svg-pan-zoom": "^3.6.1",
     "three": "^0.166.1",
-    "three-stdlib": "^2.20.5",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
+    "three-stdlib": "^2.30.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zustand": "^4.1.5"
   },
   "devDependencies": {

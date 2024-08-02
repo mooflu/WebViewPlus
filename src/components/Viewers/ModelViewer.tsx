@@ -1,13 +1,10 @@
 /* eslint-disable react/no-unknown-property */
 import React from 'react';
 import { Group } from 'three';
+import { FBXLoader, OBJLoader, GLTFLoader, GLTF } from 'three-stdlib';
 
 import { OrbitControls, Sky } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-
-import { FBXLoader } from 'three-stdlib/loaders/FBXLoader';
-import { OBJLoader } from 'three-stdlib/loaders/OBJLoader';
-import { GLTFLoader, GLTF } from 'three-stdlib/loaders/GLTFLoader';
 
 import NormalizedScene from '@components/Viewers/NormalizedScene';
 import useStore from '@hooks/useStore';
