@@ -78,10 +78,11 @@ const HeaderItem = ({ node, className, children, ref, ...props }:
 
 const MarkdownViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent) as string;
+    const isDark = useStore(state => state.isDark);
 
     const RM = React.useMemo(() => {
         store.getState().actions.clearTableOfContent();
-        const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
+        const style = isDark ? vscDarkPlus : vs;
 
         // This is collecting the TOC data during render (via HeaderItem)
         // Memo so it doesn't re-render (and mess with the TOC data).
@@ -117,6 +118,9 @@ const MarkdownViewer: React.FC = () => {
                                 wrapLongLines
                                 lineProps={{
                                     data: 'textLine', // className doesn't work :(
+                                    style: {
+                                        lineHeight: '1.2rem',
+                                    },
                                 }}
                                 customStyle={{
                                     margin: 0,
@@ -135,7 +139,7 @@ const MarkdownViewer: React.FC = () => {
                 {fileContent}
             </ReactMarkdown>
         );
-    }, [fileContent]);
+    }, [fileContent, isDark]);
 
     return (
         <Box

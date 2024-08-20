@@ -2,7 +2,7 @@ import React from 'react';
 import { type Rendition, type Contents } from 'epubjs';
 import { ReactReader, ReactReaderStyle, type IReactReaderStyle } from 'react-reader';
 
-import { Box, useMediaQuery } from '@mui/material';
+import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 import useStore from '@hooks/useStore';
@@ -160,7 +160,7 @@ const EPubViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent as ArrayBuffer);
     const ePubFontSize = useStore(state => state.ePubFontSize);
     const ePubCustomFont = useStore(state => state.ePubCustomFont);
-    const isDark = useMediaQuery('(prefers-color-scheme: dark)');
+    const isDark = useStore(state => state.isDark);
     const [location, setLocation] = React.useState<string | number>(0);
 
     React.useEffect(() => {
@@ -168,6 +168,12 @@ const EPubViewer: React.FC = () => {
             updateTheme(rendition.current, isDark, ePubFontSize, ePubCustomFont);
         }
     }, [ePubFontSize, ePubCustomFont]);
+
+    React.useEffect(() => {
+        if (rendition.current) {
+            updateTheme(rendition.current, isDark, ePubFontSize, ePubCustomFont);
+        }
+    }, [isDark]);
 
     return (
         <Box component="div" sx={{ width: '100%', height: '100%' }}>

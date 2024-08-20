@@ -18,6 +18,7 @@ const SyntaxViewer: React.FC = () => {
     const pluginByShortName = useStore(state => state.pluginByShortName);
     const syntaxFontSize = useStore(state => state.syntaxFontSize);
     const syntaxCustomFont = useStore(state => state.syntaxCustomFont);
+    const isDark = useStore(state => state.isDark);
     const plugin = pluginByShortName.syntax;
 
     const matchedExtra = plugin.extraExtensions.filter(e => e.split(':')[0] === fileExt);
@@ -30,7 +31,7 @@ const SyntaxViewer: React.FC = () => {
         lang = Ext2Lang[fileExt] || fileExt;
     }
 
-    const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
+    const style = isDark ? vscDarkPlus : vs;
 
     const fontFaceSx: SxProps = syntaxCustomFont
         ? {
@@ -52,7 +53,11 @@ const SyntaxViewer: React.FC = () => {
                 wrapLongLines={syntaxWrapLines}
                 lineProps={{
                     data: 'textLine', // className doesn't work :(
-                    style: { fontFamily: syntaxCustomFont ? 'syntaxFont' : '', fontSize: syntaxFontSize },
+                    style: {
+                        fontFamily: syntaxCustomFont ? 'syntaxFont' : '',
+                        fontSize: syntaxFontSize,
+                        lineHeight: '1.2rem',
+                    },
                 }}
                 showLineNumbers={syntaxShowLineNumbers}
                 customStyle={{

@@ -14,6 +14,7 @@ import {
     SxProps,
     ThemeProvider,
     Typography,
+    useMediaQuery,
 } from '@mui/material';
 import {
     Settings as SettingsIcon,
@@ -55,14 +56,6 @@ const classes = {
     },
     floatButton: {
         ml: '0.5rem',
-        '@media (prefers-color-scheme:light)': {
-            color: '#222',
-            backgroundColor: '#ccc',
-        },
-        '@media (prefers-color-scheme:dark)': {
-            color: '#888',
-            backgroundColor: '#333',
-        },
         opacity: 0.7,
     },
     errorComponent: {
@@ -128,6 +121,9 @@ const App: React.FC = () => {
     const [snackbarOpen, setSnackbarOpen] = React.useState(false);
     const [dragInProgress, setDragInProgress] = React.useState(false);
     const [settingsButtonsVisible, setSettingsButtonsVisible] = React.useState(true);
+    const systemDark = useMediaQuery('(prefers-color-scheme: dark)');
+    const isDark = yingYang ? systemDark : !systemDark;
+    const floatButtonContainer = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         initState();
@@ -155,33 +151,47 @@ const App: React.FC = () => {
             webview.addEventListener('sharedbufferreceived', handleSharedBufferReceived);
             webview.addEventListener('message', handleWebMessage);
             webview.postMessage({ command: 'AppReadyForData', data: null });
-            document.addEventListener('pointerenter', handlePointerEnter);
-            document.addEventListener('keydown', handleKeyDown);
         } else {
             body.addEventListener('dragenter', handleDragEnter);
             body.addEventListener('dragover', handleDragOver);
             body.addEventListener('dragleave', handleDragExit);
             body.addEventListener('drop', handleDrop);
-            document.addEventListener('pointerenter', handlePointerEnter);
-            document.addEventListener('keydown', handleKeyDown);
         }
+        document.addEventListener('pointerenter', makeSettingsButtonsVisible);
+        document.addEventListener('keydown', makeSettingsButtonsVisible);
 
         return () => {
             if (webview) {
                 webview.removeEventListener('sharedbufferreceived', handleSharedBufferReceived);
                 webview.removeEventListener('message', handleWebMessage);
-                document.removeEventListener('pointerenter', handlePointerEnter);
-                document.removeEventListener('keydown', handleKeyDown);
             } else {
                 body.removeEventListener('dragenter', handleDragEnter);
                 body.removeEventListener('dragover', handleDragOver);
                 body.removeEventListener('dragleave', handleDragExit);
                 body.removeEventListener('drop', handleDrop);
-                document.removeEventListener('pointerenter', handlePointerEnter);
-                document.removeEventListener('keydown', handleKeyDown);
             }
+            if (floatButtonContainer.current) {
+                floatButtonContainer.current.removeEventListener('pointermove', makeSettingsButtonsVisible);
+                floatButtonContainer.current.removeEventListener('pointerdown', makeSettingsButtonsVisible);
+                floatButtonContainer.current.removeEventListener('keydown', makeSettingsButtonsVisible);
+            }
+            document.addEventListener('pointerenter', makeSettingsButtonsVisible);
+            document.addEventListener('keydown', makeSettingsButtonsVisible);
         };
     }, []);
+
+    React.useEffect(() => {
+        if (floatButtonContainer.current) {
+            floatButtonContainer.current.addEventListener('pointermove', makeSettingsButtonsVisible);
+            floatButtonContainer.current.addEventListener('pointerdown', makeSettingsButtonsVisible);
+            floatButtonContainer.current.addEventListener('keydown', makeSettingsButtonsVisible);
+        }
+    }, [floatButtonContainer]);
+
+    React.useEffect(() => {
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        useStore.setState({ isDark });
+    }, [isDark]);
 
     React.useEffect(() => {
         if (showSettings) {
@@ -207,12 +217,9 @@ const App: React.FC = () => {
     };
 
     const toggleYingYang = () => {
-        // toggle background color - useful for items with transparent background
+        // toggle light/dark mode - useful for items with transparent background
         // where the forground color is the similar to light/dark theme.
-        const yy = !yingYang;
-        useStore.setState({ yingYang: yy });
-        const body = document.getElementsByTagName('body')[0];
-        body.style.backgroundColor = yy ? theme.palette.background.default : '#777';
+        useStore.setState({ yingYang: !yingYang });
     };
 
     const resetFile = () => {
@@ -254,11 +261,7 @@ const App: React.FC = () => {
         e.preventDefault();
     };
 
-    const handlePointerEnter = (e: Event) => {
-        setSettingsButtonsVisible(true);
-    };
-
-    const handleKeyDown = (e: Event) => {
+    const makeSettingsButtonsVisible = () => {
         setSettingsButtonsVisible(true);
     };
 
@@ -266,6 +269,12 @@ const App: React.FC = () => {
     if (!settingsButtonsVisible) {
         floatButtonsStyles.push(classes.floatButtonsHidden);
     }
+
+    const floatButton = {
+        ...classes.floatButton,
+        color: isDark ? '#222' : '#888',
+        backgroundColor: isDark ? '#ccc' : '#333',
+    };
 
     return (
         <ThemeProvider theme={theme}>
@@ -287,16 +296,16 @@ const App: React.FC = () => {
                     <FileViewer />
                 )}
 
-                <Box component="div" sx={floatButtonsStyles}>
+                <Box component="div" sx={floatButtonsStyles} ref={floatButtonContainer}>
                     {!webview && fileName && (
-                        <IconButton onClick={resetFile} sx={classes.floatButton}>
+                        <IconButton onClick={resetFile} sx={floatButton}>
                             <UndoIcon />
                         </IconButton>
                     )}
-                    <IconButton onClick={toggleYingYang} sx={classes.floatButton}>
+                    <IconButton onClick={toggleYingYang} sx={floatButton}>
                         <YingYangIcon />
                     </IconButton>
-                    <IconButton onClick={toggleSettings} sx={classes.floatButton}>
+                    <IconButton onClick={toggleSettings} sx={floatButton}>
                         <SettingsIcon />
                     </IconButton>
                 </Box>

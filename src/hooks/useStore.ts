@@ -131,6 +131,7 @@ export const store = createStore(
                 plugins: PLUGINS as IPlugin[],
                 pluginByShortName: Object.fromEntries(PLUGINS.map(x => [x.shortName, x])),
                 yingYang: true as boolean,
+                isDark: true as boolean,
 
                 openExifPanel: false,
                 zoom: 1,
@@ -329,6 +330,8 @@ export const store = createStore(
                 useTransparency: state.useTransparency,
                 ePubFontSize: state.ePubFontSize,
                 ePubCustomFont: state.ePubCustomFont,
+                isDark: state.isDark,
+                yingYang: state.yingYang,
             }),
         },
     ),

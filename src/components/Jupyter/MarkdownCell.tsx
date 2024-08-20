@@ -13,6 +13,7 @@ import {
 
 import { Box } from '@mui/material';
 
+import useStore from '@hooks/useStore';
 import * as NB from '@components/Jupyter/JupyterCommon';
 
 interface MarkdownCellProps {
@@ -21,7 +22,8 @@ interface MarkdownCellProps {
 
 const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
     const { cell } = props;
-    const style = window.matchMedia('(prefers-color-scheme: light)').matches ? vs : vscDarkPlus;
+    const isDark = useStore(state => state.isDark);
+    const style = isDark ? vscDarkPlus : vs;
     const cellContent = NB.joinData(cell.source);
 
     return (
@@ -51,6 +53,9 @@ const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
                                 wrapLines
                                 lineProps={{
                                     data: 'textLine', // className doesn't work :(
+                                    style: {
+                                        lineHeight: '1.2rem',
+                                    },
                                 }}
                                 customStyle={{
                                     margin: 0,

@@ -1,11 +1,13 @@
 import React from 'react';
 
-import { useMediaQuery, createTheme, Theme } from '@mui/material';
+import { createTheme, Theme } from '@mui/material';
 import { indigo, grey } from '@mui/material/colors';
+
+import useStore from '@hooks/useStore';
 
 const useTheme = () => {
     const [theme, setTheme] = React.useState<Theme>(createTheme());
-    const isDark = useMediaQuery('(prefers-color-scheme: dark)');
+    const isDark = useStore(state => state.isDark);
 
     React.useEffect(() => {
         setTheme(createTheme({
@@ -81,6 +83,8 @@ const useTheme = () => {
                             fontSize: '1rem !important',
                             height: '100% !important',
                             color: isDark ? '#aaa !important' : '#333 !important',
+                            backgroundColor: isDark ? '#222 !important' : '#fff !important',
+                            '--border-color': isDark ? '#444' : '#ddd',
                         },
                         '.rdg-header-row': {
                             backgroundColor: isDark ? '#115 !important' : '#ccf !important',

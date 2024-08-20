@@ -8,6 +8,7 @@ import {
 
 import { Box, useTheme } from '@mui/material';
 
+import useStore from '@hooks/useStore';
 import * as NB from '@components/Jupyter/JupyterCommon';
 import MarkdownCell from '@components/Jupyter/MarkdownCell';
 
@@ -26,7 +27,8 @@ const ImageMimeType = [
 const DataOutput: React.FC<DataOutputProps> = (props) => {
     const { t } = useTranslation();
     const { data } = props;
-    const style = (window.matchMedia('(prefers-color-scheme: light)').matches) ? vs : vscDarkPlus;
+    const isDark = useStore(state => state.isDark);
+    const style = isDark ? vscDarkPlus : vs;
 
     for (const mimeType of ImageMimeType) {
         const imageData = data[mimeType] as string;
@@ -79,6 +81,9 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
                 wrapLines
                 lineProps={{
                     data: 'textLine', // className doesn't work :(
+                    style: {
+                        lineHeight: '1.2rem',
+                    },
                 }}
             >
                 {code}
@@ -155,7 +160,8 @@ interface CodeCellProps {
 const CodeCell: React.FC<CodeCellProps> = (props) => {
     const { cell, lang } = props;
     const theme = useTheme();
-    const style = (window.matchMedia('(prefers-color-scheme: light)').matches) ? vs : vscDarkPlus;
+    const isDark = useStore(state => state.isDark);
+    const style = isDark ? vscDarkPlus : vs;
     const code = NB.joinData(cell.source);
 
     return (
@@ -171,6 +177,9 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
                 wrapLines
                 lineProps={{
                     data: 'textLine', // className doesn't work :(
+                    style: {
+                        lineHeight: '1.2rem',
+                    },
                 }}
             >
                 {code}
