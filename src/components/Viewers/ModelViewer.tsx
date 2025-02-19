@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unknown-property */
 import React from 'react';
 import { Group } from 'three';
-import { FBXLoader, OBJLoader, GLTFLoader, GLTF } from 'three-stdlib';
+import { FBXLoader, OBJLoader } from 'three-stdlib';
 
-import { OrbitControls, Sky } from '@react-three/drei';
+import { OrbitControls, Sky, useGLTF } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 
 import NormalizedScene from '@components/Viewers/NormalizedScene';
@@ -20,25 +20,11 @@ const logProgress = (p: ProgressEvent) => {
 };
 
 const GLTFScene: React.FC = () => {
-    const fileName = useStore(state => state.fileName);
     const fileUrl = useStore(state => state.fileUrl);
-    const [scene, setScene] = React.useState<Group | null>(null);
-
-    React.useEffect(() => {
-        if (fileName && fileUrl) {
-            const loader = new GLTFLoader();
-            loader.load(
-                fileUrl,
-                (gltf: GLTF) => { setScene(gltf.scene); },
-                undefined, // logProgress,
-                (e: ErrorEvent) => { log(`Failed to model: ${fileName}`); },
-            );
-        }
-    }, [fileName, fileUrl]);
-
+    const { scene, animations } = useGLTF(fileUrl);
     return (
         <React.Suspense fallback={null}>
-            {!!scene && <NormalizedScene scene={scene} />}
+            {!!scene && <NormalizedScene scene={scene} animations={animations} />}
         </React.Suspense>
     );
 };

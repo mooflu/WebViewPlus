@@ -2,15 +2,33 @@
 import React from 'react';
 import * as THREE from 'three';
 
+import { useAnimations } from '@react-three/drei';
+
 import { log } from '@utils/log';
 
 interface NormalizedSceneProps {
     scene: THREE.Group;
+    animations?: THREE.AnimationClip[];
 }
 
 const NormalizedScene: React.FC<NormalizedSceneProps> = (props) => {
     const [center, setCenter] = React.useState<THREE.Vector3>(new THREE.Vector3());
     const [scale, setScale] = React.useState<number>(1);
+    const modelAnimations = useAnimations(props.animations || [], props.scene);
+
+    React.useEffect(() => {
+        if (modelAnimations.names.length === 0) return;
+
+        const anim = modelAnimations.actions[modelAnimations.names[0]];
+        if (anim) {
+            anim
+                .reset()
+                .setEffectiveTimeScale(1)
+                .setEffectiveWeight(1)
+                .fadeIn(0.5)
+                .play();
+        }
+    }, [modelAnimations]);
 
     React.useEffect(() => {
         if (props.scene) {
