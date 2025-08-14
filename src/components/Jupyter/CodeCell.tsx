@@ -80,7 +80,7 @@ const DataOutput: React.FC<DataOutputProps> = (props) => {
                 style={style}
                 wrapLines
                 lineProps={{
-                    data: 'textLine', // className doesn't work :(
+                    className: 'textLine',
                     style: {
                         lineHeight: '1.2rem',
                     },
@@ -176,7 +176,7 @@ const CodeCell: React.FC<CodeCellProps> = (props) => {
                 }}
                 wrapLines
                 lineProps={{
-                    data: 'textLine', // className doesn't work :(
+                    className: 'textLine',
                     style: {
                         lineHeight: '1.2rem',
                     },

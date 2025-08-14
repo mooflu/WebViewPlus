@@ -117,7 +117,7 @@ const MarkdownViewer: React.FC = () => {
                                 wrapLines
                                 wrapLongLines
                                 lineProps={{
-                                    data: 'textLine', // className doesn't work :(
+                                    className: 'textLine',
                                     style: {
                                         lineHeight: '1.2rem',
                                     },

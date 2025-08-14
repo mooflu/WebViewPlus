@@ -265,10 +265,10 @@ const App: React.FC = () => {
         setSettingsButtonsVisible(true);
     };
 
-    const floatButtonsStyles: SxProps[] = [classes.floatButtons];
-    if (!settingsButtonsVisible) {
-        floatButtonsStyles.push(classes.floatButtonsHidden);
-    }
+    const floatButtonsStyles: SxProps = {
+        ...classes.floatButtons,
+        ...(settingsButtonsVisible ? {} : classes.floatButtonsHidden),
+    };
 
     const floatButton = {
         ...classes.floatButton,

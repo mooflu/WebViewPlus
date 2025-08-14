@@ -72,10 +72,15 @@ const useTheme = () => {
                             height: '100%',
                         },
                         // react-syntax-highlighter
-                        'span[data="textLine"]': {
-                            display: 'block',
+                        '.textLine': {
+                            display: 'block !important',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-all',
                         },
-                        'span[data="textLine"]:hover': {
+                        '.textLineNoWrap': {
+                            display: 'block !important',
+                        },
+                        '.textLine:hover, .textLineNoWrap:hover': {
                             backgroundColor: isDark ? '#444' : '#eee',
                         },
                         // react-data-grid custom style

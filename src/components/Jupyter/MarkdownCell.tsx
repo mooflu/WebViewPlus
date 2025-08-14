@@ -52,7 +52,7 @@ const MarkdownCell: React.FC<MarkdownCellProps> = (props) => {
                                 style={style}
                                 wrapLines
                                 lineProps={{
-                                    data: 'textLine', // className doesn't work :(
+                                    className: 'textLine',
                                     style: {
                                         lineHeight: '1.2rem',
                                     },

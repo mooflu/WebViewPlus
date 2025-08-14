@@ -52,7 +52,7 @@ const SyntaxViewer: React.FC = () => {
                 wrapLines
                 wrapLongLines={syntaxWrapLines}
                 lineProps={{
-                    data: 'textLine', // className doesn't work :(
+                    className: syntaxWrapLines ? 'textLine' : 'textLineNoWrap',
                     style: {
                         fontFamily: syntaxCustomFont ? 'syntaxFont' : '',
                         fontSize: syntaxFontSize,
