@@ -65,7 +65,7 @@ const SyntaxViewer: React.FC = () => {
                     padding: 0,
                     border: 'none',
                     overflow: 'initial',
-                    // background: 'initial',
+                    background: 'initial',
                     counterReset: 'linenumber',
                 }}
             >
