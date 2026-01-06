@@ -81,7 +81,7 @@ const useTheme = () => {
                         '.textLineNumber::before': {
                             position: 'absolute',
                             marginLeft: '-4em',
-                            width: '3rem',
+                            width: '3.7em',
                             content: 'counter(linenumber)',
                             fontStyle: 'italic',
                             textAlign: 'right',

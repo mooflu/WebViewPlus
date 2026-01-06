@@ -57,7 +57,7 @@ const SyntaxViewer: React.FC = () => {
                         fontFamily: syntaxCustomFont ? 'syntaxFont' : '',
                         fontSize: syntaxFontSize,
                         lineHeight: '1.2em',
-                        marginLeft: syntaxShowLineNumbers ? '3rem' : 0,
+                        marginLeft: syntaxShowLineNumbers ? '3.1em' : 0,
                     },
                 }}
                 customStyle={{
