@@ -142,7 +142,7 @@ const SettingsDialog: React.FC = () => {
                     sx={{ position: 'absolute', right: 11, bottom: 8 }}
                     onClick={closeSettings}
                 >
-                    {t('Close')}
+                    {t('SaveAndClose')}
                 </Button>
             </DialogTitle>
 

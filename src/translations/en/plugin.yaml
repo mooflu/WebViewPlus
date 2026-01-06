@@ -48,3 +48,4 @@ UseTransparency: Window transparency
 UseTransparencyTooltip: Takes effect on Quicklook restart
 RestartQuicklook: Restart Quicklook
 EpubCustomFontExplain: "A font name. E.g.:"
+SaveAndClose: Save and close
