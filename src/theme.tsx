@@ -76,9 +76,20 @@ const useTheme = () => {
                             display: 'block !important',
                             whiteSpace: 'pre-wrap',
                             wordBreak: 'break-all',
+                            counterIncrement: 'linenumber',
+                        },
+                        '.textLineNumber::before': {
+                            position: 'absolute',
+                            marginLeft: '-4em',
+                            width: '3rem',
+                            content: 'counter(linenumber)',
+                            fontStyle: 'italic',
+                            textAlign: 'right',
+                            color: isDark ? 'rgb(97, 97, 97) !important' : 'rgb(147, 147, 147) !important',
                         },
                         '.textLineNoWrap': {
                             display: 'block !important',
+                            counterIncrement: 'linenumber',
                         },
                         '.textLine:hover, .textLineNoWrap:hover': {
                             backgroundColor: isDark ? '#444' : '#eee',

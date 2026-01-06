@@ -52,20 +52,21 @@ const SyntaxViewer: React.FC = () => {
                 wrapLines
                 wrapLongLines={syntaxWrapLines}
                 lineProps={{
-                    className: syntaxWrapLines ? 'textLine' : 'textLineNoWrap',
+                    className: syntaxWrapLines ? 'textLine textLineNumber' : 'textLineNoWrap textLineNumber',
                     style: {
                         fontFamily: syntaxCustomFont ? 'syntaxFont' : '',
                         fontSize: syntaxFontSize,
                         lineHeight: '1.2em',
+                        marginLeft: syntaxShowLineNumbers ? '3rem' : 0,
                     },
                 }}
-                showLineNumbers={syntaxShowLineNumbers}
                 customStyle={{
                     margin: 0,
                     padding: 0,
                     border: 'none',
                     overflow: 'initial',
-                    background: 'initial',
+                    // background: 'initial',
+                    counterReset: 'linenumber',
                 }}
             >
                 {fileContent}
