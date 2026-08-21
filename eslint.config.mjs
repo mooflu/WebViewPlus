@@ -52,7 +52,7 @@ export default [{
         },
 
         parser: tsParser,
-        ecmaVersion: 6,
+        ecmaVersion: 2024,
         sourceType: "module",
 
         parserOptions: {
@@ -228,6 +228,12 @@ export default [{
 
         "react/static-property-placement": 0,
         "react-hooks/exhaustive-deps": 0,
+        // New React-Compiler rules in eslint-plugin-react-hooks v7 flag patterns
+        // throughout this codebase (effects syncing state, late-declared locals
+        // in event handlers); keep disabled until the codebase is refactored
+        // to satisfy them
+        "react-hooks/immutability": 0,
+        "react-hooks/set-state-in-effect": 0,
         "jsx-a11y/media-has-caption": 0,
     },
 }];

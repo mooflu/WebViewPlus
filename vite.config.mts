@@ -6,7 +6,7 @@ import reactRefresh from '@vitejs/plugin-react-swc';
 import yaml from '@rollup/plugin-yaml';
 
 // eslint-disable-next-line import/extensions
-import packageJson from './package.json';
+import packageJson from './package.json' with { type: 'json' };
 
 // https://vitejs.dev/config/
 export default defineConfig({
