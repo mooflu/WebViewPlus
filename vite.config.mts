@@ -14,7 +14,7 @@ export default defineConfig({
     define: {
         APP_VERSION: JSON.stringify(packageJson.version),
     },
-    plugins: [reactRefresh(), yaml(), visualizer()],
+    plugins: [reactRefresh(), yaml(), ...(process.env.ANALYZE ? [visualizer()] : [])],
     resolve: {
         alias: {
             '@plugins/': '/src/plugins/',

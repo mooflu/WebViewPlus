@@ -51,6 +51,12 @@ const handledDataLoaded = (e: ProgressEvent<FileReader>) => {
     }
 };
 
+const handleReadError = (e: ProgressEvent<FileReader>) => {
+    log(`Failed to read file: ${e.target?.error?.message || 'unknown error'}`);
+    // reset back to the file picker instead of staying on the loading spinner
+    useStore.getState().actions.unload();
+};
+
 export const openFile = (file: File) => {
     log(`openFile: ${file.name}`);
     const ext = file.name.split('.').pop()?.toLocaleLowerCase() || '';
@@ -58,6 +64,7 @@ export const openFile = (file: File) => {
     const url = URL.createObjectURL(file); // returns a blob url - won't expose local file system location
     const fileReader = new FileReader();
     fileReader.onloadend = handledDataLoaded;
+    fileReader.onerror = handleReadError;
     if (BINARY_EXTENSIONS.has(ext)) {
         fileReader.readAsArrayBuffer(file);
     } else {

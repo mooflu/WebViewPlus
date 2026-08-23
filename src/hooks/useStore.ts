@@ -167,6 +167,7 @@ export const store = createStore(
                         });
                     },
                     unload: () => {
+                        const prevFileUrl = store.getState().fileUrl;
                         set(() => {
                             return {
                                 fileSize: 0,
@@ -178,14 +179,23 @@ export const store = createStore(
                                 activeViewer: ViewerType.Unknown,
                             };
                         });
+                        if (prevFileUrl) {
+                            URL.revokeObjectURL(prevFileUrl);
+                        }
+                        return {};
                     },
                     updateFileData: (fileData: FileData) => {
+                        const prevFileUrl = store.getState().fileUrl;
                         set((state) => {
                             return {
                                 ...fileData,
                                 activeViewer: ViewerType.Unknown,
                             };
                         });
+                        if (prevFileUrl && prevFileUrl !== fileData.fileUrl) {
+                            URL.revokeObjectURL(prevFileUrl);
+                        }
+                        return {};
                     },
                     togglePlugin: (p: IPlugin) => {
                         set((state) => {

@@ -61,3 +61,7 @@ make build
 make lint
 
 make check
+
+Optional: generate a bundle size report (stats.html) with:
+
+ANALYZE=1 make build

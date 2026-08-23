@@ -210,8 +210,8 @@ const App: React.FC = () => {
                 floatButtonContainer.current.removeEventListener('pointerdown', makeSettingsButtonsVisible);
                 floatButtonContainer.current.removeEventListener('keydown', makeSettingsButtonsVisible);
             }
-            document.addEventListener('pointerenter', makeSettingsButtonsVisible);
-            document.addEventListener('keydown', makeSettingsButtonsVisible);
+            document.removeEventListener('pointerenter', makeSettingsButtonsVisible);
+            document.removeEventListener('keydown', makeSettingsButtonsVisible);
         };
     }, []);
 
