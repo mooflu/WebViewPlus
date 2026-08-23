@@ -59,17 +59,10 @@ const ImageViewer: React.FC = () => {
     const transformRef = React.useRef<TransformSettings>({ ...defaultTransform });
     const containerRef = React.useRef<HTMLDivElement>(null);
     const imgRef = React.useRef<HTMLImageElement>(null);
-    const [zoom, setZoom] = React.useState(1);
+    const [zoom, setZoom] = React.useState(lastZoom);
     const [translate, setTranslate] = React.useState({ x: 0, y: 0 });
     const [tags, setTags] = React.useState(null as ExifReader.Tags | null);
-
-    React.useEffect(() => {
-        updateZoomSettings(lastZoom);
-        setZoom(lastZoom);
-        return () => {
-            useStore.setState({ zoom: transformRef.current.zoom }); // remember zoom across mounts
-        };
-    }, []);
+    const [prevFileContent, setPrevFileContent] = React.useState(fileContent);
 
     const updateZoomSettings = (z: number) => {
         transformRef.current.zoom = z;
@@ -77,6 +70,18 @@ const ImageViewer: React.FC = () => {
         transformRef.current.minZoom = Math.min(1, z / 10);
         transformRef.current.maxZoom = Math.max(10, z * 10);
     };
+
+    if (prevFileContent !== fileContent) {
+        setPrevFileContent(fileContent);
+        setTags(null);
+    }
+
+    React.useEffect(() => {
+        updateZoomSettings(lastZoom);
+        return () => {
+            useStore.setState({ zoom: transformRef.current.zoom }); // remember zoom across mounts
+        };
+    }, []);
 
     const getZoomToFit = () => {
         if (!imgRef.current) {
@@ -254,7 +259,7 @@ const ImageViewer: React.FC = () => {
     }, [fileUrl]);
 
     React.useEffect(() => {
-        setTags(null);
+        let cancelled = false;
         const readTags = async () => {
             if (fileContent && fileContent instanceof ArrayBuffer) {
                 const eTags = await ExifReader.load(fileContent, { async: true });
@@ -262,10 +267,15 @@ const ImageViewer: React.FC = () => {
                 delete eTags.Thumbnail;
                 delete eTags.UserComment;
                 delete eTags.MPEntry;
-                setTags(eTags);
+                if (!cancelled) {
+                    setTags(eTags);
+                }
             }
         };
         readTags().catch(reason => log(`ExifReader: ${reason}`));
+        return () => {
+            cancelled = true;
+        };
     }, [fileContent]);
 
     const onImageLoad = () => {

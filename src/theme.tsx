@@ -1,16 +1,15 @@
 import React from 'react';
 
-import { createTheme, Theme } from '@mui/material';
+import { createTheme } from '@mui/material';
 import { indigo, grey } from '@mui/material/colors';
 
 import useStore from '@hooks/useStore';
 
 const useTheme = () => {
-    const [theme, setTheme] = React.useState<Theme>(createTheme());
     const isDark = useStore(state => state.isDark);
 
-    React.useEffect(() => {
-        setTheme(createTheme({
+    const theme = React.useMemo(
+        () => createTheme({
             palette: {
                 mode: isDark ? 'dark' : 'light',
                 ...(isDark
@@ -150,8 +149,9 @@ const useTheme = () => {
                     },
                 },
             },
-        }));
-    }, [isDark]);
+        }),
+        [isDark],
+    );
 
     return theme;
 };

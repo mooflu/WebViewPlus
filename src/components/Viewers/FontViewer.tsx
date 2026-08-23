@@ -47,10 +47,9 @@ const FontViewer: React.FC = () => {
     const fileContent = useStore(state => state.fileContent);
     const fontText = useStore(state => state.fontText);
     const setFontText = useStore(state => state.actions.setFontText);
-    const [fontInfo, setFontInfo] = React.useState<NameProp[] | null>(null);
     const [showEdit, setShowEdit] = React.useState(false);
 
-    React.useEffect(() => {
+    const fontInfo = React.useMemo<NameProp[] | null>(() => {
         try {
             // Note: opentype.js does not support woff2 directly. Needs decompression...
             const font = opentype.parse(fileContent);
@@ -61,10 +60,9 @@ const FontViewer: React.FC = () => {
                 name,
                 value: nameTable[name],
             }));
-            setFontInfo(nameProps);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (ex) {
-            setFontInfo(null);
+            return nameProps;
+        } catch {
+            return null;
         }
     }, [fileContent]);
 

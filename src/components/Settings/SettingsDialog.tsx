@@ -42,11 +42,13 @@ const SettingsDialog: React.FC = () => {
     const savePluginSettings = useStore(state => state.actions.savePluginSettings);
     const webview = useStore(state => state.webview);
     const [viewerType, setViewerType] = React.useState(activeViewerType);
+    const [prevActiveViewerType, setPrevActiveViewerType] = React.useState(activeViewerType);
 
-    React.useEffect(() => {
-        // activate the tab for the file type currently being viewed
+    // activate the tab for the file type currently being viewed
+    if (prevActiveViewerType !== activeViewerType) {
+        setPrevActiveViewerType(activeViewerType);
         setViewerType(activeViewerType);
-    }, [activeViewerType]);
+    }
 
     const closeSettings = () => {
         savePluginSettings();

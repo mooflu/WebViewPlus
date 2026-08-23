@@ -125,6 +125,41 @@ const App: React.FC = () => {
     const isDark = yingYang ? systemDark : !systemDark;
     const floatButtonContainer = React.useRef<HTMLDivElement>(null);
 
+    const handleDrop = (e: DragEvent) => {
+        setDragInProgress(false);
+        unload();
+        if (e.dataTransfer?.items) {
+            for (const item of e.dataTransfer.items) {
+                if (item.kind === 'file') {
+                    const file = item.getAsFile();
+                    if (file) {
+                        e.preventDefault();
+                        openFile(file);
+                    }
+                }
+            }
+        }
+    };
+
+    const handleDragEnter = (e: DragEvent) => {
+        setDragInProgress(true);
+        e.preventDefault();
+    };
+
+    const handleDragOver = (e: DragEvent) => {
+        setDragInProgress(true);
+        e.preventDefault();
+    };
+
+    const handleDragExit = (e: DragEvent) => {
+        setDragInProgress(false);
+        e.preventDefault();
+    };
+
+    const makeSettingsButtonsVisible = () => {
+        setSettingsButtonsVisible(true);
+    };
+
     React.useEffect(() => {
         initState();
 
@@ -228,41 +263,6 @@ const App: React.FC = () => {
 
     const onCloseSnackbar = () => {
         setSnackbarOpen(false);
-    };
-
-    const handleDrop = (e: DragEvent) => {
-        setDragInProgress(false);
-        unload();
-        if (e.dataTransfer?.items) {
-            for (const item of e.dataTransfer.items) {
-                if (item.kind === 'file') {
-                    const file = item.getAsFile();
-                    if (file) {
-                        e.preventDefault();
-                        openFile(file);
-                    }
-                }
-            }
-        }
-    };
-
-    const handleDragEnter = (e: DragEvent) => {
-        setDragInProgress(true);
-        e.preventDefault();
-    };
-
-    const handleDragOver = (e: DragEvent) => {
-        setDragInProgress(true);
-        e.preventDefault();
-    };
-
-    const handleDragExit = (e: DragEvent) => {
-        setDragInProgress(false);
-        e.preventDefault();
-    };
-
-    const makeSettingsButtonsVisible = () => {
-        setSettingsButtonsVisible(true);
     };
 
     const floatButtonsStyles: SxProps = {

@@ -23,10 +23,12 @@ const PluginPanel: React.FC<PluginPanelProps> = (props) => {
     const toggleExtension = useStore(state => state.actions.toggleExtension);
     const setExtraExtensions = useStore(state => state.actions.setExtraExtensions);
     const [extensionsStr, setExtensionsStr] = React.useState(p.extraExtensions.join(','));
+    const [prevP, setPrevP] = React.useState(p);
 
-    React.useEffect(() => {
+    if (prevP !== p) {
+        setPrevP(p);
         setExtensionsStr(p.extraExtensions.join(','));
-    }, [p]);
+    }
 
     const extensionItems = Object.keys(p.extensions).map((ext: string) => {
         const checked = p.extensions[ext];
